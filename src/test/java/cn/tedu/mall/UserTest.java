@@ -2,12 +2,15 @@ package cn.tedu.mall;
 
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.User;
+import cn.tedu.mall.pojo.domain.UserAuthority;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,7 +33,6 @@ public class UserTest {
         user.setNickname("roshia");
         user.setIsEnable(0);
         user.setBod(LocalDate.of(1985,8,4));
-
         userMapper.insert(user);
     }
 
@@ -38,7 +40,7 @@ public class UserTest {
     public void testGetByUsername(){
         String username = "roshia1";
         User user = userMapper.getByUsername(username);
-        System.out.println(user.toString());
+            System.out.println(user.toString());
 
     }
 }

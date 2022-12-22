@@ -1,5 +1,6 @@
 package cn.tedu.mall.controller;
 
+import cn.tedu.mall.pojo.UserLoginDTO;
 import cn.tedu.mall.pojo.UserRegDTO;
 import cn.tedu.mall.service.IUserService;
 import cn.tedu.mall.web.JsonResult;
@@ -33,5 +34,14 @@ public class UserController {
         log.debug("註冊功能controller開始");
         userService.reg(userRegDTO);
         return JsonResult.ok();
+    }
+
+    @PostMapping("/login")
+    @ApiOperation("用戶登入")
+    @ApiOperationSupport(order = 200)
+    public JsonResult reg(@RequestBody UserLoginDTO userLoginDTO){
+        log.debug("登入功能controller開始");
+        String jwt = userService.login(userLoginDTO);
+        return JsonResult.ok(jwt);
     }
 }

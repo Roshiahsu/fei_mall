@@ -8,7 +8,7 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
             ums_user_detail(username,password,nickname,email,
-            phone,sex,bod,is_enable,reward_point,authorities,gmt_last_login,gmt_modified)
+            phone,sex,bod,is_enable,reward_point,gmt_last_login,gmt_modified)
         VALUES(
         #{username},
         #{password},
@@ -19,10 +19,6 @@
         #{bod},
         #{isEnable},
         #{rewardPoint},
-        <foreach collection="authorities" item="authorities" separator=",">
-            #{authorities}
-        </foreach>
-        )
         #{gmtLastLogin},
         #{gmtModified}
         )

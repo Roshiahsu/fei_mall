@@ -3,19 +3,27 @@ package cn.tedu.mall.service.impl;
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.User;
+import cn.tedu.mall.pojo.UserLoginDTO;
 import cn.tedu.mall.pojo.UserRegDTO;
 import cn.tedu.mall.pojo.domain.UserAuthority;
+import cn.tedu.mall.security.CustomerDetails;
 import cn.tedu.mall.service.IUserService;
 import cn.tedu.mall.utils.ConstUtils;
+import cn.tedu.mall.utils.JwtUtils;
 import cn.tedu.mall.web.ServiceCode;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @ClassName UserServiceImpl
@@ -26,6 +34,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserServiceImpl implements IUserService {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserMapper userMapper;
@@ -61,5 +72,31 @@ public class UserServiceImpl implements IUserService {
         //資料寫入資料庫
         userMapper.insert(user);
         log.debug("註冊完成");
+    }
+
+    @Override
+    public String login(UserLoginDTO userLoginDTO) {
+        log.debug("開始登入service.login");
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                userLoginDTO.getUsername(), userLoginDTO.getPassword()
+        );
+        Authentication loginResult = authenticationManager.authenticate(authentication);
+
+        CustomerDetails principal =(CustomerDetails) loginResult.getPrincipal();
+
+        Long id = principal.getId();
+        String username = principal.getUsername();
+        Collection<GrantedAuthority> authorities = principal.getAuthorities();
+
+        String jsonString = JSON.toJSONString(authorities);
+
+        Map<String,Object> claims = new HashMap<>();
+
+        claims.put("id",id);
+        claims.put("username",username);
+        claims.put("authorities",jsonString);
+
+        return JwtUtils.generate(claims);
     }
 }
