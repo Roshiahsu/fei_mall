@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.UserMapper">
+
+<!--    void insert(User user);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            ums_user_detail(username,password,nickname,email,
+            phone,sex,bod,is_enable,reward_point,authorities,gmt_last_login,gmt_modified)
+        VALUES(
+        #{username},
+        #{password},
+        #{nickname},
+        #{email},
+        #{phone},
+        #{sex},
+        #{bod},
+        #{isEnable},
+        #{rewardPoint},
+        <foreach collection="authorities" item="authorities" separator=",">
+            #{authorities}
+        </foreach>
+        )
+        #{gmtLastLogin},
+        #{gmtModified}
+        )
+    </insert>
+
+<!--    int countByUsername(String username);-->
+    <select id="countByUsername" resultType="int">
+        select
+            count(*)
+        from
+            ums_user_detail
+        where
+            username = #{username}
+    </select>
+<!--    User getByUsername(String username);-->
+    <select id="getByUsername" resultMap="StandardResultMap">
+        select
+            <include refid="BaseQueryFields"/>
+        from
+            ums_user_detail
+        where
+            username = #{username}
+    </select>
+    
+    <sql id="BaseQueryFields">
+        <if test="true">
+            id,
+            username,
+            password,
+            nickname,
+            email,
+            phone,
+            sex,
+            bod,
+            is_enable,
+            reward_point,
+            gmt_modified,
+            gmt_last_login
+        </if>
+    </sql>
+    <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="sex" property="sex"/>
+        <result column="bod" property="bod"/>
+        <result column="is_enable" property="isEnable"/>
+        <result column="reward_point" property="rewardPoint"/>
+<!--        <result column="authorities" property="authorities"/>-->
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="gmt_last_login" property="gmtLastLogin"/>
+    </resultMap>
+
+</mapper>
