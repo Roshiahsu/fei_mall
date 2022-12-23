@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation("用戶登入")
     @ApiOperationSupport(order = 200)
-    public JsonResult reg(@RequestBody UserLoginDTO userLoginDTO){
+    public JsonResult login(@RequestBody UserLoginDTO userLoginDTO){
         log.debug("登入功能controller開始");
         String jwt = userService.login(userLoginDTO);
         return JsonResult.ok(jwt);

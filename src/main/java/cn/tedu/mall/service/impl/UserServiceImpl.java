@@ -61,14 +61,6 @@ public class UserServiceImpl implements IUserService {
         /*補充用戶資料*/
         //預設用戶暱稱為註冊帳號
         user.setNickname(userRegDTO.getUsername());
-        //預設帳號啟用
-        user.setIsEnable(ConstUtils.IS_ENABLE);
-        //初始化積分
-        user.setRewardPoint(0);
-        //設定權限 (待完成
-//        List<UserAuthority> authority = new ArrayList<>();
-//        authority.add(ConstUtils.getAuthority(ConstUtils.AUTHORITY_USER));
-//        user.setAuthorities(authority);
         //資料寫入資料庫
         userMapper.insert(user);
         log.debug("註冊完成");
@@ -77,7 +69,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public String login(UserLoginDTO userLoginDTO) {
         log.debug("開始登入service.login");
-
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userLoginDTO.getUsername(), userLoginDTO.getPassword()
         );
@@ -85,14 +76,16 @@ public class UserServiceImpl implements IUserService {
 
         CustomerDetails principal =(CustomerDetails) loginResult.getPrincipal();
 
+        //獲取用戶id
         Long id = principal.getId();
+        //獲取用戶名稱
         String username = principal.getUsername();
+        //獲取用戶權限
         Collection<GrantedAuthority> authorities = principal.getAuthorities();
-
+        //將權限集合透過fastjson轉成json格式
         String jsonString = JSON.toJSONString(authorities);
 
         Map<String,Object> claims = new HashMap<>();
-
         claims.put("id",id);
         claims.put("username",username);
         claims.put("authorities",jsonString);

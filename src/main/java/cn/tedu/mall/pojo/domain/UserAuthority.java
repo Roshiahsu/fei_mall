@@ -14,4 +14,8 @@ import java.io.Serializable;
 @Data
 public class UserAuthority implements Serializable, GrantedAuthority {
     private String authority;
+
+    public UserAuthority(String authority) {
+        this.authority = authority;
+    }
 }

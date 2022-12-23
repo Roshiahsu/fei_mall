@@ -1,6 +1,7 @@
 package cn.tedu.mall.mapper;
 
 import cn.tedu.mall.pojo.User;
+import cn.tedu.mall.pojo.UserLoginVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,6 @@ public interface UserMapper {
 
     int countByUsername(String username);
 
-    User getByUsername(String username);
+    UserLoginVO getByUsername(String username);
 
 }

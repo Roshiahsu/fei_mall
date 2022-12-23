@@ -1,23 +1,20 @@
 package cn.tedu.mall.pojo;
 
 import cn.tedu.mall.pojo.domain.UserAuthority;
-import cn.tedu.mall.utils.ConstUtils;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
- * @ClassName User
+ * @ClassName UserLoginVO
  * @Version 1.0
  * @Description TODO
- * @Date 2022/12/21、下午9:35
+ * @Date 2022/12/23、上午10:13
  */
 @Data
-public class User {
-
+public class UserLoginVO {
     @ApiModelProperty(value = "用戶id")
     private Long id;
 
@@ -49,20 +46,11 @@ public class User {
     private Integer rewardPoint;
 
     @ApiModelProperty(value = "用戶角色")
-    private int roleId;
+    private String roleName;
 
     @ApiModelProperty(value = "修改日期")
     private LocalDateTime gmtModified;
 
     @ApiModelProperty(value = "最後一次登入時間")
     private LocalDateTime gmtLastLogin;
-
-    public User() {
-        //預設帳號啟用
-        this.isEnable = ConstUtils.IS_ENABLE;
-        //初始化積分
-        this.rewardPoint=0;
-        //設定
-        this.roleId = ConstUtils.AUTHORITY_USER_ID ;
-    }
 }

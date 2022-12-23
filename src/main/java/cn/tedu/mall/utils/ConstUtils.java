@@ -25,22 +25,12 @@ public class ConstUtils {
     /**
      * 管理員權限
      */
-    public static final String AUTHORITY_ADMIN = "ROLE_admin";
+    public static final Integer AUTHORITY_ADMIN_ID = 1;
     /**
      * 一般用戶權限
      */
-    public static final String AUTHORITY_USER = "ROLE_user";
+    public static final Integer AUTHORITY_USER_ID = 2;
 
-    /**
-     * 返回 UserAuthority
-     * @param authority 要設定的權限
-     * @return
-     */
-    public static UserAuthority getAuthority(String authority){
-        UserAuthority userAuthority = new UserAuthority();
-        userAuthority.setAuthority(authority);
-        return userAuthority;
-    }
 
 
 }

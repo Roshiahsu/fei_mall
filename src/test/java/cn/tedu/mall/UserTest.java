@@ -2,6 +2,7 @@ package cn.tedu.mall;
 
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.User;
+import cn.tedu.mall.pojo.UserLoginVO;
 import cn.tedu.mall.pojo.domain.UserAuthority;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -34,13 +35,14 @@ public class UserTest {
         user.setIsEnable(0);
         user.setBod(LocalDate.of(1985,8,4));
         userMapper.insert(user);
+
     }
 
     @Test
     public void testGetByUsername(){
         String username = "roshia1";
-        User user = userMapper.getByUsername(username);
-            System.out.println(user.toString());
+        UserLoginVO user = userMapper.getByUsername(username);
+        System.out.println(user.toString());
 
     }
 }
