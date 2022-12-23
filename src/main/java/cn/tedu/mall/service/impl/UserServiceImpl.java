@@ -5,6 +5,7 @@ import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.User;
 import cn.tedu.mall.pojo.UserLoginDTO;
 import cn.tedu.mall.pojo.UserRegDTO;
+import cn.tedu.mall.pojo.UserUpdateDTO;
 import cn.tedu.mall.pojo.domain.UserAuthority;
 import cn.tedu.mall.security.CustomerDetails;
 import cn.tedu.mall.service.IUserService;
@@ -91,5 +92,14 @@ public class UserServiceImpl implements IUserService {
         claims.put("authorities",jsonString);
 
         return JwtUtils.generate(claims);
+    }
+
+    @Override
+    public void update(UserUpdateDTO userUpdateDTO) {
+        log.debug("開始service.update");
+        int rows = userMapper.update(userUpdateDTO);
+        if(rows !=1){
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
+        }
     }
 }

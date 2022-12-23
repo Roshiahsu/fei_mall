@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -16,7 +17,9 @@ import java.time.LocalDate;
 @Data
 public class UserUpdateDTO implements Serializable {
 
-
+    @ApiModelProperty(value = "用戶id")
+    @NotBlank(message = "無效的Id")
+    private Long id;
 
     @ApiModelProperty(value = "用戶密碼")
     private String password;
@@ -45,4 +48,8 @@ public class UserUpdateDTO implements Serializable {
 
     @ApiModelProperty(value = "用戶角色")
     private int roleId;
+
+    public UserUpdateDTO() {
+        this.isEnable = 1;
+    }
 }

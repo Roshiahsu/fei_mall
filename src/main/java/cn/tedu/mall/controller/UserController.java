@@ -2,6 +2,7 @@ package cn.tedu.mall.controller;
 
 import cn.tedu.mall.pojo.UserLoginDTO;
 import cn.tedu.mall.pojo.UserRegDTO;
+import cn.tedu.mall.pojo.UserUpdateDTO;
 import cn.tedu.mall.service.IUserService;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -43,5 +44,14 @@ public class UserController {
         log.debug("登入功能controller開始");
         String jwt = userService.login(userLoginDTO);
         return JsonResult.ok(jwt);
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("詳情修改")
+    @ApiOperationSupport(order = 300)
+    public JsonResult update(@RequestBody UserUpdateDTO userUpdateDTO){
+        log.debug("修改功能controller開始");
+        userService.update(userUpdateDTO);
+        return JsonResult.ok();
     }
 }

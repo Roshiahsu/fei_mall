@@ -78,6 +78,42 @@
         <result column="role_name" property="roleName"/>
     </resultMap>
 
-    
-    <update id=""
+<!--    int update(UserUpdateDTO userUpdateDTO);-->
+    <update id="update">
+        update
+            ums_user
+                 <set>
+
+                     <if test="password !=null">
+                        password = #{password},
+                    </if>
+                    <if test="nickname !=null">
+                        nickname = #{nickname},
+                    </if>
+                    <if test="email !=null">
+                        email = #{email},
+                    </if>
+                    <if test="phone !=null">
+                        phone = #{phone},
+                    </if>
+                    <if test="sex !=null">
+                        sex = #{sex},
+                    </if>
+                    <if test="bod !=null">
+                        bod = #{bod},
+                    </if>
+                    <if test="isEnable !=null">
+                        is_enable = #{isEnable},
+                    </if>
+                    <if test="rewardPoint !=null">
+                        reward_point = #{rewardPoint},
+                    </if>
+                     <if test="roleId !=null">
+                         role_id = #{roleId},
+                     </if>
+
+                </set>
+        where
+            id = #{id}
+    </update>
 </mapper>

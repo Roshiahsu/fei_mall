@@ -2,6 +2,7 @@ package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.UserLoginDTO;
 import cn.tedu.mall.pojo.UserRegDTO;
+import cn.tedu.mall.pojo.UserUpdateDTO;
 
 /**
  * @ClassName IUserService
@@ -14,4 +15,6 @@ public interface IUserService {
     void reg(UserRegDTO userRegDTO);
 
     String login(UserLoginDTO userLoginDTO);
+
+    void update(UserUpdateDTO userUpdateDTO);
 }
