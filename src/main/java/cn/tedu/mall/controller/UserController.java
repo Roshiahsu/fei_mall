@@ -1,5 +1,6 @@
 package cn.tedu.mall.controller;
 
+import cn.tedu.mall.pojo.UserInfoVO;
 import cn.tedu.mall.pojo.UserLoginDTO;
 import cn.tedu.mall.pojo.UserRegDTO;
 import cn.tedu.mall.pojo.UserUpdateDTO;
@@ -53,5 +54,14 @@ public class UserController {
         log.debug("修改功能controller開始");
         userService.update(userUpdateDTO);
         return JsonResult.ok();
+    }
+
+    @PostMapping("/userInfo")
+    @ApiOperation("用戶詳情")
+    @ApiOperationSupport(order = 350)
+    public JsonResult userInfo(){
+        log.debug("用戶詳情controller開始");
+        UserInfoVO userInfoVO = userService.userInfo(5L);
+        return JsonResult.ok(userInfoVO);
     }
 }

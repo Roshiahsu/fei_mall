@@ -1,9 +1,8 @@
 package cn.tedu.mall.mapper;
 
 import cn.tedu.mall.pojo.User;
-import cn.tedu.mall.pojo.UserLoginVO;
+import cn.tedu.mall.pojo.UserInfoVO;
 import cn.tedu.mall.pojo.UserUpdateDTO;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +20,10 @@ public interface UserMapper {
 
     int countByUsername(String username);
 
-    UserLoginVO getByUsername(String username);
+    UserInfoVO getByUsername(String username);
 
     int update(UserUpdateDTO userUpdateDTO);
+
+    UserInfoVO userInfo(Long id);
 
 }

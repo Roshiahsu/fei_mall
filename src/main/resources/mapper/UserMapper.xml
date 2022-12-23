@@ -34,7 +34,7 @@
         where
             username = #{username}
     </select>
-<!--    User getByUsername(String username);-->
+<!--    UserInfoVO getByUsername(String username);-->
     <select id="getByUsername" resultMap="StandardResultMap">
         select
             <include refid="BaseQueryFields"/>
@@ -44,7 +44,21 @@
         where
             uu.username = #{username}
     </select>
-    
+
+<!--        UserInfoVO userInfo(Long id);-->
+    <select id="userInfo" resultMap="StandardResultMap">
+        select
+        <include refid="BaseQueryFields"/>
+        ,sex_name
+        from
+        ums_user uu
+        left join ums_role on uu.role_id = ums_role.id
+        left join ums_sex on uu.role_id = ums_sex.id
+        where
+        uu.id = #{id}
+    </select>
+
+<!--    通用字段與resultMap-->
     <sql id="BaseQueryFields">
         <if test="true">
             uu.id,
@@ -57,12 +71,13 @@
             bod,
             is_enable,
             reward_point,
+            uu.role_id,
             ums_role.role_name,
             gmt_modified,
             gmt_last_login
         </if>
     </sql>
-    <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.UserLoginVO">
+    <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.UserInfoVO">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -76,7 +91,11 @@
         <result column="gmt_modified" property="gmtModified"/>
         <result column="gmt_last_login" property="gmtLastLogin"/>
         <result column="role_name" property="roleName"/>
+        <result column="role_id" property="roleId"/>
+        <result column="sex_name" property="sexName"/>
     </resultMap>
+
+
 
 <!--    int update(UserUpdateDTO userUpdateDTO);-->
     <update id="update">
