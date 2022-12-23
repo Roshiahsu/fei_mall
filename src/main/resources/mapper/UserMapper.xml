@@ -7,7 +7,7 @@
 <!--    void insert(User user);-->
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-            ums_user_detail(username,password,nickname,email,
+            ums_user(username,password,nickname,email,
             phone,sex,bod,is_enable,reward_point,role_id,gmt_last_login,gmt_modified)
         VALUES(
         #{username},
@@ -30,7 +30,7 @@
         select
             count(*)
         from
-            ums_user_detail
+            ums_user
         where
             username = #{username}
     </select>
@@ -39,15 +39,15 @@
         select
             <include refid="BaseQueryFields"/>
         from
-            ums_user_detail uud
-        left join ums_role on uud.role_id = ums_role.id
+            ums_user uu
+        left join ums_role on uu.role_id = ums_role.id
         where
-            uud.username = #{username}
+            uu.username = #{username}
     </select>
     
     <sql id="BaseQueryFields">
         <if test="true">
-            uud.id,
+            uu.id,
             username,
             password,
             nickname,
@@ -78,4 +78,6 @@
         <result column="role_name" property="roleName"/>
     </resultMap>
 
+    
+    <update id=""
 </mapper>

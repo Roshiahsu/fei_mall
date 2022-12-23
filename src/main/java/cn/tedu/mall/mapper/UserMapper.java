@@ -22,4 +22,6 @@ public interface UserMapper {
 
     UserLoginVO getByUsername(String username);
 
+    void update(User user);
+
 }

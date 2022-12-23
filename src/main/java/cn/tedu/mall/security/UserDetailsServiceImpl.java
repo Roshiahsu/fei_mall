@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //查詢用戶資料
         UserLoginVO loginResult = userMapper.getByUsername(username);
         //獲取權限
-        UserAuthority userAuthority = new UserAuthority(loginResult.getRoleName());
+        SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority(loginResult.getRoleName());
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(userAuthority);
         log.debug("獲取到的用戶訊息>>>{}",loginResult.toString());
