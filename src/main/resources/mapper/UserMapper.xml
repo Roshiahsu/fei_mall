@@ -77,7 +77,7 @@
             gmt_last_login
         </if>
     </sql>
-    <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.UserInfoVO">
+    <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.user.UserInfoVO">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>

@@ -2,20 +2,16 @@ package cn.tedu.mall.service.impl;
 
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.UserMapper;
-import cn.tedu.mall.pojo.*;
-import cn.tedu.mall.pojo.domain.UserAuthority;
+import cn.tedu.mall.pojo.user.*;
 import cn.tedu.mall.security.CustomerDetails;
 import cn.tedu.mall.service.IUserService;
-import cn.tedu.mall.utils.ConstUtils;
 import cn.tedu.mall.utils.JwtUtils;
 import cn.tedu.mall.web.ServiceCode;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,15 +46,18 @@ public class UserServiceImpl implements IUserService {
         if(count > 0){
             throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"用戶名稱已被註冊!");
         }
+
         /*準備要寫入資料庫的資料*/
         User user = new User();
         user.setUsername(userRegDTO.getUsername());
         //密碼加密
         String encode = passwordEncoder.encode(userRegDTO.getPassword());
         user.setPassword(encode);
+
         /*補充用戶資料*/
         //預設用戶暱稱為註冊帳號
         user.setNickname(userRegDTO.getUsername());
+
         //資料寫入資料庫
         userMapper.insert(user);
         log.debug("註冊完成");
@@ -91,9 +90,25 @@ public class UserServiceImpl implements IUserService {
         return JwtUtils.generate(claims);
     }
 
+    //修改用戶詳情，不包含修改密碼
     @Override
     public void update(UserUpdateDTO userUpdateDTO) {
         log.debug("開始service.update");
+        int rows = userMapper.update(userUpdateDTO);
+        if(rows !=1){
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
+        }
+    }
+
+    @Override
+    public void updatePassword(UserUpdateDTO userUpdateDTO) {
+        log.debug("開始service.updatePassword");
+
+        /*密碼加密*/
+        String password = userUpdateDTO.getPassword();
+        String encode = passwordEncoder.encode(password);
+        userUpdateDTO.setPassword(encode);
+
         int rows = userMapper.update(userUpdateDTO);
         if(rows !=1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
@@ -105,7 +120,7 @@ public class UserServiceImpl implements IUserService {
         log.debug("開始service.userInfo");
         UserInfoVO userInfoVO = userMapper.userInfo(id);
         if(userInfoVO ==null){
-            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
+            throw new ServiceException(ServiceCode.ERR_UNKNOWN,"伺服器繁忙請稍後再試");
         }
         return userInfoVO;
     }

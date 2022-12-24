@@ -1,4 +1,4 @@
-package cn.tedu.mall.pojo;
+package cn.tedu.mall.pojo.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

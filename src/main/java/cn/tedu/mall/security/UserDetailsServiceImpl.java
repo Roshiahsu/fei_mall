@@ -1,7 +1,7 @@
 package cn.tedu.mall.security;
 
 import cn.tedu.mall.mapper.UserMapper;
-import cn.tedu.mall.pojo.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

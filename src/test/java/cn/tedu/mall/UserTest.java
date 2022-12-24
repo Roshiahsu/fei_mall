@@ -1,9 +1,9 @@
 package cn.tedu.mall;
 
 import cn.tedu.mall.mapper.UserMapper;
-import cn.tedu.mall.pojo.User;
-import cn.tedu.mall.pojo.UserInfoVO;
-import cn.tedu.mall.pojo.UserUpdateDTO;
+import cn.tedu.mall.pojo.user.User;
+import cn.tedu.mall.pojo.user.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +46,7 @@ public class UserTest {
     public void testUpdate(){
         UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
         userUpdateDTO.setId(5L);
+        userUpdateDTO.setBod(LocalDate.of(1922,05,03));
         userUpdateDTO.setRewardPoint(1000);
         userUpdateDTO.setNickname("c8763");
         System.out.println(userUpdateDTO.toString());

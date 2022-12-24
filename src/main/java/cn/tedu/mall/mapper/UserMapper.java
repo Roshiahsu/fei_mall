@@ -1,8 +1,8 @@
 package cn.tedu.mall.mapper;
 
-import cn.tedu.mall.pojo.User;
-import cn.tedu.mall.pojo.UserInfoVO;
-import cn.tedu.mall.pojo.UserUpdateDTO;
+import cn.tedu.mall.pojo.user.User;
+import cn.tedu.mall.pojo.user.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

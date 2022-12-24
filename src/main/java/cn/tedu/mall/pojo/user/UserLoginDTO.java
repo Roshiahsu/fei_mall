@@ -1,4 +1,4 @@
-package cn.tedu.mall.pojo;
+package cn.tedu.mall.pojo.user;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,13 +7,13 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * @ClassName UserRegDTO
+ * @ClassName UserLoginDTO
  * @Version 1.0
  * @Description TODO
- * @Date 2022/12/21、下午9:22
+ * @Date 2022/12/22、下午4:08
  */
 @Data
-public class UserRegDTO implements Serializable {
+public class UserLoginDTO implements Serializable {
 
     @ApiModelProperty(value = "用戶名稱")
     @NotBlank(message = "請輸入正確用戶名")

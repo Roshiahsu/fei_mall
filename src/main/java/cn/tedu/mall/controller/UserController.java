@@ -1,17 +1,17 @@
 package cn.tedu.mall.controller;
 
-import cn.tedu.mall.pojo.UserInfoVO;
-import cn.tedu.mall.pojo.UserLoginDTO;
-import cn.tedu.mall.pojo.UserRegDTO;
-import cn.tedu.mall.pojo.UserUpdateDTO;
+import cn.tedu.mall.pojo.user.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserLoginDTO;
+import cn.tedu.mall.pojo.user.UserRegDTO;
+import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import cn.tedu.mall.service.IUserService;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,7 +56,7 @@ public class UserController {
         return JsonResult.ok();
     }
 
-    @PostMapping("/userInfo")
+    @GetMapping("/userInfo")
     @ApiOperation("用戶詳情")
     @ApiOperationSupport(order = 350)
     public JsonResult userInfo(){
