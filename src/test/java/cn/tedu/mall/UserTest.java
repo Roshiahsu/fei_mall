@@ -3,6 +3,7 @@ package cn.tedu.mall;
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.user.User;
 import cn.tedu.mall.pojo.user.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserLoginVO;
 import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ public class UserTest {
     @Test
     public void testGetByUsername(){
         String username = "roshia1";
-        UserInfoVO user = userMapper.getByUsername(username);
+        UserLoginVO user = userMapper.getByUsername(username);
         System.out.println(user.toString());
     }
     @Test

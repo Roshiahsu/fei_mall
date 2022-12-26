@@ -2,6 +2,7 @@ package cn.tedu.mall.security;
 
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.user.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserLoginVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername方法調用");
         //查詢用戶資料
-        UserInfoVO loginResult = userMapper.getByUsername(username);
+        UserLoginVO loginResult = userMapper.getByUsername(username);
         //獲取權限
         SimpleGrantedAuthority userAuthority = new SimpleGrantedAuthority(loginResult.getRoleName());
         List<GrantedAuthority> authorities = new ArrayList<>();

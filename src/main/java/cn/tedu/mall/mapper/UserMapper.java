@@ -2,6 +2,7 @@ package cn.tedu.mall.mapper;
 
 import cn.tedu.mall.pojo.user.User;
 import cn.tedu.mall.pojo.user.UserInfoVO;
+import cn.tedu.mall.pojo.user.UserLoginVO;
 import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +37,7 @@ public interface UserMapper {
      * @param username 用戶名
      * @return 查詢到的用戶訊息
      */
-    UserInfoVO getByUsername(String username);
+    UserLoginVO getByUsername(String username);
 
     /**
      * 根據id獲取用戶訊息

@@ -35,15 +35,23 @@
             username = #{username}
     </select>
 <!--    UserInfoVO getByUsername(String username);-->
-<!--    <select id="getByUsername" resultMap="StandardResultMap">-->
-<!--        select-->
-<!--            <include refid="BaseQueryFields"/>-->
-<!--        from-->
-<!--            ums_user uu-->
-<!--        left join ums_role on uu.role_id = ums_role.id-->
-<!--        where-->
-<!--            uu.username = #{username}-->
-<!--    </select>-->
+    <select id="getByUsername" resultMap="GetByUsernameResultMap">
+        select
+            <include refid="BaseQueryFields"/>
+        from
+            ums_user uu
+        left join ums_role on uu.role_id = ums_role.id
+        where
+            uu.username = #{username}
+    </select>
+
+    <resultMap id="GetByUsernameResultMap" type="cn.tedu.mall.pojo.user.UserLoginVO">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="is_enable" property="isEnable"/>
+        <result column="role_name" property="roleName"/>
+    </resultMap>
 
 <!--        List<UserInfoVO> userInfo(Long id);-->
     <select id="userInfo" resultMap="StandardResultMap">
@@ -57,6 +65,7 @@
         where
         uu.id = #{id}
     </select>
+
 
 <!--    通用字段與resultMap-->
     <sql id="BaseQueryFields">
