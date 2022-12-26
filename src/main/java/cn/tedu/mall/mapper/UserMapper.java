@@ -6,6 +6,8 @@ import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @ClassName UserMapper
  * @Version 1.0
@@ -41,7 +43,7 @@ public interface UserMapper {
      * @param id 用戶id
      * @return 查詢到的用戶訊息
      */
-    UserInfoVO userInfo(Long id);
+    List<UserInfoVO> userInfo(Long id);
 
     /**
      * 修改用戶訊息

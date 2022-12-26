@@ -94,9 +94,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserInfoVO userInfo(Long id) {
+    public List<UserInfoVO> userInfo(Long id) {
         log.debug("開始service.userInfo");
-        UserInfoVO userInfoVO = userMapper.userInfo(id);
+        List<UserInfoVO> userInfoVO = userMapper.userInfo(id);
         if(userInfoVO ==null){
             throw new ServiceException(ServiceCode.ERR_UNKNOWN,"伺服器繁忙請稍後再試");
         }

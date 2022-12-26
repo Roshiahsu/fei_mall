@@ -35,17 +35,17 @@
             username = #{username}
     </select>
 <!--    UserInfoVO getByUsername(String username);-->
-    <select id="getByUsername" resultMap="StandardResultMap">
-        select
-            <include refid="BaseQueryFields"/>
-        from
-            ums_user uu
-        left join ums_role on uu.role_id = ums_role.id
-        where
-            uu.username = #{username}
-    </select>
+<!--    <select id="getByUsername" resultMap="StandardResultMap">-->
+<!--        select-->
+<!--            <include refid="BaseQueryFields"/>-->
+<!--        from-->
+<!--            ums_user uu-->
+<!--        left join ums_role on uu.role_id = ums_role.id-->
+<!--        where-->
+<!--            uu.username = #{username}-->
+<!--    </select>-->
 
-<!--        UserInfoVO userInfo(Long id);-->
+<!--        List<UserInfoVO> userInfo(Long id);-->
     <select id="userInfo" resultMap="StandardResultMap">
         select
         <include refid="BaseQueryFields"/>

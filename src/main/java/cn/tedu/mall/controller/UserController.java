@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @ClassName UserController
  * @Version 1.0
@@ -59,7 +61,7 @@ public class UserController {
     @ApiOperationSupport(order = 350)
     public JsonResult userInfo(){
         log.debug("用戶詳情controller開始");
-        UserInfoVO userInfoVO = userService.userInfo(5L);
+        List<UserInfoVO> userInfoVO = userService.userInfo(5L);
         return JsonResult.ok(userInfoVO);
     }
 }

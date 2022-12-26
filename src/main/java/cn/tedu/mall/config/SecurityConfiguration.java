@@ -31,5 +31,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+
+        http.cors();
+
+        String[] urls = {
+                "/admins/login",
+                "/doc.html",
+                "/**/*.css",
+                "/**/*.js",
+                "/swagger-resources",
+                "/v2/api-docs",
+        };
+
+//        http.authorizeRequests() //請求授權
+//                .antMatchers(urls)
+//                .permitAll()     //允許直接訪問
+//                .anyRequest()    //除上述配置以外的其他請求
+//                .authenticated();//通過認證：已經登入過才能訪問
+        http.authorizeRequests() //請求授權
+                .anyRequest()
+                .permitAll()     ;//允許直接訪問
+                    //除上述配置以外的其他請求
+
     }
+
 }
