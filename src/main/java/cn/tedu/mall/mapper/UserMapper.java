@@ -15,15 +15,39 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public interface UserMapper {
+    /**
+     * 新增用戶/插入用戶
+     * @param user 新增的用資料
+     * @return 影響行數
+     */
+    int insert(User user);
 
-    void insert(User user);
-
+    /**
+     * 使用用戶名統計用戶
+     * @param username 用戶名
+     * @return 用戶數
+     */
     int countByUsername(String username);
 
+    /**
+     * 根據用戶名獲取用戶訊息
+     * @param username 用戶名
+     * @return 查詢到的用戶訊息
+     */
     UserInfoVO getByUsername(String username);
 
-    int update(UserUpdateDTO userUpdateDTO);
-
+    /**
+     * 根據id獲取用戶訊息
+     * @param id 用戶id
+     * @return 查詢到的用戶訊息
+     */
     UserInfoVO userInfo(Long id);
+
+    /**
+     * 修改用戶訊息
+     * @param userUpdateDTO 欲修改的資料
+     * @return 影響行數
+     */
+    int update(UserUpdateDTO userUpdateDTO);
 
 }

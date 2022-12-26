@@ -36,7 +36,6 @@ public class UserUpdateDTO implements Serializable {
     @ApiModelProperty(value = "用戶性別")
     private Character sex;
 
-    @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty(value = "用戶生日")
     private LocalDate bod;
 

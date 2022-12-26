@@ -59,7 +59,10 @@ public class UserServiceImpl implements IUserService {
         user.setNickname(userRegDTO.getUsername());
 
         //資料寫入資料庫
-        userMapper.insert(user);
+        int rows = userMapper.insert(user);
+        if(rows != 1){
+            throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍候再試!");
+        }
         log.debug("註冊完成");
     }
 
@@ -90,6 +93,16 @@ public class UserServiceImpl implements IUserService {
         return JwtUtils.generate(claims);
     }
 
+    @Override
+    public UserInfoVO userInfo(Long id) {
+        log.debug("開始service.userInfo");
+        UserInfoVO userInfoVO = userMapper.userInfo(id);
+        if(userInfoVO ==null){
+            throw new ServiceException(ServiceCode.ERR_UNKNOWN,"伺服器繁忙請稍後再試");
+        }
+        return userInfoVO;
+    }
+
     //修改用戶詳情，不包含修改密碼
     @Override
     public void update(UserUpdateDTO userUpdateDTO) {
@@ -115,13 +128,5 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-    @Override
-    public UserInfoVO userInfo(Long id) {
-        log.debug("開始service.userInfo");
-        UserInfoVO userInfoVO = userMapper.userInfo(id);
-        if(userInfoVO ==null){
-            throw new ServiceException(ServiceCode.ERR_UNKNOWN,"伺服器繁忙請稍後再試");
-        }
-        return userInfoVO;
-    }
+
 }

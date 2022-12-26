@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.ProductMapper">
+<!--    int insert(ProductAddNewDTO productAddNewDTO);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            pms_spu (category_id, brand_id, product_name, description, keywords,
+            picture, tags, price, stock, gmt_exp)
+        values (#{categoryId},#{brandId},#{productName},#{description},#{keywords},
+        #{picture},#{tags},#{price},#{stock},#{gmtExp})
+    </insert>
+<!--    int deleteByIds(Long... id);-->
+    <delete id="deleteByIds">
+        delete from
+        pms_spu
+        where
+        id in (
+              <foreach collection="array" separator="," item="id">
+                   #{id}
+               </foreach>
+                )
+    </delete>
+<!--    int countByName(String productName);-->
+    <select id="countByName" resultType="int">
+        select
+            count(*)
+        where
+            product_name = #{productName}
+    </select>
+</mapper>
