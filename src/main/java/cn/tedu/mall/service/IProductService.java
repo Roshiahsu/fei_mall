@@ -1,7 +1,10 @@
 package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
+import cn.tedu.mall.pojo.product.ProductListVO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @ClassName IProductService
@@ -14,4 +17,6 @@ public interface IProductService {
     void insert(ProductAddNewDTO productAddNewDTO);
 
     void deleteByIds(Long... ids);
+
+    List<ProductListVO> listProduct(Long typeId);
 }

@@ -1,8 +1,11 @@
 package cn.tedu.mall.mapper;
 
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
+import cn.tedu.mall.pojo.product.ProductListVO;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @ClassName ProductMapper
@@ -18,9 +21,8 @@ public interface ProductMapper {
 
     void deleteByIds(Long... id);
 
-
-
     int countByName(String productName);
 
+    List<ProductListVO> listProduct(Long typeId);
 
 }

@@ -3,11 +3,14 @@ package cn.tedu.mall.service.impl;
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
+import cn.tedu.mall.pojo.product.ProductListVO;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.web.ServiceCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @ClassName ProductServiceImpl
@@ -43,5 +46,9 @@ public class ProductServiceImpl implements IProductService {
         productMapper.deleteByIds(ids);
     }
 
-
+    @Override
+    public List<ProductListVO> listProduct(Long typeId) {
+        List<ProductListVO> vos = productMapper.listProduct(typeId);
+        return vos;
+    }
 }

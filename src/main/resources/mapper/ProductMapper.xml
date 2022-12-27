@@ -29,4 +29,46 @@
         where
             product_name = #{productName}
     </select>
+
+<!--    List<ProductListVO> listProduct(Long typeId);-->
+    <select id="listProduct" resultMap="ListProductResultMap">
+        select
+            id,
+            category_id,
+            brand_id,
+            product_name,
+            description,
+            keywords,
+            picture,
+            tags,
+            price,
+            stock,
+            gmt_exp
+        from
+            pms_spu
+--             判斷傳入的數值，如果為1則搜索全部結果
+--                 不為1則搜索傳入的typeId
+            <if test="typeId ==1">
+
+            </if>
+            <if test="type !=1">
+                where
+                product_type_id = #{typeId}
+            </if>
+        order by
+            id
+    </select>
+    <resultMap id="ListProductResultMap" type="cn.tedu.mall.pojo.product.ProductListVO">
+        <id column="id" property="id"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="product_name" property="productName"/>
+        <result column="description" property="description"/>
+        <result column="keywords" property="keywords"/>
+        <result column="picture" property="picture"/>
+        <result column="tags" property="tags"/>
+        <result column="price" property="price"/>
+        <result column="stock" property="stock"/>
+        <result column="gmt_exp" property="gmtExp"/>
+    </resultMap>
 </mapper>

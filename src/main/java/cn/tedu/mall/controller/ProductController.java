@@ -2,16 +2,16 @@ package cn.tedu.mall.controller;
 
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
+import cn.tedu.mall.pojo.product.ProductListVO;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @ClassName ProductController
@@ -45,4 +45,13 @@ public class ProductController {
         productMapper.deleteByIds(ids);
         return JsonResult.ok();
     }
+    @GetMapping("/{typeId}/listProduct")
+    @ApiOperation("商品列表")
+    @ApiOperationSupport(order = 250)
+    public JsonResult listProduct(@PathVariable Long typeId){
+        log.debug("開始productController.listProduct");
+        List<ProductListVO> vos = productMapper.listProduct(typeId);
+        return JsonResult.ok(vos);
+    }
+
 }
