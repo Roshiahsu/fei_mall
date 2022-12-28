@@ -31,7 +31,7 @@
     </select>
 
 <!--    List<ProductListVO> listProduct(Long typeId);-->
-    <select id="listProduct" resultMap="ListProductResultMap">
+    <select id="listProduct" resultMap="ProductQueryResultMap">
         select
             id,
             category_id,
@@ -58,7 +58,7 @@
         order by
             id
     </select>
-    <resultMap id="ListProductResultMap" type="cn.tedu.mall.pojo.product.ProductListVO">
+    <resultMap id="ProductQueryResultMap" type="cn.tedu.mall.pojo.product.ProductListVO">
         <id column="id" property="id"/>
         <result column="category_id" property="categoryId"/>
         <result column="brand_id" property="brandId"/>
@@ -71,4 +71,24 @@
         <result column="stock" property="stock"/>
         <result column="gmt_exp" property="gmtExp"/>
     </resultMap>
+
+<!--    ProductListVO getById(Long id);-->
+    <select id="getById" resultMap="ProductQueryResultMap">
+        select
+            id,
+            category_id,
+            brand_id,
+            product_name,
+            description,
+            keywords,
+            picture,
+            tags,
+            price,
+            stock,
+            gmt_exp
+        from
+            pms_spu
+        where
+            id = #{id}
+    </select>
 </mapper>

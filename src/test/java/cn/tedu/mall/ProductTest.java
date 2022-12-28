@@ -50,4 +50,9 @@ public class ProductTest {
             System.out.println("獲取到的資料>>"+vo.toString());
         }
     }
+    @Test
+    public void getByIdTest(){
+        ProductListVO byId = productMapper.getById(19L);
+        System.out.println("獲取到的資料>>"+byId.toString());
+    }
 }

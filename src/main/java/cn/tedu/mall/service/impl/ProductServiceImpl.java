@@ -25,6 +25,10 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private ProductMapper productMapper;
 
+    /**
+     * 添加商品
+     * @param productAddNewDTO
+     */
     @Override
     public void insert(ProductAddNewDTO productAddNewDTO) {
         log.debug("productService.insert開始");
@@ -40,15 +44,37 @@ public class ProductServiceImpl implements IProductService {
         }
     }
 
+    /**
+     * 刪除商品
+     * @param ids
+     */
     @Override
     public void deleteByIds(Long... ids) {
         log.debug("productService.deleteByIds開始");
         productMapper.deleteByIds(ids);
     }
 
+    /**
+     * 獲取商品列表
+     * @param typeId
+     * @return
+     */
     @Override
     public List<ProductListVO> listProduct(Long typeId) {
+        log.debug("productService.listProduct開始");
         List<ProductListVO> vos = productMapper.listProduct(typeId);
+        //TODO 增加分頁查詢
         return vos;
+    }
+
+    /**
+     * 根據id獲取商品詳情
+     * @param id
+     * @return
+     */
+    @Override
+    public ProductListVO getById(Long id) {
+        log.debug("productService.getById開始");
+        return productMapper.getById(id);
     }
 }

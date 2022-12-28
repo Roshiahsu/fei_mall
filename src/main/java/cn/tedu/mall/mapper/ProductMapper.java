@@ -25,4 +25,6 @@ public interface ProductMapper {
 
     List<ProductListVO> listProduct(Long typeId);
 
+    ProductListVO getById(Long id);
+
 }

@@ -47,11 +47,20 @@ public class ProductController {
     }
     @GetMapping("/{typeId}/listProduct")
     @ApiOperation("商品列表")
-    @ApiOperationSupport(order = 250)
+    @ApiOperationSupport(order = 300)
     public JsonResult listProduct(@PathVariable Long typeId){
         log.debug("開始productController.listProduct");
         List<ProductListVO> vos = productMapper.listProduct(typeId);
         return JsonResult.ok(vos);
+    }
+
+    @GetMapping("/{id}/details")
+    @ApiOperation("商品詳情")
+    @ApiOperationSupport(order = 350)
+    public JsonResult getProductById(@PathVariable Long id){
+        log.debug("開始productController.getProductById");
+        ProductListVO vo = productMapper.getById(id);
+        return JsonResult.ok(vo);
     }
 
 }

@@ -19,4 +19,6 @@ public interface IProductService {
     void deleteByIds(Long... ids);
 
     List<ProductListVO> listProduct(Long typeId);
+
+    ProductListVO getById(Long id);
 }
