@@ -14,7 +14,6 @@ import java.util.List;
  * @Date 2022/12/24、下午11:15
  */
 @Repository
-@Transactional
 public interface ProductMapper {
 
     int insert(ProductAddNewDTO productAddNewDTO);

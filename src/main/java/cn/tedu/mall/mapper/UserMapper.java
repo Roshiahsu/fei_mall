@@ -16,7 +16,6 @@ import java.util.List;
  * @Date 2022/12/21、下午9:44
  */
 @Repository
-@Transactional
 public interface UserMapper {
     /**
      * 新增用戶/插入用戶

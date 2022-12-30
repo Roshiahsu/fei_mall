@@ -20,13 +20,17 @@ public class ServiceCode {
      */
     public static final int ERR_JWT_INVALID = 40001;
     /**
-     * 錯誤：客戶端數據輸入錯誤
-     */
-    public static final int ERR_BAD_REQUEST = 40002;
-    /**
      * 錯誤：JWT過期
      */
-    public static final int ERR_JWT_EXPIRED = 40300;
+    public static final int ERR_JWT_EXPIRED = 40002;
+    /**
+     * 錯誤：客戶端數據輸入錯誤
+     */
+    public static final int ERR_BAD_REQUEST = 40003;
+    /**
+     * 錯誤：沒有登入訊息
+     */
+    public static final int ERR_UNAUTHORIZED =40004;
     /**
      * 錯誤：衝突，數據重複
      */
@@ -47,4 +51,5 @@ public class ServiceCode {
      * 錯誤：未知異常
      */
     public static final int ERR_UNKNOWN = 59999;
+
 }

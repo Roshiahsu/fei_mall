@@ -35,7 +35,7 @@ public class ProductServiceImpl implements IProductService {
         //檢查商品是否重複
         int count = productMapper.countByName(productAddNewDTO.getProductName());
         if(count !=0){
-            throw new ServiceException(ServiceCode.ERR_INSERT,"商品重複！！");
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"商品重複！！");
         }
 
         int rows = productMapper.insert(productAddNewDTO);

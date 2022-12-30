@@ -26,6 +26,8 @@
     <select id="countByName" resultType="int">
         select
             count(*)
+        from
+            pms_spu
         where
             product_name = #{productName}
     </select>

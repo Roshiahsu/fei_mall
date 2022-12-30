@@ -3,6 +3,7 @@ package cn.tedu.mall.controller;
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
@@ -26,14 +27,14 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProductMapper productMapper;
+    private IProductService productService;
 
     @PostMapping("/insert")
     @ApiOperation("新增商品")
     @ApiOperationSupport(order = 100)
     public JsonResult insert(@RequestBody ProductAddNewDTO productAddNewDTO){
         log.debug("開始productController.insert");
-        productMapper.insert(productAddNewDTO);
+        productService.insert(productAddNewDTO);
         return JsonResult.ok();
     }
 
@@ -41,8 +42,8 @@ public class ProductController {
     @ApiOperation("刪除商品")
     @ApiOperationSupport(order = 200)
     public JsonResult delete(Long... ids){
-        log.debug("開始productController.insert");
-        productMapper.deleteByIds(ids);
+        log.debug("開始productController.delete");
+        productService.deleteByIds(ids);
         return JsonResult.ok();
     }
     @GetMapping("/{typeId}/listProduct")
@@ -50,7 +51,7 @@ public class ProductController {
     @ApiOperationSupport(order = 300)
     public JsonResult listProduct(@PathVariable Long typeId){
         log.debug("開始productController.listProduct");
-        List<ProductListVO> vos = productMapper.listProduct(typeId);
+        List<ProductListVO> vos = productService.listProduct(typeId);
         return JsonResult.ok(vos);
     }
 
@@ -59,7 +60,7 @@ public class ProductController {
     @ApiOperationSupport(order = 350)
     public JsonResult getProductById(@PathVariable Long id){
         log.debug("開始productController.getProductById");
-        ProductListVO vo = productMapper.getById(id);
+        ProductListVO vo = productService.getById(id);
         return JsonResult.ok(vo);
     }
 

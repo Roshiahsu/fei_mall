@@ -3,6 +3,7 @@ package cn.tedu.mall.service;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Description TODO
  * @Date 2022/12/24、下午11:14
  */
+@Transactional
 public interface IProductService {
 
     void insert(ProductAddNewDTO productAddNewDTO);
