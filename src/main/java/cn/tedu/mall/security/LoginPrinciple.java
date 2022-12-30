@@ -22,9 +22,12 @@ public class LoginPrinciple implements Serializable {
     @ApiModelProperty(value = "使用者名稱")
     private String username;
 
+    @ApiModelProperty(value = "使用者名稱")
+    private List<String> authorities;
 
-    public LoginPrinciple(Long id, String username) {
+    public LoginPrinciple(Long id, String username, List<String> authorities) {
         this.id = id;
         this.username = username;
+        this.authorities = authorities;
     }
 }

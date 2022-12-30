@@ -82,16 +82,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         log.debug("解析完成 claims>>>{}",claims.toString());
 
 
-        Object id = claims.get("id");
-        Object username = claims.get("username");
-        Object authoritiesString = claims.get("authorities");
-        List<SimpleGrantedAuthority> authorities = JSON.parseArray(authoritiesString.toString(), SimpleGrantedAuthority.class);
+        String login = (String)claims.get(ConstUtils.CLAIM_KEY_USERNAME);
+        LoginPrinciple loginPrincipleString = JSON.parseObject(login, LoginPrinciple.class);
+        List<String> authoritiesString = loginPrincipleString.getAuthorities();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (String s : authoritiesString) {
+            authorities.add(new SimpleGrantedAuthority(s));
+        }
 
-        LoginPrinciple loginPrinciple = new LoginPrinciple(Long.parseLong(id.toString()), username.toString());
-        log.debug("loginPrinciple>>>{}",loginPrinciple.toString());
-
-        Authentication authentication = new UsernamePasswordAuthenticationToken(loginPrinciple, null, authorities);
-        log.debug("authentication>>>{}",authentication.toString());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(loginPrincipleString.getUsername(), loginPrincipleString, authorities);
 
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
