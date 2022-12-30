@@ -44,11 +44,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        //清除上下文
         SecurityContextHolder.clearContext();
-
+        //從請求頭獲取JWT
         String jwt = request.getHeader(REQUEST_HEADER_AUTHORIZATION);
-
+        //沒有JWT直接放行
         if(!StringUtils.hasText(jwt)){
             filterChain.doFilter(request,response);
             return;
@@ -56,6 +56,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         Claims claims = null;
         try {
+            //解析JWT
             claims = JwtUtils.parse(jwt);
         } catch (ExpiredJwtException e) {
             log.debug("解析JWT失敗，JWT過期:{},{}",e.getClass().getName(),e.getMessage());
@@ -81,9 +82,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         log.debug("解析完成 claims>>>{}",claims.toString());
 
-
+        //獲取用戶資料
         String login = (String)claims.get(ConstUtils.CLAIM_KEY_USERNAME);
+        //使用fastjson將資料還原
         LoginPrinciple loginPrincipleString = JSON.parseObject(login, LoginPrinciple.class);
+        //設置權限訊息
         List<String> authoritiesString = loginPrincipleString.getAuthorities();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (String s : authoritiesString) {
@@ -92,6 +95,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(loginPrincipleString.getUsername(), loginPrincipleString, authorities);
 
+        //將獲取訊息添加到上下文
         SecurityContext securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(authentication);
         

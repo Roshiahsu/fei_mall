@@ -2,7 +2,6 @@ package cn.tedu.mall.security;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.util.List;

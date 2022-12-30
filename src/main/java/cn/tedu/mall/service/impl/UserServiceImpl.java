@@ -84,19 +84,19 @@ public class UserServiceImpl implements IUserService {
         String username = principal.getUsername();
         //獲取用戶權限
         Collection<GrantedAuthority> authorities = principal.getAuthorities();
-
+        //將權限轉換成List<String>類型
         List<String> authoritiesValue = new ArrayList<>();
         for (GrantedAuthority authority : authorities) {
             String value = authority.getAuthority();
             authoritiesValue.add(value);
         }
-
+        //使用自定義類LoginPrinciple封裝資料
         LoginPrinciple loginPrinciple = new LoginPrinciple(id, username, authoritiesValue);
+        //fastjson將 LoginPrinciple 轉換成json格式
         String loginPrincipleString = JSON.toJSONString(loginPrinciple);
 
         Map<String,Object> claims = new HashMap<>();
         claims.put(ConstUtils.CLAIM_KEY_USERNAME,loginPrincipleString);
-
 
         return JwtUtils.generate(claims);
     }

@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.cors();
-
+        //開放通型的路徑
         String[] urls = {
                 "/user/reg",
                 "/user/login",
@@ -57,6 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()    //除上述配置以外的其他請求
                 .authenticated();//通過認證：已經登入過才能訪問
 
+        //設置filter在security驗證之前
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
