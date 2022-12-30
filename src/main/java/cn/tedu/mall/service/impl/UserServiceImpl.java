@@ -4,7 +4,9 @@ import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.user.*;
 import cn.tedu.mall.security.CustomerDetails;
+import cn.tedu.mall.security.LoginPrinciple;
 import cn.tedu.mall.service.IUserService;
+import cn.tedu.mall.utils.ConstUtils;
 import cn.tedu.mall.utils.JwtUtils;
 import cn.tedu.mall.web.ServiceCode;
 import com.alibaba.fastjson.JSON;
@@ -82,13 +84,15 @@ public class UserServiceImpl implements IUserService {
         String username = principal.getUsername();
         //獲取用戶權限
         Collection<GrantedAuthority> authorities = principal.getAuthorities();
-        //將權限集合透過fastjson轉成json格式
-        String jsonString = JSON.toJSONString(authorities);
+        //用fastjson 將集合轉成string
+        String authoritiesString = JSON.toJSONString(authorities);
+
 
         Map<String,Object> claims = new HashMap<>();
         claims.put("id",id);
         claims.put("username",username);
-        claims.put("authorities",jsonString);
+        claims.put("authorities",authoritiesString);
+
 
         return JwtUtils.generate(claims);
     }

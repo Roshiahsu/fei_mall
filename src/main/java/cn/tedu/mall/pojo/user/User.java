@@ -62,7 +62,7 @@ public class User {
         this.isEnable = ConstUtils.IS_ENABLE;
         //初始化積分
         this.rewardPoint=0;
-        //設定
+        //設定權限
         this.roleId = ConstUtils.AUTHORITY_USER_ID ;
     }
 }

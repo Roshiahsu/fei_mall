@@ -38,6 +38,9 @@ public class JwtUtils {
     }
 
     public static Claims parse(String jwt){
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwt).getBody();
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(jwt)
+                .getBody();
     }
 }

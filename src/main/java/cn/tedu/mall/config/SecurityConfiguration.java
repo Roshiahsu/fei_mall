@@ -1,5 +1,8 @@
 package cn.tedu.mall.config;
 
+import cn.tedu.mall.filter.JwtAuthorizationFilter;
+import io.jsonwebtoken.Jwt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @ClassName SecurityConfiguration
@@ -17,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -35,7 +42,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors();
 
         String[] urls = {
-                "/admins/login",
+                "/user/reg",
+                "/user/login",
                 "/doc.html",
                 "/**/*.css",
                 "/**/*.js",
@@ -43,16 +51,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/v2/api-docs",
         };
 
-//        http.authorizeRequests() //請求授權
-//                .antMatchers(urls)
-//                .permitAll()     //允許直接訪問
-//                .anyRequest()    //除上述配置以外的其他請求
-//                .authenticated();//通過認證：已經登入過才能訪問
         http.authorizeRequests() //請求授權
-                .anyRequest()
-                .permitAll()     ;//允許直接訪問
-                    //除上述配置以外的其他請求
+                .antMatchers(urls)
+                .permitAll()     //允許直接訪問
+                .anyRequest()    //除上述配置以外的其他請求
+                .authenticated();//通過認證：已經登入過才能訪問
 
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

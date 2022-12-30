@@ -20,7 +20,7 @@ public class ConstUtils {
     public static final int IS_DISABLE =0;
 
     /*
-    權限常量
+     *權限常量
      */
     /**
      * 管理員權限
@@ -31,6 +31,7 @@ public class ConstUtils {
      */
     public static final Integer AUTHORITY_USER_ID = 2;
 
+    public static final String  CLAIM_KEY_USERNAME = "user";
 
 
 }

@@ -12,6 +12,7 @@ import java.io.Serializable;
  * @Date 2022/12/22、上午3:08
  */
 @Data
+@Deprecated
 public class UserAuthority implements Serializable, GrantedAuthority {
     private String authority;
 
