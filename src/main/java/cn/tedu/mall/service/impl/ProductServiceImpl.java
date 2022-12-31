@@ -5,7 +5,10 @@ import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
 import cn.tedu.mall.service.IProductService;
+import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,11 +63,14 @@ public class ProductServiceImpl implements IProductService {
      * @return
      */
     @Override
-    public List<ProductListVO> listProduct(Long typeId) {
+    public JsonPage<ProductListVO> listProduct(Integer pageNum,Integer pageSize,Long typeId) {
         log.debug("productService.listProduct開始");
-        List<ProductListVO> vos = productMapper.listProduct(typeId);
+        PageHelper.startPage(pageNum,pageSize);
+
+        List<ProductListVO> list = productMapper.listProduct(typeId);
         //TODO 增加分頁查詢
-        return vos;
+
+        return JsonPage.restPage(new PageInfo<>(list));
     }
 
     /**

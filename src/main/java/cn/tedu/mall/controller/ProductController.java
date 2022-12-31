@@ -4,11 +4,13 @@ import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
 import cn.tedu.mall.service.IProductService;
+import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,10 +51,10 @@ public class ProductController {
     @GetMapping("/{typeId}/listProduct")
     @ApiOperation("商品列表")
     @ApiOperationSupport(order = 300)
-    public JsonResult listProduct(@PathVariable Long typeId){
+    public JsonResult listProduct(@Param ("pageNum") Integer pageNum,@Param("pageSize") Integer pageSize,@PathVariable Long typeId){
         log.debug("開始productController.listProduct");
-        List<ProductListVO> vos = productService.listProduct(typeId);
-        return JsonResult.ok(vos);
+        JsonPage<ProductListVO> list = productService.listProduct(pageNum, pageSize, typeId);
+        return JsonResult.ok(list);
     }
 
     @GetMapping("/{id}/details")
