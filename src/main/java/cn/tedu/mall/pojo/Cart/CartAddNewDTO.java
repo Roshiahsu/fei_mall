@@ -19,7 +19,6 @@ public class CartAddNewDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "用戶id")
-    @NotBlank(message = "請輸入正確的用戶id。")
     private Long userId;
 
     @ApiModelProperty(value = "商品id")

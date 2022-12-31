@@ -34,6 +34,7 @@ public class CartController {
     @ApiOperationSupport(order = 100)
     public JsonResult insert(@RequestBody CartAddNewDTO cartAddNewDTO){
         log.debug("開始新增購物車Controller");
+        log.debug("獲取到的資料>>>{}",cartAddNewDTO);
         cartService.insert(cartAddNewDTO);
         return JsonResult.ok();
     }

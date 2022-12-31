@@ -68,7 +68,6 @@ public class ProductServiceImpl implements IProductService {
         PageHelper.startPage(pageNum,pageSize);
 
         List<ProductListVO> list = productMapper.listProduct(typeId);
-        //TODO 增加分頁查詢
 
         return JsonPage.restPage(new PageInfo<>(list));
     }
