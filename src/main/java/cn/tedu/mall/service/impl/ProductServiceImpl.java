@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -68,6 +69,14 @@ public class ProductServiceImpl implements IProductService {
         PageHelper.startPage(pageNum,pageSize);
 
         List<ProductListVO> list = productMapper.listProduct(typeId);
+        //商品名稱太長，縮排
+        for (ProductListVO vo : list) {
+            String productName = vo.getProductName();
+            if(productName.length()>15){
+                productName= productName.substring(0,12)+"...";
+                vo.setProductName(productName);
+            }
+        }
 
         return JsonPage.restPage(new PageInfo<>(list));
     }
