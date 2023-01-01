@@ -39,5 +39,17 @@ public interface CartMapper {
      */
     Cart selectExistsCart(@Param("userId") Long userId,@Param("spuId")Long spuId);
 
+    /**
+     * 根據用戶id查詢購物車列表
+     * @param userId
+     * @return
+     */
     List<CartInfoVO> listCartInfoByUserId(Long userId);
+
+    /**
+     * 根據id刪除購物車
+     * @param id
+     * @return
+     */
+    int deleteCartById(Long id);
 }

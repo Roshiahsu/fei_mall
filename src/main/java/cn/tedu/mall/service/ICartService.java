@@ -19,4 +19,6 @@ public interface ICartService {
     void insert(CartAddNewDTO cartAddNewDTO);
 
     JsonPage<CartInfoVO> listCartByUserId(Integer pageNum, Integer pageSize);
+
+    void deleteCartById(Long id);
 }

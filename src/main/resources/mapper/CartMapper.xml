@@ -12,6 +12,34 @@
             (#{userId}, #{spuId}, #{price}, #{quantity}, #{gmtCreate}, #{gmtModified})
     </insert>
 
+    <!--    int updateByCartId(Cart cart);-->
+    <update id="updateByCartId">
+        update
+        oms_cart
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="spuId != null">
+                spu_id = #{spuId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified},
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
 <!--            Cart selectExistsCart(@Param("userId") Long userId,@Param("spuId")Long spuId);-->
     <select id="selectExistsCart" resultMap="BasicQueryFields">
         select
@@ -47,33 +75,6 @@
         <result column="gmt_create" property="gmtCreate"/>
         <result column="gmt_modified" property="gmtModified"/>
     </resultMap>
-<!--    int updateByCartId(Cart cart);-->
-    <update id="updateByCartId">
-        update
-            oms_cart
-            <set>
-                <if test="userId != null">
-                    user_id = #{userId},
-                </if>
-                <if test="spuId != null">
-                    spu_id = #{spuId},
-                </if>
-                <if test="price != null">
-                    price = #{price},
-                </if>
-                <if test="quantity != null">
-                    quantity = #{quantity},
-                </if>
-                <if test="gmtCreate != null">
-                    gmt_create = #{gmtCreate},
-                </if>
-                <if test="gmtModified != null">
-                    gmt_modified = #{gmtModified},
-                </if>
-            </set>
-        where
-            id = #{id}
-    </update>
 
 <!--    List<CartInfoVO> listCartInfoByUserId(Long userId);-->
     <select id="listCartInfoByUserId" resultMap="ListFields">
@@ -99,4 +100,13 @@
         <result column="price" property="price"/>
         <result column="quantity" property="quantity"/>
     </resultMap>
+
+<!--    int deleteCartById(Long id);-->
+    <delete id="deleteCartById">
+        delete from
+            oms_cart
+        where
+            id = #{id}
+
+    </delete>
 </mapper>

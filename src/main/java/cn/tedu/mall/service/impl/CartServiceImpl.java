@@ -35,14 +35,8 @@ public class CartServiceImpl implements ICartService {
     @Override
     public void insert(CartAddNewDTO cartAddNewDTO) {
         log.debug("CartService.insert開始");
-        Long userId =null;
-        try{
-             userId = ConstUtils.getUserId();
-        }catch (ClassCastException e){
-            log.debug("捕獲異常");
-            throw new ServiceException(ServiceCode.ERR_UNAUTHORIZED,"用戶尚未登入!");
-        }
-
+        //從上下文獲取UserId
+        Long userId = ConstUtils.getUserId();
         //根據userId與spuId查詢該商品是否已經加入購物車
         Cart cartInfo = cartMapper.selectExistsCart(userId, cartAddNewDTO.getSpuId());
 
@@ -78,11 +72,20 @@ public class CartServiceImpl implements ICartService {
         log.debug("CartService.listCartByUserId開始");
         //從上下文獲取UserId
         Long userId = ConstUtils.getUserId();
+        log.debug("獲取到的ID>>>{}",userId);
         //設定分頁數
         PageHelper.startPage(pageNum,pageSize);
 
         List<CartInfoVO> list = cartMapper.listCartInfoByUserId(userId);
-
+        for (CartInfoVO cartInfoVO : list) {
+            cartInfoVO.setSubtotal(cartInfoVO.getPrice() * cartInfoVO.getQuantity());
+        }
         return JsonPage.restPage(new PageInfo<>(list));
+    }
+
+    @Override
+    public void deleteCartById(Long id) {
+        log.debug("CartService.deleteCartById開始");
+        cartMapper.deleteCartById(id);
     }
 }

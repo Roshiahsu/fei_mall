@@ -34,4 +34,7 @@ public class CartInfoVO implements Serializable {
     @ApiModelProperty(value = "購買數量")
     private int quantity;
 
+    @ApiModelProperty(value = "小計")
+    private int subtotal;
+
 }

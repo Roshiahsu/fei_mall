@@ -39,6 +39,16 @@ public class CartController {
         return JsonResult.ok();
     }
 
+    @GetMapping("/{id}/delete")
+    @ApiOperation("刪除購物車商品")
+    @ApiOperationSupport(order = 200)
+    public JsonResult delete(@PathVariable Long id){
+        log.debug("開始刪除購物車Controller");
+        log.debug("獲取到的資料>>>{}",id);
+        cartService.deleteCartById(id);
+        return JsonResult.ok();
+    }
+
     @GetMapping("/list")
     @ApiOperation("查詢用戶購物車列表")
     @ApiOperationSupport(order = 400)

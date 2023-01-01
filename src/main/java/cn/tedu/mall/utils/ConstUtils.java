@@ -4,6 +4,7 @@ import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.pojo.domain.UserAuthority;
 import cn.tedu.mall.security.LoginPrinciple;
 import cn.tedu.mall.web.ServiceCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * @Description 常量工具包
  * @Date 2022/12/22、上午3:20
  */
+@Slf4j
 public class ConstUtils {
 
     /**
@@ -38,10 +40,14 @@ public class ConstUtils {
 
     //從上下文獲取用戶訊息
     public static LoginPrinciple getUserInfo(){
-        UsernamePasswordAuthenticationToken authentication =
-                (UsernamePasswordAuthenticationToken)SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null) {
-            throw new ServiceException(ServiceCode.ERR_UNAUTHORIZED, "沒有登入訊息");
+        log.debug("開始從上下文獲取id");
+        UsernamePasswordAuthenticationToken authentication = null;
+        try{
+            authentication =
+                    (UsernamePasswordAuthenticationToken)SecurityContextHolder
+                            .getContext().getAuthentication();
+        }catch (ClassCastException e){
+            throw new ServiceException(ServiceCode.ERR_UNAUTHORIZED, "用戶尚未登入");
         }
 
         LoginPrinciple loginPrinciple = (LoginPrinciple)authentication.getCredentials();
