@@ -21,4 +21,6 @@ public interface ICartService {
     JsonPage<CartInfoVO> listCartByUserId(Integer pageNum, Integer pageSize);
 
     void deleteCartById(Long id);
+
+    void deleteAllCarts();
 }

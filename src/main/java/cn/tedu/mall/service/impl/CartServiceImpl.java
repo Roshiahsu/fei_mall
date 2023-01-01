@@ -46,8 +46,11 @@ public class CartServiceImpl implements ICartService {
             log.debug("商品已存在，修改購買數量");
             //商品已存在，修改購買數量
             BeanUtils.copyProperties(cartInfo,cart);
+            //獲取新增的數量
             int originalQuantity = cartInfo.getQuantity();
+            //原始數量加上新增的數量
             cart.setQuantity(originalQuantity+cartAddNewDTO.getQuantity());
+            //添加修改時間
             cart.setGmtModified(LocalDateTime.now());
             int rows = cartMapper.updateByCartId(cart);
             if(rows !=1){
@@ -66,7 +69,7 @@ public class CartServiceImpl implements ICartService {
             }
         }
     }
-
+    //根據用戶id查詢當前用戶購物車中商品訊息
     @Override
     public JsonPage<CartInfoVO> listCartByUserId(Integer pageNum, Integer pageSize) {
         log.debug("CartService.listCartByUserId開始");
@@ -86,6 +89,20 @@ public class CartServiceImpl implements ICartService {
     @Override
     public void deleteCartById(Long id) {
         log.debug("CartService.deleteCartById開始");
-        cartMapper.deleteCartById(id);
+        //從上下文獲取id，判斷用戶是否登入
+        Long userId = ConstUtils.getUserId();
+        int rows = cartMapper.deleteCartById(id);
+        if(rows==0){
+            throw new ServiceException(ServiceCode.ERR_NOT_FOUND,"您要刪除的商品不存在");
+        }
+    }
+
+    @Override
+    public void deleteAllCarts() {
+        Long userId = ConstUtils.getUserId();
+        int rows = cartMapper.deleteAllCarts(userId);
+        if(rows==0){
+            throw new ServiceException(ServiceCode.ERR_NOT_FOUND,"您要刪除的商品不存在");
+        }
     }
 }

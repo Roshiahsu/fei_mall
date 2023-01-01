@@ -52,4 +52,10 @@ public interface CartMapper {
      * @return
      */
     int deleteCartById(Long id);
+
+    /**
+     * 清空購物車
+     * @return
+     */
+    int deleteAllCarts(Long userId);
 }

@@ -49,6 +49,15 @@ public class CartController {
         return JsonResult.ok();
     }
 
+    @GetMapping("/deleteAll")
+    @ApiOperation("清空購物車商品")
+    @ApiOperationSupport(order = 250)
+    public JsonResult deleteAll(){
+        log.debug("開始清空購物車Controller");
+        cartService.deleteAllCarts();
+        return JsonResult.ok();
+    }
+
     @GetMapping("/list")
     @ApiOperation("查詢用戶購物車列表")
     @ApiOperationSupport(order = 400)

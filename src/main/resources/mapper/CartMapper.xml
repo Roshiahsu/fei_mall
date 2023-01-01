@@ -107,6 +107,12 @@
             oms_cart
         where
             id = #{id}
-
+    </delete>
+<!--    int deleteAllCarts();-->
+    <delete id="deleteAllCarts">
+         delete from
+            oms_cart
+        where
+            user_id = #{userId}
     </delete>
 </mapper>
