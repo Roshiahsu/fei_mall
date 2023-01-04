@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @ClassName OrderItemAddNewDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 新增訂單包含的商品訊息
  * @Date 2023/1/2、上午3:42
  */
 @Data
@@ -22,7 +22,6 @@ public class OrderItemAddNewDTO implements Serializable {
     private String sn;
 
     @ApiModelProperty(value = "商品id")
-    @NotBlank(message = "商品id不得為空！！")
     private Long spuId;
 
     @ApiModelProperty(value = "購買數量")

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @ClassName OrderAddNewDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 前端發起新增訂單請求的資料
  * @Date 2023/1/1、下午8:43
  */
 @Data

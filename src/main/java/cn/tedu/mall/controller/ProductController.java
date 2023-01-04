@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * @ClassName ProductController
  * @Version 1.0
- * @Description TODO
+ * @Description 商品相關Controller
  * @Date 2022/12/26、上午3:01
  */
 @RestController
@@ -35,7 +35,7 @@ public class ProductController {
     @ApiOperation("新增商品")
     @ApiOperationSupport(order = 100)
     public JsonResult insert(@RequestBody ProductAddNewDTO productAddNewDTO){
-        log.debug("開始productController.insert");
+        log.debug("開始新增商品");
         productService.insert(productAddNewDTO);
         return JsonResult.ok();
     }
@@ -44,7 +44,7 @@ public class ProductController {
     @ApiOperation("刪除商品")
     @ApiOperationSupport(order = 200)
     public JsonResult delete(Long... ids){
-        log.debug("開始productController.delete");
+        log.debug("開始刪除商品");
         productService.deleteByIds(ids);
         return JsonResult.ok();
     }
@@ -52,7 +52,7 @@ public class ProductController {
     @ApiOperation("商品列表")
     @ApiOperationSupport(order = 300)
     public JsonResult listProduct(@Param ("pageNum") Integer pageNum,@Param("pageSize") Integer pageSize,@PathVariable Long typeId){
-        log.debug("開始productController.listProduct");
+        log.debug("開始查詢商品列表");
         JsonPage<ProductListVO> list = productService.listProduct(pageNum, pageSize, typeId);
         return JsonResult.ok(list);
     }
@@ -61,7 +61,7 @@ public class ProductController {
     @ApiOperation("商品詳情")
     @ApiOperationSupport(order = 350)
     public JsonResult getProductById(@PathVariable Long id){
-        log.debug("開始productController.getProductById");
+        log.debug("開始查詢商品詳情");
         ProductListVO vo = productService.getById(id);
         return JsonResult.ok(vo);
     }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @ClassName Order
  * @Version 1.0
- * @Description TODO
+ * @Description 寫入資料庫的資料
  * @Date 2023/1/2、上午2:29
  */
 @Data

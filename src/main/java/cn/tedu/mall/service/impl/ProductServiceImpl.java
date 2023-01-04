@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * @ClassName ProductServiceImpl
  * @Version 1.0
- * @Description TODO
+ * @Description 商品相關Service
  * @Date 2022/12/26、上午2:28
  */
 @Service
@@ -35,13 +35,13 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public void insert(ProductAddNewDTO productAddNewDTO) {
-        log.debug("productService.insert開始");
+        log.debug("添加商品Service");
         //檢查商品是否重複
         int count = productMapper.countByName(productAddNewDTO.getProductName());
         if(count !=0){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"商品重複！！");
         }
-
+        //資料寫入資料庫
         int rows = productMapper.insert(productAddNewDTO);
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍後再試!!");
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public void deleteByIds(Long... ids) {
-        log.debug("productService.deleteByIds開始");
+        log.debug("刪除商品Service");
         productMapper.deleteByIds(ids);
     }
 
@@ -65,10 +65,11 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public JsonPage<ProductListVO> listProduct(Integer pageNum,Integer pageSize,Long typeId) {
-        log.debug("productService.listProduct開始");
+        log.debug("獲取商品列表Service");
         PageHelper.startPage(pageNum,pageSize);
 
         List<ProductListVO> list = productMapper.listProduct(typeId);
+
         //商品名稱太長，縮排
         for (ProductListVO vo : list) {
             String productName = vo.getProductName();
@@ -77,7 +78,6 @@ public class ProductServiceImpl implements IProductService {
                 vo.setProductName(productName);
             }
         }
-
         return JsonPage.restPage(new PageInfo<>(list));
     }
 
@@ -88,7 +88,7 @@ public class ProductServiceImpl implements IProductService {
      */
     @Override
     public ProductListVO getById(Long id) {
-        log.debug("productService.getById開始");
+        log.debug("獲取商品詳情Service");
         return productMapper.getById(id);
     }
 }

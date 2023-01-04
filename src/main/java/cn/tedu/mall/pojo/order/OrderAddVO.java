@@ -9,7 +9,7 @@ import java.math.BigInteger;
 /**
  * @ClassName OrderAddVO
  * @Version 1.0
- * @Description 新增訂單完成回傳的資料
+ * @Description 新增訂單完成響應給前端的資料
  * @Date 2023/1/2、上午4:10
  */
 @Data

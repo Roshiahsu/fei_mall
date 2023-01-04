@@ -10,7 +10,7 @@ import java.time.LocalDate;
 /**
  * @ClassName ProductListVO
  * @Version 1.0
- * @Description TODO
+ * @Description 響應的商品列表資料
  * @Date 2022/12/27、上午7:01
  */
 @Data

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 /**
  * @ClassName ProductAddNewDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 前端發送新增商品請求的商品資料
  * @Date 2022/12/24、下午11:16
  */
 @Data

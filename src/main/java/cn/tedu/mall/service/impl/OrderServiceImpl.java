@@ -28,7 +28,7 @@ import java.util.UUID;
 /**
  * @ClassName OrderServiceImpl
  * @Version 1.0
- * @Description TODO
+ * @Description 訂單相關Service層
  * @Date 2023/1/2、上午2:48
  */
 @Service
@@ -71,12 +71,12 @@ public class OrderServiceImpl implements IOrderService {
             orderItem.setSn(order.getSn());
             orderItems.add(orderItem);
 
-            //修改商品庫存數量
+            //透過spuId修改商品庫存
             ProductUpdateDTO productUpdateDTO = new ProductUpdateDTO();
             productUpdateDTO.setId(orderItem.getSpuId());
             //獲取庫存
             int stock = orderItem.getStock();
-            //減少庫存
+            //將庫存減少購買數量
             productUpdateDTO.setStock(stock-orderItem.getQuantity());
             log.debug("準備傳入資料庫的資料{}",productUpdateDTO);
             rows = productMapper.updateById(productUpdateDTO);
@@ -117,12 +117,12 @@ public class OrderServiceImpl implements IOrderService {
         }
         //判斷運費
         if(order.getAmountOfFreight()==null){
-            //需要精確計算必須使用BigDecimal
+            //使用BigInteger做精確計算
             order.setAmountOfFreight(new BigInteger("0"));
         }
         //判斷運費
         if(order.getAmountOfDiscount()==null){
-            //需要精確計算必須使用BigDecimal
+
             order.setAmountOfDiscount(new BigInteger("0"));
         }
         //判斷創建時間

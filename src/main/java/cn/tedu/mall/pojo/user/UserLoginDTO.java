@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @ClassName UserLoginDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 用戶登入資料
  * @Date 2022/12/22、下午4:08
  */
 @Data

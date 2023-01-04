@@ -4,10 +4,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 
+/**
+ * @ClassName UserLoginVO
+ * @Version 1.0
+ * @Description 用戶登入時調用loadUserByUsername，回傳的資料
+ * @Date 2022/12/21、下午9:22
+ */
 @Data
 public class UserLoginVO implements Serializable {
     @ApiModelProperty(value = "用戶id")

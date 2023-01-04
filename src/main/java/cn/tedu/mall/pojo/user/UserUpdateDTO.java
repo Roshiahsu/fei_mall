@@ -11,7 +11,7 @@ import java.time.LocalDate;
 /**
  * @ClassName UserUpdateDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 修改用戶資料請求資料
  * @Date 2022/12/23、下午1:24
  */
 @Data

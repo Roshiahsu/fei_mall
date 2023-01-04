@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @ClassName UserRegDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 用戶快速註冊請求資料
  * @Date 2022/12/21、下午9:22
  */
 @Data
