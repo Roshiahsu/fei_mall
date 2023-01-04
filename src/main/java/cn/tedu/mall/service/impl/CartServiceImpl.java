@@ -5,6 +5,7 @@ import cn.tedu.mall.mapper.CartMapper;
 import cn.tedu.mall.pojo.Cart.Cart;
 import cn.tedu.mall.pojo.Cart.CartAddNewDTO;
 import cn.tedu.mall.pojo.Cart.CartInfoVO;
+import cn.tedu.mall.pojo.Cart.CartUpdateDTO;
 import cn.tedu.mall.service.ICartService;
 import cn.tedu.mall.utils.ConstUtils;
 import cn.tedu.mall.web.JsonPage;
@@ -32,6 +33,7 @@ public class CartServiceImpl implements ICartService {
     @Autowired
     private CartMapper cartMapper;
 
+    //新增商品
     @Override
     public void insert(CartAddNewDTO cartAddNewDTO) {
         log.debug("新增購物車Service層開始");
@@ -69,6 +71,25 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
+    //修改購物車內商品訊息
+    @Override
+    public void updateCart(List<CartUpdateDTO> cartUpdateDTO) {
+        log.debug("開始修改購物車內的購買數量");
+        for (CartUpdateDTO updateDTO : cartUpdateDTO) {
+            //判斷isUpdate屬性，1則修改屬性
+            if(updateDTO.getIsUpdate()==1){
+                Cart cart = new Cart();
+                BeanUtils.copyProperties(updateDTO,cart);
+                cart.setGmtModified(LocalDateTime.now());
+                cart.setIsUpdate(0);
+                int rows = cartMapper.updateByCartId(cart);
+                if(rows==0){
+                    throw new ServiceException(ServiceCode.ERR_UPDATE,"您要修改的商品不存在");
+                }
+            }
+        }
+    }
+
     //根據用戶id查詢當前用戶購物車中商品訊息
     @Override
     public List<CartInfoVO> listCartByUserId() {
@@ -76,8 +97,6 @@ public class CartServiceImpl implements ICartService {
         //從上下文獲取UserId
         Long userId = ConstUtils.getUserId();
         log.debug("獲取到的ID>>>{}",userId);
-        //設定分頁數
-
 
         List<CartInfoVO> list = cartMapper.listCartInfoByUserId(userId);
         //小計每件商品價錢
@@ -108,4 +127,6 @@ public class CartServiceImpl implements ICartService {
             throw new ServiceException(ServiceCode.ERR_NOT_FOUND,"您要刪除的商品不存在");
         }
     }
+
+
 }
