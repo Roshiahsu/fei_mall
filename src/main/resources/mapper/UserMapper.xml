@@ -61,7 +61,8 @@
         from
         ums_user uu
         left join ums_role on uu.role_id = ums_role.id
-        left join ums_sex on uu.role_id = ums_sex.id
+        left join ums_sex on uu.sex = ums_sex.id
+        left join ums_user_address uua on uu.id = uua.user_id
         where
         uu.id = #{id}
     </select>
@@ -78,12 +79,16 @@
             phone,
             sex,
             bod,
-            is_enable,
+            uu.is_enable,
             reward_point,
             uu.role_id,
             ums_role.role_name,
             gmt_modified,
-            gmt_last_login
+            gmt_last_login,
+            zip_code,
+            city,
+            zone,
+            detailed_address
         </if>
     </sql>
     <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.user.UserInfoVO">
@@ -102,6 +107,10 @@
         <result column="role_name" property="roleName"/>
         <result column="role_id" property="roleId"/>
         <result column="sex_name" property="sexName"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="city" property="city"/>
+        <result column="zone" property="zone"/>
+        <result column="detailed_address" property="detailedAddress"/>
     </resultMap>
 
 

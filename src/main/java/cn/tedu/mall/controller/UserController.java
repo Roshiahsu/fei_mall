@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,9 +60,10 @@ public class UserController {
     @GetMapping("/userInfo")
     @ApiOperation("用戶詳情")
     @ApiOperationSupport(order = 350)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult userInfo(){
         log.debug("用戶詳情controller開始");
-        List<UserInfoVO> userInfoVO = userService.userInfo(5L);
+        List<UserInfoVO> userInfoVO = userService.userInfo();
         return JsonResult.ok(userInfoVO);
     }
 }

@@ -70,5 +70,5 @@ public class UserInfoVO implements Serializable {
     private String zone;
 
     @ApiModelProperty(value = "地址詳情")
-    private String detailAddress;
+    private String detailedAddress;
 }
