@@ -71,20 +71,20 @@ public class CartServiceImpl implements ICartService {
 
     //根據用戶id查詢當前用戶購物車中商品訊息
     @Override
-    public JsonPage<CartInfoVO> listCartByUserId(Integer pageNum, Integer pageSize) {
+    public List<CartInfoVO> listCartByUserId() {
         log.debug("根據用戶id查詢購物車中商品訊息開始");
         //從上下文獲取UserId
         Long userId = ConstUtils.getUserId();
         log.debug("獲取到的ID>>>{}",userId);
         //設定分頁數
-        PageHelper.startPage(pageNum,pageSize);
+
 
         List<CartInfoVO> list = cartMapper.listCartInfoByUserId(userId);
         //小計每件商品價錢
         for (CartInfoVO cartInfoVO : list) {
             cartInfoVO.setSubtotal(cartInfoVO.getPrice() * cartInfoVO.getQuantity());
         }
-        return JsonPage.restPage(new PageInfo<>(list));
+        return list;
     }
 
     @Override

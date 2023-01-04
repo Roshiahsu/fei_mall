@@ -14,6 +14,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @ClassName CartController
  * @Version 1.0
@@ -61,9 +63,9 @@ public class CartController {
     @GetMapping("/list")
     @ApiOperation("查詢用戶購物車列表")
     @ApiOperationSupport(order = 400)
-    public JsonResult listCartByUserId(@Param("pageNum")Integer pageNum,@Param("pageSize")Integer pageSize){
+    public JsonResult listCartByUserId(){
         log.debug("查詢用戶購物車列表Controller");
-        JsonPage<CartInfoVO> cartInfoVOJsonPage = cartService.listCartByUserId(pageNum, pageSize);
+        List<CartInfoVO> cartInfoVOJsonPage = cartService.listCartByUserId();
         return JsonResult.ok(cartInfoVOJsonPage);
     }
 

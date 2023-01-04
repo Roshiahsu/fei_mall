@@ -7,6 +7,8 @@ import cn.tedu.mall.web.JsonPage;
 import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @ClassName ICartService
  * @Version 1.0
@@ -18,7 +20,7 @@ public interface ICartService {
 
     void insert(CartAddNewDTO cartAddNewDTO);
 
-    JsonPage<CartInfoVO> listCartByUserId(Integer pageNum, Integer pageSize);
+    List<CartInfoVO> listCartByUserId();
 
     void deleteCartById(Long id);
 
