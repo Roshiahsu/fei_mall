@@ -93,4 +93,50 @@
         where
             id = #{id}
     </select>
+
+<!--        int updateById(ProductUpdateDTO productUpdateDTO);-->
+    <update id="updateById">
+        update
+            pms_spu
+        <set>
+            <if test="id !=null">
+                id = #{id},
+            </if>
+            <if test="categoryId !=null">
+                category_id = #{categoryId},
+            </if>
+            <if test="brandId !=null">
+                brand_id = #{brandId},
+            </if>
+            <if test="productName !=null">
+                product_name = #{productName},
+            </if>
+            <if test="description !=null">
+                description = #{description},
+            </if>
+            <if test="keywords !=null">
+                keywords = #{keywords},
+            </if>
+            <if test="picture !=null">
+                picture = #{picture},
+            </if>
+            <if test="tags !=null">
+                tags = #{tags},
+            </if>
+            <if test="price !=null">
+                price = #{price},
+            </if>
+            <if test="stock !=null">
+                stock = #{stock},
+            </if>
+            <if test="gmtExp !=null">
+                gmt_exp = #{gmtExp},
+            </if>
+            <if test="productTypeId !=null">
+                product_type_id = #{productTypeId},
+            </if>
+        </set>
+        where
+            id = #{id}
+    </update>
 </mapper>

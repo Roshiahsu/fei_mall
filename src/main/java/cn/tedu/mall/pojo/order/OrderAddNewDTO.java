@@ -44,5 +44,4 @@ public class OrderAddNewDTO implements Serializable {
     @NotBlank(message = "實際支付金額不得為空")
     private List<OrderItemAddNewDTO> orderItems;
 
-
 }

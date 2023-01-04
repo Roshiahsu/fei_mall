@@ -3,10 +3,12 @@ package cn.tedu.mall.service.impl;
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.CartMapper;
 import cn.tedu.mall.mapper.OrderMapper;
+import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.order.Order;
 import cn.tedu.mall.pojo.order.OrderAddNewDTO;
 import cn.tedu.mall.pojo.order.OrderAddVO;
 import cn.tedu.mall.pojo.order.OrderItemAddNewDTO;
+import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.service.IOrderService;
 import cn.tedu.mall.utils.ConstUtils;
 import cn.tedu.mall.web.ServiceCode;
@@ -15,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -38,12 +41,12 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private CartMapper cartMapper;
 
-
-
+    @Autowired
+    private ProductMapper productMapper;
 
     @Override
     public OrderAddVO insert(OrderAddNewDTO orderAddNewDTO) {
-        log.debug("OrderService.inset開始");
+        log.debug("開始新增訂單");
         log.debug("獲取到的DTO>>>{}",orderAddNewDTO);
         //從上下文獲取id
         Long userId = ConstUtils.getUserId();
@@ -67,6 +70,19 @@ public class OrderServiceImpl implements IOrderService {
             //外鍵，將omsOrderItem與omsOrder透過sn進行關聯
             orderItem.setSn(order.getSn());
             orderItems.add(orderItem);
+
+            //修改商品庫存數量
+            ProductUpdateDTO productUpdateDTO = new ProductUpdateDTO();
+            productUpdateDTO.setId(orderItem.getSpuId());
+            //獲取庫存
+            int stock = orderItem.getStock();
+            //減少庫存
+            productUpdateDTO.setStock(stock-orderItem.getQuantity());
+            log.debug("準備傳入資料庫的資料{}",productUpdateDTO);
+            rows = productMapper.updateById(productUpdateDTO);
+            if (rows == 0){
+                throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌中，請稍後再試!!");
+            }
         }
         log.debug("獲取到的orderItems>>>{}",orderItems);
         //orderItems是商品
@@ -76,10 +92,10 @@ public class OrderServiceImpl implements IOrderService {
         //清空購物車
         log.debug("清空購物車");
         rows = cartMapper.deleteAllCarts(userId);
-//        if (rows == 0){
-//            throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌中，請稍後再試!!");
-//        }
-//TODO 修改商品庫存數量
+        if (rows == 0){
+            throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌中，請稍後再試!!");
+        }
+
         OrderAddVO orderAddVO = new OrderAddVO();
         //訂單id
         orderAddVO.setId(order.getId());

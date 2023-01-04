@@ -24,4 +24,10 @@ public class OrderItemAddNewDTO implements Serializable {
     @ApiModelProperty(value = "商品id")
     @NotBlank(message = "商品id不得為空！！")
     private Long spuId;
+
+    @ApiModelProperty(value = "購買數量")
+    private int quantity;
+
+    @ApiModelProperty(value = "庫存")
+    private int stock;
 }
