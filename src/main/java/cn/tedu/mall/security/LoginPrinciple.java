@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @ClassName LoginPrinciple
  * @Version 1.0
- * @Description TODO
+ * @Description Principle包裝類
  * @Date 2022/12/29、上午7:36
  */
 @Data

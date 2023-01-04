@@ -14,7 +14,7 @@ import java.util.Collection;
 /**
  * @ClassName CustomerDetails
  * @Version 1.0
- * @Description TODO
+ * @Description 自定義Security User 包裝類
  * @Date 2022/12/22、下午3:38
  */
 

@@ -101,11 +101,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         
         filterChain.doFilter(request,response);
     }
-
+    //發送jwt失敗響應
     private void jwtExceptionResponse(HttpServletResponse response, Integer serviceCode,String errorMessage) throws IOException {
+        //配置響應格式
         JsonResult jsonResult = JsonResult.fail(serviceCode, errorMessage);
+        //使用fastjson轉換格式
         String jsonResultString = JSON.toJSONString(jsonResult);
+        //配置響應頭
         response.setContentType("application/json; charset=UTF-8");
+        //透過流發送
         response.getWriter().println(jsonResultString);
     }
 }

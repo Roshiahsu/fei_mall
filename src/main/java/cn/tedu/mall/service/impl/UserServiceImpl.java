@@ -121,6 +121,7 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    //修改密碼
     @Override
     public void updatePassword(UserUpdateDTO userUpdateDTO) {
         log.debug("開始service.updatePassword");
