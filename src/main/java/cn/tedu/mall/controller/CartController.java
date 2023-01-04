@@ -1,7 +1,9 @@
 package cn.tedu.mall.controller;
 
+import cn.tedu.mall.pojo.Cart.Cart;
 import cn.tedu.mall.pojo.Cart.CartAddNewDTO;
 import cn.tedu.mall.pojo.Cart.CartInfoVO;
+import cn.tedu.mall.pojo.Cart.CartUpdateDTO;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.service.ICartService;
 import cn.tedu.mall.web.JsonPage;
@@ -41,9 +43,19 @@ public class CartController {
         return JsonResult.ok();
     }
 
+    @PostMapping("/update")
+    @ApiOperation("修改購物車購買數量")
+    @ApiOperationSupport(order = 200)
+    public JsonResult update(@RequestBody List<CartUpdateDTO> cartUpdateDTO){
+        log.debug("開始修改購物車購買數量");
+        log.debug("獲取到的資料>>>{}",cartUpdateDTO);
+        cartService.updateCart(cartUpdateDTO);
+        return JsonResult.ok();
+    }
+
     @GetMapping("/{id}/delete")
     @ApiOperation("刪除購物車商品")
-    @ApiOperationSupport(order = 200)
+    @ApiOperationSupport(order = 300)
     public JsonResult delete(@PathVariable Long id){
         log.debug("開始刪除購物車Controller");
         log.debug("獲取到的資料>>>{}",id);
@@ -53,7 +65,7 @@ public class CartController {
 
     @GetMapping("/deleteAll")
     @ApiOperation("清空購物車商品")
-    @ApiOperationSupport(order = 250)
+    @ApiOperationSupport(order = 350)
     public JsonResult deleteAll(){
         log.debug("開始清空購物車Controller");
         cartService.deleteAllCarts();

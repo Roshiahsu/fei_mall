@@ -7,9 +7,9 @@
 <!--        int insert(Cart cart);-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
         insert into
-            oms_cart(user_id, spu_id, price, quantity, gmt_create, gmt_modified)
+            oms_cart(user_id, spu_id, price, quantity, gmt_create, gmt_modified,is_update)
         values
-            (#{userId}, #{spuId}, #{price}, #{quantity}, #{gmtCreate}, #{gmtModified})
+            (#{userId}, #{spuId}, #{price}, #{quantity}, #{gmtCreate}, #{gmtModified},#{isUpdate})
     </insert>
 
     <!--    int updateByCartId(Cart cart);-->
@@ -35,6 +35,9 @@
             <if test="gmtModified != null">
                 gmt_modified = #{gmtModified},
             </if>
+            <if test="isUpdate != null">
+            is_update = #{isUpdate},
+        </if>
         </set>
         where
         id = #{id}
@@ -85,7 +88,8 @@
             pms_spu.product_name,
             oc.price,
             quantity,
-            pms_spu.stock
+            pms_spu.stock,
+            is_update
         from
             oms_cart oc
         left join pms_spu on oc.spu_id = pms_spu.id
@@ -101,6 +105,7 @@
         <result column="price" property="price"/>
         <result column="quantity" property="quantity"/>
         <result column="stock" property="stock"/>
+        <result column="is_update" property="isUpdate"/>
     </resultMap>
 
 <!--    int deleteCartById(Long id);-->
