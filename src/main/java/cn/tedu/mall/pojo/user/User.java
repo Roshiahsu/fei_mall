@@ -49,7 +49,7 @@ public class User {
     private Integer rewardPoint;
 
     @ApiModelProperty(value = "用戶角色")
-    private int roleId;
+    private Integer roleId;
 
     @ApiModelProperty(value = "修改日期")
     private LocalDateTime gmtModified;

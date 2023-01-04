@@ -25,8 +25,8 @@ public class OrderItemAddNewDTO implements Serializable {
     private Long spuId;
 
     @ApiModelProperty(value = "購買數量")
-    private int quantity;
+    private Integer quantity;
 
     @ApiModelProperty(value = "庫存")
-    private int stock;
+    private Integer stock;
 }

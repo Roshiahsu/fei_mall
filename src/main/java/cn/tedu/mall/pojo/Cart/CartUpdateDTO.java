@@ -23,7 +23,7 @@ public class CartUpdateDTO implements Serializable {
     private Long spuId;
 
     @ApiModelProperty(value = "購買數量")
-    private int quantity;
+    private Integer quantity;
 
     @ApiModelProperty(value = "修改時間")
     private LocalDateTime gmtModified;

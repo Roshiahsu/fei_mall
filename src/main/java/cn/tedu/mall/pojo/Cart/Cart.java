@@ -29,7 +29,7 @@ public class Cart implements Serializable {
     private Integer price;
 
     @ApiModelProperty(value = "購買數量")
-    private int quantity;
+    private Integer quantity;
 
     @ApiModelProperty(value = "創建時間")
     private LocalDateTime gmtCreate;

@@ -46,7 +46,7 @@ public class UserUpdateDTO implements Serializable {
     private Integer rewardPoint;
 
     @ApiModelProperty(value = "用戶角色")
-    private int roleId;
+    private Integer roleId;
 
     public UserUpdateDTO() {
         this.isEnable = 1;

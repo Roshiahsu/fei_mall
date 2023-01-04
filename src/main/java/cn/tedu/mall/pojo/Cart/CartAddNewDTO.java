@@ -31,5 +31,5 @@ public class CartAddNewDTO implements Serializable {
 
     @ApiModelProperty(value = "購買數量")
     @NotBlank(message = "請輸入正確的購買數量。")
-    private int quantity;
+    private Integer quantity;
 }
