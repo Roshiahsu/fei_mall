@@ -59,4 +59,16 @@ public class UserInfoVO implements Serializable {
 
     @ApiModelProperty(value = "最後一次登入時間")
     private LocalDateTime gmtLastLogin;
+
+    @ApiModelProperty(value = "郵遞區號")
+    private Integer zipCode;
+
+    @ApiModelProperty(value = "縣市")
+    private String city;
+
+    @ApiModelProperty(value = "鄉鎮區")
+    private String zone;
+
+    @ApiModelProperty(value = "地址詳情")
+    private String detailAddress;
 }
