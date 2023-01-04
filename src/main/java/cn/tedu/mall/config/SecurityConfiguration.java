@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * @ClassName SecurityConfiguration
  * @Version 1.0
- * @Description TODO
+ * @Description TODO 過濾器
  * @Date 2022/12/22、上午12:56
  */
 @Configuration
@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll();
 //
 //        http.authorizeRequests() //請求授權
-//                .antMatchers("*")
+//                .antMatchers("urls")
 //                .permitAll()     //允許直接訪問
 //                .anyRequest()    //除上述配置以外的其他請求
 //                .authenticated();//通過認證：已經登入過才能訪問

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @ClassName CartServiceImpl
  * @Version 1.0
- * @Description TODO
+ * @Description 購物車Service層
  * @Date 2022/12/30、下午3:40
  */
 @Slf4j
@@ -34,19 +34,18 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public void insert(CartAddNewDTO cartAddNewDTO) {
-        log.debug("CartService.insert開始");
+        log.debug("新增購物車Service層開始");
         //從上下文獲取UserId
         Long userId = ConstUtils.getUserId();
         //根據userId與spuId查詢該商品是否已經加入購物車
         Cart cartInfo = cartMapper.selectExistsCart(userId, cartAddNewDTO.getSpuId());
-
 
         Cart cart = new Cart();
         if(cartInfo !=null){
             log.debug("商品已存在，修改購買數量");
             //商品已存在，修改購買數量
             BeanUtils.copyProperties(cartInfo,cart);
-            //獲取新增的數量
+            //獲取原始數量
             int originalQuantity = cartInfo.getQuantity();
             //原始數量加上新增的數量
             cart.setQuantity(originalQuantity+cartAddNewDTO.getQuantity());
@@ -69,10 +68,11 @@ public class CartServiceImpl implements ICartService {
             }
         }
     }
+
     //根據用戶id查詢當前用戶購物車中商品訊息
     @Override
     public JsonPage<CartInfoVO> listCartByUserId(Integer pageNum, Integer pageSize) {
-        log.debug("CartService.listCartByUserId開始");
+        log.debug("根據用戶id查詢購物車中商品訊息開始");
         //從上下文獲取UserId
         Long userId = ConstUtils.getUserId();
         log.debug("獲取到的ID>>>{}",userId);
@@ -80,6 +80,7 @@ public class CartServiceImpl implements ICartService {
         PageHelper.startPage(pageNum,pageSize);
 
         List<CartInfoVO> list = cartMapper.listCartInfoByUserId(userId);
+        //小計每件商品價錢
         for (CartInfoVO cartInfoVO : list) {
             cartInfoVO.setSubtotal(cartInfoVO.getPrice() * cartInfoVO.getQuantity());
         }
@@ -89,7 +90,7 @@ public class CartServiceImpl implements ICartService {
     @Override
     public void deleteCartById(Long id) {
         log.debug("CartService.deleteCartById開始");
-        //從上下文獲取id，判斷用戶是否登入
+        //從上下文獲取id，判斷用戶是否登入，沒有登入則在方法調用時拋異常
         Long userId = ConstUtils.getUserId();
         int rows = cartMapper.deleteCartById(id);
         if(rows==0){
@@ -97,8 +98,10 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
+    //清空購物車
     @Override
     public void deleteAllCarts() {
+        //從上下文獲取id
         Long userId = ConstUtils.getUserId();
         int rows = cartMapper.deleteAllCarts(userId);
         if(rows==0){

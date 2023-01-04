@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * @ClassName CartInfoVO
  * @Version 1.0
- * @Description TODO
+ * @Description 商品詳情
  * @Date 2022/12/30、下午8:21
  */
 @Data

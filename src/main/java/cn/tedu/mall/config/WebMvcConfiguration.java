@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * @ClassName WebMvcConfiguration
  * @Version 1.0
- * @Description TODO
+ * @Description TODO 跨域配置
  * @Date 2022/12/27、上午5:26
  */
 

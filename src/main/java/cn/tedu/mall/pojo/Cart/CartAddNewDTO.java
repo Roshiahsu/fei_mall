@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * @ClassName CartAddNewDTO
  * @Version 1.0
- * @Description TODO
+ * @Description 前端發送新增購物車請求的商品資料
  * @Date 2022/12/28、下午3:23
  */
 @Data

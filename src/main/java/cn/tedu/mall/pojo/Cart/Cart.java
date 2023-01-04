@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * @ClassName Cart
  * @Version 1.0
- * @Description TODO
+ * @Description 寫入資料庫的資料
  * @Date 2022/12/28、下午3:27
  */
 @Data
