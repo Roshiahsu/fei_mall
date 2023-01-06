@@ -74,7 +74,7 @@ public class ProductServiceImpl implements IProductService {
         for (ProductListVO vo : list) {
             String productName = vo.getProductName();
             if(productName.length()>15){
-                productName= productName.substring(0,12)+"...";
+                productName= productName.substring(0,10)+"...";
                 vo.setProductName(productName);
             }
         }

@@ -58,6 +58,10 @@
         select
         <include refid="BaseQueryFields"/>
         ,sex_name
+        ,zip_code
+        ,city
+        ,zone
+        ,detailed_address
         from
         ums_user uu
         left join ums_role on uu.role_id = ums_role.id
@@ -84,11 +88,7 @@
             uu.role_id,
             ums_role.role_name,
             gmt_modified,
-            gmt_last_login,
-            zip_code,
-            city,
-            zone,
-            detailed_address
+            gmt_last_login
         </if>
     </sql>
     <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.user.UserInfoVO">
