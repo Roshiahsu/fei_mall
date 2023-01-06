@@ -3,6 +3,7 @@ package cn.tedu.mall.mapper;
 import cn.tedu.mall.pojo.Cart.Cart;
 import cn.tedu.mall.pojo.order.Order;
 import cn.tedu.mall.pojo.order.OrderItemAddNewDTO;
+import cn.tedu.mall.pojo.order.OrderListVO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,5 +31,11 @@ public interface OrderMapper {
      */
     int insertOrderItems(List<OrderItemAddNewDTO> orderItemAddNewDTOS);
 
+    /**
+     * 根據用戶id查詢訂單列表
+     * @param userId
+     * @return
+     */
+    List<OrderListVO> listOrdersByUserId(Long userId);
 
 }
