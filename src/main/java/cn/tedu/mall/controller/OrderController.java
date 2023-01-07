@@ -3,16 +3,17 @@ package cn.tedu.mall.controller;
 import cn.tedu.mall.pojo.Cart.CartAddNewDTO;
 import cn.tedu.mall.pojo.order.OrderAddNewDTO;
 import cn.tedu.mall.pojo.order.OrderAddVO;
+import cn.tedu.mall.pojo.order.OrderListVO;
 import cn.tedu.mall.service.IOrderService;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @ClassName OrderController
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequestMapping("/order")
+@Api(tags = "訂單管理模組")
 public class OrderController {
 
     @Autowired
@@ -36,5 +38,14 @@ public class OrderController {
         log.debug("獲取到的資料>>>{}",orderAddNewDTO);
         OrderAddVO orderInfo = orderService.insert(orderAddNewDTO);
         return JsonResult.ok(orderInfo);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("訂單列表")
+    @ApiOperationSupport(order = 400)
+    public JsonResult listByUserId(){
+        log.debug("開始訂單列表Controller");
+        List<OrderListVO> orderListVOS = orderService.listByUserId();
+        return JsonResult.ok(orderListVOS);
     }
 }

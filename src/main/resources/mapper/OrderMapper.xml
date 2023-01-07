@@ -15,7 +15,8 @@
             amount_of_freight,
             amount_of_discount,
             amount_of_actual_pay,
-            gmt_create
+            gmt_create,
+            order_status
             )
         values (
             #{userId},
@@ -25,7 +26,8 @@
             #{amountOfFreight},
             #{amountOfDiscount},
             #{amountOfActualPay},
-            #{gmtCreate}
+            #{gmtCreate},
+            #{orderStatus}
         )
     </insert>
 

@@ -47,4 +47,8 @@ public class Order implements Serializable {
 
     @ApiModelProperty(value = "創建時間")
     private LocalDateTime gmtCreate;
+
+    @ApiModelProperty(value = "訂單狀態")
+    private Integer orderStatus;
+
 }
