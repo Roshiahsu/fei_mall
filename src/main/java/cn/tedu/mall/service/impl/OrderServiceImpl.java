@@ -4,10 +4,7 @@ import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.CartMapper;
 import cn.tedu.mall.mapper.OrderMapper;
 import cn.tedu.mall.mapper.ProductMapper;
-import cn.tedu.mall.pojo.order.Order;
-import cn.tedu.mall.pojo.order.OrderAddNewDTO;
-import cn.tedu.mall.pojo.order.OrderAddVO;
-import cn.tedu.mall.pojo.order.OrderItemAddNewDTO;
+import cn.tedu.mall.pojo.order.*;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.service.IOrderService;
 import cn.tedu.mall.utils.ConstUtils;
@@ -20,10 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @ClassName OrderServiceImpl
@@ -44,6 +41,13 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private ProductMapper productMapper;
 
+    public static final Integer ORDER_STATUS_SUCCESS = 2;
+
+    /**
+     * 新增訂單
+     * @param orderAddNewDTO
+     * @return
+     */
     @Override
     public OrderAddVO insert(OrderAddNewDTO orderAddNewDTO) {
         log.debug("開始新增訂單");
@@ -55,6 +59,7 @@ public class OrderServiceImpl implements IOrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderAddNewDTO,order);
         order.setUserId(userId);
+        order.setOrderStatus(ORDER_STATUS_SUCCESS);
         //數據加載
         loadOrder(order);
         log.debug("獲取到的Order>>>{}",order);
@@ -107,13 +112,29 @@ public class OrderServiceImpl implements IOrderService {
         return orderAddVO;
     }
 
-    //加載數據
+    /**
+     * 透過userId獲取訂單列表
+     * @return
+     */
+    @Override
+    public List<OrderListVO> listByUserId() {
+        log.debug("開使獲取訂單列表");
+        //從上下文獲取id
+        Long userId = ConstUtils.getUserId();
+        List<OrderListVO> orderListVOS = orderMapper.listOrdersByUserId(userId);
+        return orderListVOS;
+    }
+
+    /**
+     * 數據加載
+     * @param order
+     */
     private void loadOrder(Order order) {
 
         //判斷sn 訂單編號
         if(order.getSn()==null){
             //使用UUID生成訂單編號
-            order.setSn(UUID.randomUUID().toString());
+            order.setSn(createOrderNumber());
         }
         //判斷運費
         if(order.getAmountOfFreight()==null){
@@ -142,4 +163,43 @@ public class OrderServiceImpl implements IOrderService {
         BigInteger actualPay = amountOfOriginalPrice.add(amountOfFreight).subtract(amountOfDiscount);
         order.setAmountOfActualPay(actualPay); //實際需要支付的金額
     }
+
+    /**
+     * 生成訂單編號(日期8位+時間戳5位+4位隨機數)
+     * @return
+     */
+    public String createOrderNumber(){
+        //格式化日期為"yyyymmdd"
+        DateFormat format = new SimpleDateFormat("yyMMdd");
+        Date date = new Date();
+
+        StringBuffer buffer = new StringBuffer();
+        //加入日期
+        buffer.append(format.format(date));
+        //加入時間戳5位
+        buffer.append((date.getTime()+"").substring(5));
+        //獲取4為隨機數
+        buffer.append(getRandNum(4));
+
+        return buffer.toString();
+    }
+
+    /**
+     * 獲取N為隨機數
+     * @return
+     */
+    public String getRandNum(int length){
+        Random random = new Random();
+        StringBuffer result = new StringBuffer();
+
+        for (int i = 0; i < length; i++) {
+            result.append(random.nextInt(10));
+        }
+        if(result.length()>0){
+            return result.toString();
+        }
+        return null;
+    }
+
+
 }
