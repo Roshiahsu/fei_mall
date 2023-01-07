@@ -16,7 +16,8 @@
             amount_of_discount,
             amount_of_actual_pay,
             gmt_create,
-            order_status
+            order_status,
+            recipient_id
             )
         values (
             #{userId},
@@ -27,7 +28,8 @@
             #{amountOfDiscount},
             #{amountOfActualPay},
             #{gmtCreate},
-            #{orderStatus}
+            #{orderStatus},
+            #{recipientId}
         )
     </insert>
 
@@ -69,4 +71,34 @@
         <result column="status_name" property="statusName"/>
         <result column="amount_of_actual_pay" property="amountOfActualPay"/>
     </resultMap>
+
+<!--    OrderDetailVO getOrderDetailById(Long id);-->
+    <select id="getOrderDetailById" resultMap="getOrderDetailResult">
+        select
+            oo.id,
+            oo.sn,
+            oo.gmt_create,
+            osi.status_name,
+            oo.amount_of_actual_pay,
+            ri.recipient_name,
+            ri.recipient_phone,
+            ri.recipient_address
+        from
+            oms_order oo
+        left join recipient_information ri on oo.recipient_id = ri.id
+        left join order_status_info osi on oo.order_status = osi.id
+        where
+            oo.id= #{id}
+    </select>
+    <resultMap id="getOrderDetailResult" type="cn.tedu.mall.pojo.order.OrderDetailVO">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="status_name" property="statusName"/>
+        <result column="amount_of_actual_pay" property="amountOfActualPay"/>
+        <result column="recipient_name" property="recipientName"/>
+        <result column="recipient_phone" property="recipientPhone"/>
+        <result column="recipient_address" property="recipientAddress"/>
+    </resultMap>
+
 </mapper>

@@ -3,6 +3,7 @@ package cn.tedu.mall.controller;
 import cn.tedu.mall.pojo.Cart.CartAddNewDTO;
 import cn.tedu.mall.pojo.order.OrderAddNewDTO;
 import cn.tedu.mall.pojo.order.OrderAddVO;
+import cn.tedu.mall.pojo.order.OrderDetailVO;
 import cn.tedu.mall.pojo.order.OrderListVO;
 import cn.tedu.mall.service.IOrderService;
 import cn.tedu.mall.web.JsonResult;
@@ -39,6 +40,16 @@ public class OrderController {
         OrderAddVO orderInfo = orderService.insert(orderAddNewDTO);
         return JsonResult.ok(orderInfo);
     }
+
+    @GetMapping("/{id}/orderDetail")
+    @ApiOperation("ˇ訂單詳情")
+    @ApiOperationSupport(order = 200)
+    public JsonResult getOrderDetailById(@PathVariable Long id){
+        log.debug("開始獲取訂單詳情Controller");
+        OrderDetailVO orderDetailVO = orderService.getOrderDetailById(id);
+        return JsonResult.ok(orderDetailVO);
+    }
+
 
     @GetMapping("/list")
     @ApiOperation("訂單列表")

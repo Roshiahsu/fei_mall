@@ -4,6 +4,8 @@ import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.CartMapper;
 import cn.tedu.mall.mapper.OrderMapper;
 import cn.tedu.mall.mapper.ProductMapper;
+import cn.tedu.mall.mapper.RecipientMapper;
+import cn.tedu.mall.pojo.domain.Recipient;
 import cn.tedu.mall.pojo.order.*;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.service.IOrderService;
@@ -41,6 +43,12 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private RecipientMapper recipientMapper;
+
+    /**
+     * 設定訂單狀態，狀態2為訂單成立
+     */
     public static final Integer ORDER_STATUS_SUCCESS = 2;
 
     /**
@@ -55,14 +63,39 @@ public class OrderServiceImpl implements IOrderService {
         //從上下文獲取id
         Long userId = ConstUtils.getUserId();
 
-        //初始化要寫入oms_order表中的訂單資料
         Order order = new Order();
+
+        //初始化收件人資料
+        Recipient recipient = new Recipient();
+        recipient.setRecipientName(orderAddNewDTO.getRecipientName());
+        recipient.setRecipientPhone(orderAddNewDTO.getRecipientPhone());
+        recipient.setRecipientAddress(orderAddNewDTO.getRecipientAddress());
+        Long recipientId = recipientMapper.getRecipientId(recipient);
+        log.debug("獲取到的id>>>{}",recipientId);
+        if (recipientId !=null){
+            //資料已存在，直接設定
+            log.debug("資料已存在，直接設定,recipientId=={}",recipientId);
+            //設定收件人ID
+            order.setRecipientId(recipientId);
+        }else{
+            //資料不存在，新增資料
+            log.debug("資料不存在，新增資料");
+            int rows = recipientMapper.insert(recipient);
+            order.setRecipientId(recipient.getId());
+            if (rows != 1){
+                throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍後再試!!");
+            }
+        }
+
+        //初始化要寫入oms_order表中的訂單資料
+
         BeanUtils.copyProperties(orderAddNewDTO,order);
         order.setUserId(userId);
         order.setOrderStatus(ORDER_STATUS_SUCCESS);
+
         //數據加載
         loadOrder(order);
-        log.debug("獲取到的Order>>>{}",order);
+        log.debug("準備寫入資料庫的Order>>>{}",order);
 
         //將訂單寫入資料庫
         int rows= orderMapper.insert(order);
@@ -101,6 +134,9 @@ public class OrderServiceImpl implements IOrderService {
             throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌中，請稍後再試!!");
         }
 
+        /*
+         * 目前沒有作用
+         */
         OrderAddVO orderAddVO = new OrderAddVO();
         //訂單id
         orderAddVO.setId(order.getId());
@@ -123,6 +159,13 @@ public class OrderServiceImpl implements IOrderService {
         Long userId = ConstUtils.getUserId();
         List<OrderListVO> orderListVOS = orderMapper.listOrdersByUserId(userId);
         return orderListVOS;
+    }
+
+    @Override
+    public OrderDetailVO getOrderDetailById(Long id) {
+        log.debug("開始獲取訂單詳情");
+        OrderDetailVO orderDetailVO = orderMapper.getOrderDetailById(id);
+        return orderDetailVO;
     }
 
     /**
