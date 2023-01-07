@@ -63,7 +63,7 @@ public class UserController {
     @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult userInfo(){
         log.debug("用戶詳情controller開始");
-        List<UserInfoVO> userInfoVO = userService.userInfo();
+        UserInfoVO userInfoVO = userService.userInfo();
         return JsonResult.ok(userInfoVO);
     }
 }

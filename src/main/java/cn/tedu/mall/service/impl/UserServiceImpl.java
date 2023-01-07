@@ -102,12 +102,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<UserInfoVO> userInfo() {
+    public UserInfoVO userInfo() {
         log.debug("開始service.userInfo");
         //從上下文獲取userId
         Long userId = ConstUtils.getUserId();
-
-        List<UserInfoVO> userInfoVO = userMapper.userInfo(userId);
+        UserInfoVO userInfoVO = userMapper.userInfo(userId);
+        //拼接地址詳情
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(userInfoVO.getZipCode());
+        buffer.append(userInfoVO.getCity());
+        buffer.append(userInfoVO.getZone());
+        buffer.append(userInfoVO.getDetailedAddress());
+        userInfoVO.setDetailedAddress(buffer.toString());
+        log.debug("準備響應的用戶資料>>>{}",userInfoVO);
         if(userInfoVO ==null){
             throw new ServiceException(ServiceCode.ERR_UNKNOWN,"伺服器繁忙請稍後再試");
         }

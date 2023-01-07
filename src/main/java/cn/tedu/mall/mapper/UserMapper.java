@@ -43,7 +43,7 @@ public interface UserMapper {
      * @param id 用戶id
      * @return 查詢到的用戶訊息
      */
-    List<UserInfoVO> userInfo(Long id);
+    UserInfoVO userInfo(Long id);
 
     /**
      * 修改用戶訊息
