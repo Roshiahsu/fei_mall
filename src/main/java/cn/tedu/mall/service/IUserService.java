@@ -25,5 +25,5 @@ public interface IUserService {
 
     void updatePassword(UserUpdateDTO userUpdateDTO);
 
-    List<UserInfoVO> userInfo();
+    UserInfoVO userInfo();
 }
