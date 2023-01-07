@@ -43,4 +43,14 @@ public class OrderAddNewDTO implements Serializable {
 
     @ApiModelProperty(value = "訂單商品列表")
     private List<OrderItemAddNewDTO> orderItems;
+
+    @ApiModelProperty(value = "收件人姓名")
+    private String recipientName;
+
+    @ApiModelProperty(value = "收件人電話")
+    private String recipientPhone;
+
+    @ApiModelProperty(value = "收件人地址")
+    private String recipientAddress;
+
 }
