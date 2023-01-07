@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.RecipientMapper">
+
+<!--    int insert(Recipient recipient);-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="cn.tedu.mall.pojo.domain.Recipient">
+        insert into
+            recipient_information(
+                recipient_name,
+                recipient_phone,
+                recipient_address
+            )
+        values (
+            #{recipientName},
+            #{recipientPhone},
+            #{recipientAddress}
+        )
+    </insert>
+
+<!--        Long getRecipientId(Recipient recipient);-->
+    <select id="getRecipientId" resultType="long">
+        select
+            id
+        from
+            recipient_information
+        where
+            recipient_name = #{recipientName} and
+            recipient_phone = #{recipientPhone} and
+            recipient_address = #{recipientAddress}
+    </select>
+</mapper>
