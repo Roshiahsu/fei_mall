@@ -38,10 +38,9 @@ public class OrderAddNewDTO implements Serializable {
     private BigInteger amountOfDiscount;
 
     @ApiModelProperty(value = "實際支付金額")
+    @NotBlank(message = "實際支付金額不得為空")
     private BigInteger amountOfActualPay;
 
-    @ApiModelProperty(value = "實際支付金額")
-    @NotBlank(message = "實際支付金額不得為空")
+    @ApiModelProperty(value = "訂單商品列表")
     private List<OrderItemAddNewDTO> orderItems;
-
 }
