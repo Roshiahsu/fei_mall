@@ -51,4 +51,7 @@ public class Order implements Serializable {
     @ApiModelProperty(value = "訂單狀態")
     private Integer orderStatus;
 
+    @ApiModelProperty(value = "收件人Id")
+    private Long recipientId;
+
 }
