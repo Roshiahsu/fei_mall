@@ -50,10 +50,8 @@
             pms_spu
 --             判斷傳入的數值，如果為1則搜索全部結果
 --                 不為1則搜索傳入的typeId
-            <if test="typeId ==1">
 
-            </if>
-            <if test="type !=1">
+            <if test="typeId !=1">
                 where
                 product_type_id = #{typeId}
             </if>
