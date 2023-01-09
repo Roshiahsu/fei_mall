@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 @Slf4j
 @Api(tags = "購物車管理模組")
 @RequestMapping("/cart")
+@PreAuthorize("hasRole('user') or hasRole('admin')")
 public class CartController {
 
     @Autowired

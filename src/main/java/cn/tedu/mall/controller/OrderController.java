@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class OrderController {
     @PostMapping("/insert")
     @ApiOperation("新增訂單")
     @ApiOperationSupport(order = 100)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult insert(@RequestBody OrderAddNewDTO orderAddNewDTO){
         log.debug("開始新增訂單Controller");
         log.debug("獲取到的資料>>>{}",orderAddNewDTO);
@@ -44,6 +46,7 @@ public class OrderController {
     @GetMapping("/{id}/orderDetail")
     @ApiOperation("ˇ訂單詳情")
     @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult getOrderDetailById(@PathVariable Long id){
         log.debug("開始獲取訂單詳情Controller");
         OrderDetailVO orderDetailVO = orderService.getOrderDetailById(id);
@@ -54,6 +57,7 @@ public class OrderController {
     @GetMapping("/list")
     @ApiOperation("訂單列表")
     @ApiOperationSupport(order = 400)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult listByUserId(){
         log.debug("開始訂單列表Controller");
         List<OrderListVO> orderListVOS = orderService.listByUserId();

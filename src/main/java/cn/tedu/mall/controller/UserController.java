@@ -51,6 +51,7 @@ public class UserController {
     @PostMapping("/update")
     @ApiOperation("詳情修改")
     @ApiOperationSupport(order = 300)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult update(@RequestBody UserUpdateDTO userUpdateDTO){
         log.debug("修改功能controller開始");
         userService.update(userUpdateDTO);

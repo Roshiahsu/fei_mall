@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class ProductController {
     @PostMapping("/insert")
     @ApiOperation("新增商品")
     @ApiOperationSupport(order = 100)
+    @PreAuthorize("hasRole('admin')")
     public JsonResult insert(@RequestBody ProductAddNewDTO productAddNewDTO){
         log.debug("開始新增商品");
         productService.insert(productAddNewDTO);
@@ -43,6 +45,7 @@ public class ProductController {
     @PostMapping("/delete")
     @ApiOperation("刪除商品")
     @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasRole('admin')")
     public JsonResult delete(Long... ids){
         log.debug("開始刪除商品");
         productService.deleteByIds(ids);
