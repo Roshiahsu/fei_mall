@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.BrandMapper">
+
+<!--    int insert(Brand brand);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            pms_brand(
+                brand_name
+            )
+        values (
+            #{brandName}
+        )
+    </insert>
+
+<!--        int countByBrandName(Brand brand);-->
+    <select id="countByBrandName" resultType="int">
+        select
+            count(*)
+        from
+            pms_brand
+        where
+            brand_name=#{brandName}
+    </select>
+
+<!--    List<Brand> listBrand();-->
+    <select id="listBrand" resultMap="listBrandResult">
+        select
+            id,
+            brand_name
+        from
+            pms_brand
+        order by
+            id
+    </select>
+
+    <resultMap id="listBrandResult" type="cn.tedu.mall.pojo.brand.Brand">
+        <id column="id" property="id"/>
+        <result column="brand_name" property="brandName"/>
+    </resultMap>
+</mapper>
