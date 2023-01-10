@@ -33,7 +33,10 @@ public class CartServiceImpl implements ICartService {
     @Autowired
     private CartMapper cartMapper;
 
-    //新增商品
+    /**
+     * 新增商品到購物車
+     * @param cartAddNewDTO
+     */
     @Override
     public void insert(CartAddNewDTO cartAddNewDTO) {
         log.debug("新增購物車Service層開始");
@@ -71,7 +74,10 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
-    //修改購物車內商品訊息
+    /**
+     * 修改購物車內容
+     * @param cartUpdateDTO
+     */
     @Override
     public void updateCart(List<CartUpdateDTO> cartUpdateDTO) {
         log.debug("開始修改購物車內的購買數量");
@@ -90,7 +96,10 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
-    //根據用戶id查詢當前用戶購物車中商品訊息
+    /**
+     * 根據userId獲取購物車中商品訊息
+     * @return
+     */
     @Override
     public List<CartInfoVO> listCartByUserId() {
         log.debug("根據用戶id查詢購物車中商品訊息開始");
@@ -106,6 +115,10 @@ public class CartServiceImpl implements ICartService {
         return list;
     }
 
+    /**
+     * 根據購物車列表id刪除商品
+     * @param id
+     */
     @Override
     public void deleteCartById(Long id) {
         log.debug("CartService.deleteCartById開始");
@@ -117,7 +130,9 @@ public class CartServiceImpl implements ICartService {
         }
     }
 
-    //清空購物車
+    /**
+     * 清空購物車
+     */
     @Override
     public void deleteAllCarts() {
         //從上下文獲取id
