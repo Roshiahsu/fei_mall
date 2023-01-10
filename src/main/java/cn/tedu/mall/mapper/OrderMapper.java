@@ -1,10 +1,7 @@
 package cn.tedu.mall.mapper;
 
 import cn.tedu.mall.pojo.Cart.Cart;
-import cn.tedu.mall.pojo.order.Order;
-import cn.tedu.mall.pojo.order.OrderDetailVO;
-import cn.tedu.mall.pojo.order.OrderItemAddNewDTO;
-import cn.tedu.mall.pojo.order.OrderListVO;
+import cn.tedu.mall.pojo.order.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -45,4 +42,12 @@ public interface OrderMapper {
      * @return
      */
     OrderDetailVO getOrderDetailById(Long id);
+
+    /**
+     * 根據訂單編號查詢購買清單
+     * @param sn 訂單編號
+     * @return
+     */
+    List<OrderItemListVO> listOrderItem(String sn);
+
 }

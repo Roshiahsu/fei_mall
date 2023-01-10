@@ -102,8 +102,10 @@ public class OrderServiceImpl implements IOrderService {
         if (rows != 1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍後再試!!");
         }
-        //獲取訂單中的商品訊息
+        //宣告準備寫入購物列表的List
         List<OrderItemAddNewDTO> orderItems = new ArrayList<>();
+
+        //獲取訂單中的商品訊息
         for (OrderItemAddNewDTO orderItem : orderAddNewDTO.getOrderItems()) {
             //外鍵，將omsOrderItem與omsOrder透過sn進行關聯
             orderItem.setSn(order.getSn());
@@ -134,9 +136,6 @@ public class OrderServiceImpl implements IOrderService {
             throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌中，請稍後再試!!");
         }
 
-        /*
-         * 目前沒有作用
-         */
         OrderAddVO orderAddVO = new OrderAddVO();
         //訂單id
         orderAddVO.setId(order.getId());
@@ -161,11 +160,28 @@ public class OrderServiceImpl implements IOrderService {
         return orderListVOS;
     }
 
+    /**
+     * 根據id獲取訂單詳情
+     * @param id
+     * @return
+     */
     @Override
     public OrderDetailVO getOrderDetailById(Long id) {
         log.debug("開始獲取訂單詳情");
         OrderDetailVO orderDetailVO = orderMapper.getOrderDetailById(id);
         return orderDetailVO;
+    }
+
+    /**
+     * 根據訂單編號查詢購物清單
+     * @param sn 訂單編號
+     * @return
+     */
+    @Override
+    public List<OrderItemListVO> listOrderItem(String sn) {
+        log.debug("開始查詢訂單內的購物清單");
+        List<OrderItemListVO> orderItemListVOS = orderMapper.listOrderItem(sn);
+        return orderItemListVOS;
     }
 
     /**

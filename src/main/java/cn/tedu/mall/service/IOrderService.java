@@ -1,9 +1,6 @@
 package cn.tedu.mall.service;
 
-import cn.tedu.mall.pojo.order.OrderAddNewDTO;
-import cn.tedu.mall.pojo.order.OrderAddVO;
-import cn.tedu.mall.pojo.order.OrderDetailVO;
-import cn.tedu.mall.pojo.order.OrderListVO;
+import cn.tedu.mall.pojo.order.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,5 +19,7 @@ public interface IOrderService {
     List<OrderListVO> listByUserId();
 
     OrderDetailVO getOrderDetailById(Long id);
+
+    List<OrderItemListVO> listOrderItem(String sn);
 
 }

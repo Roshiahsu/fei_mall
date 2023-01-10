@@ -38,13 +38,19 @@
         insert into
             oms_order_item(
                 sn,
-                spu_id
+                spu_id,
+                price,
+                quantity,
+                subtotal
             )
         values
         <foreach collection="list" item="item" separator=",">
         (
             #{item.sn},
-            #{item.spuId}
+            #{item.spuId},
+            #{item.price},
+            #{item.quantity},
+            #{item.subtotal}
             )
         </foreach>
     </insert>
@@ -101,4 +107,26 @@
         <result column="recipient_address" property="recipientAddress"/>
     </resultMap>
 
+<!--        List<OrderItemListVO> listOrderItem(String sn);-->
+    <select id="listOrderItem" resultMap="listOrderItemResult">
+        select
+            ooi.id,
+            ps.product_name,
+            ooi.quantity,
+            ooi.price,
+            ooi.subtotal
+        from
+            oms_order_item ooi
+        left join pms_spu ps on ooi.spu_id = ps.id
+        where
+            sn = #{sn}
+    </select>
+
+    <resultMap id="listOrderItemResult" type="cn.tedu.mall.pojo.order.OrderItemListVO">
+        <id column="id" property="id"/>
+        <result column="product_name" property="productName"/>
+        <result column="quantity" property="quantity"/>
+        <result column="price" property="price"/>
+        <result column="subtotal" property="subtotal"/>
+    </resultMap>
 </mapper>

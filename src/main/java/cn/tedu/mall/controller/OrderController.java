@@ -1,10 +1,7 @@
 package cn.tedu.mall.controller;
 
 import cn.tedu.mall.pojo.Cart.CartAddNewDTO;
-import cn.tedu.mall.pojo.order.OrderAddNewDTO;
-import cn.tedu.mall.pojo.order.OrderAddVO;
-import cn.tedu.mall.pojo.order.OrderDetailVO;
-import cn.tedu.mall.pojo.order.OrderListVO;
+import cn.tedu.mall.pojo.order.*;
 import cn.tedu.mall.service.IOrderService;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -44,13 +41,23 @@ public class OrderController {
     }
 
     @GetMapping("/{id}/orderDetail")
-    @ApiOperation("ˇ訂單詳情")
+    @ApiOperation("訂單詳情")
     @ApiOperationSupport(order = 200)
     @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult getOrderDetailById(@PathVariable Long id){
         log.debug("開始獲取訂單詳情Controller");
         OrderDetailVO orderDetailVO = orderService.getOrderDetailById(id);
         return JsonResult.ok(orderDetailVO);
+    }
+
+    @GetMapping("/{sn}/orderItemList")
+    @ApiOperation("購物清單")
+    @ApiOperationSupport(order = 250)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
+    public JsonResult getOrderDetailById(@PathVariable String sn){
+        log.debug("開始獲取購物清單Controller");
+        List<OrderItemListVO> orderItemListVOS = orderService.listOrderItem(sn);
+        return JsonResult.ok(orderItemListVOS);
     }
 
 
