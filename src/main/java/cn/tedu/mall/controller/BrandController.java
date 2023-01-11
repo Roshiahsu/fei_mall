@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/brands")
 @Api(tags = "品牌管理模組")
 @Slf4j
-//@PreAuthorize("hasRole('admin')")
 public class BrandController {
 
     @Autowired
@@ -33,16 +32,40 @@ public class BrandController {
     @PostMapping("/insert")
     @ApiOperation("新增品牌")
     @ApiOperationSupport(order = 100)
-    public JsonResult insert(@RequestBody Brand Brand){
+    @PreAuthorize("hasRole('admin')")
+    public JsonResult insert(@RequestBody Brand brand){
         log.debug("開始新增品牌Controller");
-        log.debug("獲取到的資料>>>{}",Brand);
-        brandService.insert(Brand);
+        log.debug("獲取到的資料>>>{}",brand);
+        brandService.insert(brand);
+        return JsonResult.ok();
+    }
+
+    @GetMapping("/{id}/delete")
+    @ApiOperation("刪除品牌")
+    @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasRole('admin')")
+    public JsonResult deleteBrandById(@PathVariable Long id){
+        log.debug("開始刪除品牌Controller");
+        log.debug("獲取到的資料>>>{}",id);
+        brandService.deleteBrandById(id);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改品牌")
+    @ApiOperationSupport(order = 300)
+    @PreAuthorize("hasRole('admin')")
+    public JsonResult updateById(@RequestBody Brand brand){
+        log.debug("開始修改品牌Controller");
+        log.debug("獲取到的資料>>>{}",brand);
+        brandService.updateById(brand);
         return JsonResult.ok();
     }
 
     @GetMapping("/list")
     @ApiOperation("品牌列表")
     @ApiOperationSupport(order = 400)
+    @PreAuthorize("hasRole('admin')")
     public JsonResult list(@Param("pageNum") Integer pageNum){
         log.debug("開始品牌列表Controller");
         JsonPage<Brand> jsonPage = brandService.listBrand(pageNum);

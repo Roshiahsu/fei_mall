@@ -53,4 +53,30 @@ public class BrandServiceImpl implements IBrandService {
 
         return JsonPage.restPage(new PageInfo<>(brands));
     }
+
+    /**
+     * 根據id刪除品牌
+     * @param id 品牌id
+     */
+    @Override
+    public void deleteBrandById(Long id) {
+        log.debug("開始刪除品牌");
+        int rows = brandMapper.deleteBrandById(id);
+        if(rows != 1){
+            throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌請稍候!");
+        }
+    }
+
+    /**
+     * 根據id修改品牌資訊
+     * @param brand 品牌資訊
+     */
+    @Override
+    public void updateById(Brand brand) {
+        log.debug("開始更新品牌資訊");
+        int rows = brandMapper.updateById(brand);
+        if(rows != 1){
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
+        }
+    }
 }

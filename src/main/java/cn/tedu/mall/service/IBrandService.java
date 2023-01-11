@@ -18,4 +18,8 @@ public interface IBrandService {
     void insert(Brand brand);
 
     JsonPage<Brand> listBrand(Integer pageNum);
+
+    void deleteBrandById(Long id);
+
+    void updateById(Brand brand);
 }

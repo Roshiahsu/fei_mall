@@ -29,4 +29,17 @@ public class BrandTest {
             log.debug("獲取的品牌>>>{}",brand);
         }
     }
+
+    @Test
+    public void deleteTest(){
+//       brandMapper.deleteBrandById(8L);
+    }
+
+    @Test
+    public void updateTest(){
+        Brand brand = new Brand();
+        brand.setId(7L);
+        brand.setBrandName("Dtest1");
+
+    }
 }

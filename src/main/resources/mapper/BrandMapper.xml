@@ -40,4 +40,26 @@
         <id column="id" property="id"/>
         <result column="brand_name" property="brandName"/>
     </resultMap>
+
+
+<!--        int deleteBrandById(Long id);-->
+    <delete id="deleteBrandById">
+        delete from
+            pms_brand
+        where
+            id=#{id}
+    </delete>
+
+<!--    int updateById(Brand brand);-->
+    <update id="updateById">
+        update
+         pms_brand
+            <set>
+                <if test="brandName != null">
+                    brand_name=#{brandName},
+                </if>
+            </set>
+        where
+            id=#{id}
+    </update>
 </mapper>

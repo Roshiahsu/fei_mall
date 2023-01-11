@@ -33,4 +33,18 @@ public interface BrandMapper {
      * @return 品牌列表
      */
     List<Brand> listBrand();
+
+    /**
+     * 根據id刪除品牌
+     * @param id 品牌id
+     * @return 影響行數
+     */
+    int deleteBrandById(Long id);
+
+    /**
+     * 根據id修改品牌
+     * @param brand (id productName)
+     * @return
+     */
+    int updateById(Brand brand);
 }
