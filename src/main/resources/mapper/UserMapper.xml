@@ -25,7 +25,7 @@
         )
     </insert>
 
-<!--    int countByUsername(String username);-->
+    <!--    int countByUsername(String username);-->
     <select id="countByUsername" resultType="int">
         select
             count(*)
@@ -34,7 +34,8 @@
         where
             username = #{username}
     </select>
-<!--    UserInfoVO getByUsername(String username);-->
+
+    <!--    UserInfoVO getByUsername(String username);-->
     <select id="getByUsername" resultMap="GetByUsernameResultMap">
         select
             <include refid="BaseQueryFields"/>
@@ -153,4 +154,6 @@
         where
             id = #{id}
     </update>
+
+
 </mapper>

@@ -1,6 +1,7 @@
 package cn.tedu.mall.service.impl;
 
 import cn.tedu.mall.exception.ServiceException;
+import cn.tedu.mall.mapper.UserAddressMapper;
 import cn.tedu.mall.mapper.UserMapper;
 import cn.tedu.mall.pojo.user.*;
 import cn.tedu.mall.security.CustomerDetails;
@@ -40,8 +41,15 @@ public class UserServiceImpl implements IUserService {
     private UserMapper userMapper;
 
     @Autowired
+    private UserAddressMapper userAddressMapper;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * 用戶註冊
+     * @param userRegDTO
+     */
     @Override
     public void reg(UserRegDTO userRegDTO) {
         log.debug("開始service.reg");
@@ -70,6 +78,11 @@ public class UserServiceImpl implements IUserService {
         log.debug("註冊完成");
     }
 
+    /**
+     * 用戶登入
+     * @param userLoginDTO
+     * @return
+     */
     @Override
     public String login(UserLoginDTO userLoginDTO) {
         log.debug("開始登入service.login");
@@ -103,6 +116,10 @@ public class UserServiceImpl implements IUserService {
         return JwtUtils.generate(claims);
     }
 
+    /**
+     * 獲取用戶詳情
+     * @return
+     */
     @Override
     public UserInfoVO userInfo() {
         log.debug("開始service.userInfo");
@@ -111,10 +128,19 @@ public class UserServiceImpl implements IUserService {
         UserInfoVO userInfoVO = userMapper.userInfo(userId);
         //拼接地址詳情
         StringBuffer buffer = new StringBuffer();
-        buffer.append(userInfoVO.getZipCode());
-        buffer.append(userInfoVO.getCity());
-        buffer.append(userInfoVO.getZone());
-        buffer.append(userInfoVO.getDetailedAddress());
+        if (userInfoVO.getZipCode() !=null){
+            buffer.append(userInfoVO.getZipCode());
+        }
+        if (userInfoVO.getZipCode() !=null){
+            buffer.append(userInfoVO.getCity());
+        }
+        if (userInfoVO.getZipCode() !=null){
+            buffer.append(userInfoVO.getZone());
+        }
+        if (userInfoVO.getZipCode() !=null){
+            buffer.append(userInfoVO.getDetailedAddress());
+        }
+
         userInfoVO.setDetailedAddress(buffer.toString());
         log.debug("準備響應的用戶資料>>>{}",userInfoVO);
         if(userInfoVO ==null){
@@ -123,7 +149,10 @@ public class UserServiceImpl implements IUserService {
         return userInfoVO;
     }
 
-    //修改用戶詳情，不包含修改密碼
+    /**
+     * 修改用戶詳情，不包含修改密碼
+     * @param userUpdateDTO
+     */
     @Override
     public void update(UserUpdateDTO userUpdateDTO) {
         log.debug("開始service.update");
@@ -139,7 +168,10 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
-    //修改密碼
+    /**
+     * 修改用戶密碼
+     * @param userUpdateDTO
+     */
     @Override
     public void updatePassword(UserUpdateDTO userUpdateDTO) {
         log.debug("開始service.updatePassword");
@@ -155,5 +187,29 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    /**
+     * 修改用戶地址
+     * @param userAddressDTO
+     */
+    @Override
+    public void updateAddress(UserAddressDTO userAddressDTO) {
+        log.debug("開始修改用戶地址");
+        Long userId = ConstUtils.getUserId();
+        userAddressDTO.setUserId(userId);
+        int addressCount = userAddressMapper.countAddressByDetail(userAddressDTO.getDetailedAddress());
 
+        if(addressCount >0 ){
+            log.debug("數據已存在，進行修改");
+            int rows = userAddressMapper.updateUserAddress(userAddressDTO);
+            if (rows !=1){
+                throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"伺服器忙碌請稍候!");
+            }
+        }else{
+            log.debug("數據不存在，進行新增");
+            int rows = userAddressMapper.insetAddress(userAddressDTO);
+            if (rows !=1){
+                throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"伺服器忙碌請稍候!");
+            }
+        }
+    }
 }

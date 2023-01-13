@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.UserAddressMapper">
+
+    <!--        int insetAddress(UserAddressDTO userAddressDTO);-->
+    <insert id="insetAddress" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            ums_user_address(user_id,zip_code,city,zone,detailed_address,is_enable)
+        VALUES(
+        #{userId},
+        #{zipCode},
+        #{city},
+        #{zone},
+        #{detailedAddress},
+        #{isEnable}
+        )
+    </insert>
+
+    <!--    int updateUserAddress(UserAddressDTO userAddressDTO);-->
+    <update id="updateUserAddress">
+        update
+        ums_user_address
+        <set>
+            <if test="zipCode !=null">
+                zip_code = #{zipCode},
+            </if>
+            <if test="city !=null">
+                city = #{city},
+            </if>
+            <if test="zone !=null">
+                zone = #{zone},
+            </if>
+            <if test="detailedAddress !=null">
+                detailed_ddress = #{detailedAddress},
+            </if>
+        </set>
+        where
+        user_id = #{userId}
+    </update>
+
+<!--    int countAddressByDetail(String detailAddress);-->
+    <select id="countAddressByDetail" resultType="int">
+        select
+            count(*)
+        from
+            ums_user_address
+        where
+            detailed_address = #{detailedAddress}
+    </select>
+</mapper>

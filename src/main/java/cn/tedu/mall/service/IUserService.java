@@ -1,9 +1,6 @@
 package cn.tedu.mall.service;
 
-import cn.tedu.mall.pojo.user.UserInfoVO;
-import cn.tedu.mall.pojo.user.UserLoginDTO;
-import cn.tedu.mall.pojo.user.UserRegDTO;
-import cn.tedu.mall.pojo.user.UserUpdateDTO;
+import cn.tedu.mall.pojo.user.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -24,6 +21,8 @@ public interface IUserService {
     void update(UserUpdateDTO userUpdateDTO);
 
     void updatePassword(UserUpdateDTO userUpdateDTO);
+
+    void updateAddress(UserAddressDTO userAddressDTO);
 
     UserInfoVO userInfo();
 }

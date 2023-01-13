@@ -1,9 +1,6 @@
 package cn.tedu.mall.controller;
 
-import cn.tedu.mall.pojo.user.UserInfoVO;
-import cn.tedu.mall.pojo.user.UserLoginDTO;
-import cn.tedu.mall.pojo.user.UserRegDTO;
-import cn.tedu.mall.pojo.user.UserUpdateDTO;
+import cn.tedu.mall.pojo.user.*;
 import cn.tedu.mall.service.IUserService;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -56,6 +53,16 @@ public class UserController {
     public JsonResult update(@RequestBody @Valid UserUpdateDTO userUpdateDTO){
         log.debug("修改功能controller開始");
         userService.update(userUpdateDTO);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/updateAddress")
+    @ApiOperation("詳情地址")
+    @ApiOperationSupport(order = 310)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
+    public JsonResult update(@RequestBody @Valid UserAddressDTO userAddressDTO){
+        log.debug("修改地址controller開始");
+        userService.updateAddress(userAddressDTO);
         return JsonResult.ok();
     }
 
