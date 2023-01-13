@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class UserController {
     @ApiOperation("詳情修改")
     @ApiOperationSupport(order = 300)
     @PreAuthorize("hasRole('user') or hasRole('admin')")
-    public JsonResult update(@RequestBody UserUpdateDTO userUpdateDTO){
+    public JsonResult update(@RequestBody @Valid UserUpdateDTO userUpdateDTO){
         log.debug("修改功能controller開始");
         userService.update(userUpdateDTO);
         return JsonResult.ok();

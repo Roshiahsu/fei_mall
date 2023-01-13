@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public JsonResult handlerBindException(BindException e){
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
-        StringJoiner stringJoiner = new StringJoiner(";","異常","!");
+        StringJoiner stringJoiner = new StringJoiner(";","錯誤:","!");
         for (FieldError fieldError : fieldErrors) {
             stringJoiner.add(fieldError.getDefaultMessage());
         }

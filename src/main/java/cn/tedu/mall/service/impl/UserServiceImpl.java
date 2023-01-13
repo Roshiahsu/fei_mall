@@ -19,6 +19,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -125,6 +127,12 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void update(UserUpdateDTO userUpdateDTO) {
         log.debug("開始service.update");
+        LocalDateTime bod = userUpdateDTO.getBod();
+        //LocalDateTime 沒有時區的分別，所以前端傳來的時間會是UTC+0，手動加8小時
+        bod=bod.plusHours(8);
+
+        log.debug("BOD>>>{}",bod);
+        userUpdateDTO.setBod(bod);
         int rows = userMapper.update(userUpdateDTO);
         if(rows !=1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
