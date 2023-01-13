@@ -33,7 +33,6 @@ public class ProductTest {
         p.setKeywords("魚油");
         p.setProductName("魚油");
         p.setStock(99);
-        p.setGmtExp(LocalDate.now());
         productMapper.insert(p);
         log.debug("insert成功");
     }

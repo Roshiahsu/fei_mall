@@ -2,8 +2,10 @@ package cn.tedu.mall.service.impl;
 
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.ProductMapper;
+import cn.tedu.mall.mapper.ProductTypeMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductTypeListVO;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.service.IUploadService;
 import cn.tedu.mall.web.JsonPage;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,8 +36,7 @@ public class ProductServiceImpl implements IProductService {
     private ProductMapper productMapper;
 
     @Autowired
-    private IUploadService uploadService;
-
+    private ProductTypeMapper productTypeMapper;
     /**
      * 新增商品
      * @param productAddNewDTO 商品資訊
@@ -47,6 +49,10 @@ public class ProductServiceImpl implements IProductService {
         if(count !=0){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"商品重複！！");
         }
+        //修改時間
+        LocalDateTime gmtExp = productAddNewDTO.getGmtExp();
+        gmtExp = gmtExp.plusHours(8);
+        productAddNewDTO.setGmtExp(gmtExp);
         //資料寫入資料庫
         int rows = productMapper.insert(productAddNewDTO);
         if(rows != 1){
@@ -96,5 +102,15 @@ public class ProductServiceImpl implements IProductService {
     public ProductListVO getById(Long id) {
         log.debug("獲取商品詳情Service");
         return productMapper.getById(id);
+    }
+
+    /**
+     * 獲取推播列表
+     * @return
+     */
+    @Override
+    public List<ProductTypeListVO> listProductType() {
+        log.debug("開始獲取推播列表");
+        return productTypeMapper.listProductType();
     }
 }

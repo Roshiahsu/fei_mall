@@ -3,6 +3,7 @@ package cn.tedu.mall.controller;
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductTypeListVO;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.JsonResult;
@@ -72,4 +73,12 @@ public class ProductController {
         return JsonResult.ok(vo);
     }
 
+    @GetMapping("/productTypeList")
+    @ApiOperation("推播列表")
+    @ApiOperationSupport(order = 360)
+    public JsonResult listProductTypeList(){
+        log.debug("開始獲取推播列表");
+        List<ProductTypeListVO> listVOS = productService.listProductType();
+        return JsonResult.ok(listVOS);
+    }
 }

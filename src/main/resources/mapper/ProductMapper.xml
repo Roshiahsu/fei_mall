@@ -7,9 +7,9 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into
             pms_spu (category_id, brand_id, product_name, description, keywords,
-            picture, tags, price, stock, gmt_exp)
+            picture, tags, price, stock, gmt_exp,product_type_id)
         values (#{categoryId},#{brandId},#{productName},#{description},#{keywords},
-        #{picture},#{tags},#{price},#{stock},#{gmtExp})
+        #{picture},#{tags},#{price},#{stock},#{gmtExp},#{productTypeId})
     </insert>
 <!--    int deleteByIds(Long... id);-->
     <delete id="deleteByIds">

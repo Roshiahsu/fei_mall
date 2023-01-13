@@ -2,6 +2,7 @@ package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductTypeListVO;
 import cn.tedu.mall.web.JsonPage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,4 +26,6 @@ public interface IProductService {
     JsonPage<ProductListVO> listProduct(Integer pageNum,Integer pageSize,Long typeId);
 
     ProductListVO getById(Long id);
+
+    List<ProductTypeListVO>listProductType();
 }
