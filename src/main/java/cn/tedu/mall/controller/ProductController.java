@@ -14,7 +14,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +40,7 @@ public class ProductController {
     @PreAuthorize("hasRole('admin')")
     public JsonResult insert(@RequestBody ProductAddNewDTO productAddNewDTO){
         log.debug("開始新增商品");
+
         productService.insert(productAddNewDTO);
         return JsonResult.ok();
     }

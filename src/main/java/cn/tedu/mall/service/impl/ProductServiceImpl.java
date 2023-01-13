@@ -5,6 +5,7 @@ import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductListVO;
 import cn.tedu.mall.service.IProductService;
+import cn.tedu.mall.service.IUploadService;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
 import com.github.pagehelper.PageHelper;
@@ -12,8 +13,10 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -29,9 +32,12 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private IUploadService uploadService;
+
     /**
-     * 添加商品
-     * @param productAddNewDTO
+     * 新增商品
+     * @param productAddNewDTO 商品資訊
      */
     @Override
     public void insert(ProductAddNewDTO productAddNewDTO) {
