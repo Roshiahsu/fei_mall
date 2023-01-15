@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class ProductTypeListVO implements Serializable {
 
     @ApiModelProperty(value = "id")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "推播種類")
     private String name;

@@ -1,9 +1,9 @@
 package cn.tedu.mall.controller;
 
-import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
-import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductVO;
 import cn.tedu.mall.pojo.product.ProductTypeListVO;
+import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.JsonResult;
@@ -15,9 +15,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,7 +58,7 @@ public class ProductController {
     @ApiOperationSupport(order = 300)
     public JsonResult listProduct(@Param ("pageNum") Integer pageNum,@Param("pageSize") Integer pageSize,@PathVariable Long typeId){
         log.debug("開始查詢商品列表");
-        JsonPage<ProductListVO> list = productService.listProduct(pageNum, pageSize, typeId);
+        JsonPage<ProductVO> list = productService.listProduct(pageNum, pageSize, typeId);
         return JsonResult.ok(list);
     }
 
@@ -69,7 +67,7 @@ public class ProductController {
     @ApiOperationSupport(order = 350)
     public JsonResult getProductById(@PathVariable Long id){
         log.debug("開始查詢商品詳情");
-        ProductListVO vo = productService.getById(id);
+        ProductVO vo = productService.getById(id);
         return JsonResult.ok(vo);
     }
 
@@ -80,5 +78,15 @@ public class ProductController {
         log.debug("開始獲取推播列表");
         List<ProductTypeListVO> listVOS = productService.listProductType();
         return JsonResult.ok(listVOS);
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改商品詳情")
+    @ApiOperationSupport(order = 400)
+    @PreAuthorize("hasRole('admin')")
+    public JsonResult updateProductInfo(@RequestBody ProductUpdateDTO productUpdateDTO){
+        log.debug("開始修改商品");
+        productService.updateById(productUpdateDTO);
+        return JsonResult.ok();
     }
 }

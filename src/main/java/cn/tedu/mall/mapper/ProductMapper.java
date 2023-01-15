@@ -1,10 +1,9 @@
 package cn.tedu.mall.mapper;
 
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
-import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductVO;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,9 +22,9 @@ public interface ProductMapper {
 
     int countByName(String productName);
 
-    List<ProductListVO> listProduct(Long typeId);
+    List<ProductVO> listProduct(Long typeId);
 
-    ProductListVO getById(Long id);
+    ProductVO getById(Long id);
 
     int updateById(ProductUpdateDTO productUpdateDTO);
 

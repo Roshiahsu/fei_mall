@@ -1,12 +1,11 @@
 package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
-import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductVO;
 import cn.tedu.mall.pojo.product.ProductTypeListVO;
+import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.web.JsonPage;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,9 +22,11 @@ public interface IProductService {
 
     void deleteByIds(Long... ids);
 
-    JsonPage<ProductListVO> listProduct(Integer pageNum,Integer pageSize,Long typeId);
+    JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Long typeId);
 
-    ProductListVO getById(Long id);
+    ProductVO getById(Long id);
 
     List<ProductTypeListVO>listProductType();
+
+    void updateById(ProductUpdateDTO productUpdateDTO);
 }

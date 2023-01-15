@@ -30,7 +30,9 @@ public class UploadServiceImpl implements IUploadService {
      * @param picFile 上傳的圖片
      * @param picture 圖片名稱 UUID
      */
-    public void upload(MultipartFile picFile,String picture) {
+    public void upload(MultipartFile picFile,String picture,String oldPicture) {
+        //刪除舊的圖片
+        remove(oldPicture);
         //準備圖片存放路徑
         File dirFile = new File(dirPath);
         if(!dirFile.exists()){
@@ -53,6 +55,7 @@ public class UploadServiceImpl implements IUploadService {
      */
     public void remove(String name){
         String filePath=dirPath+"/"+name;
+        log.debug("刪除>>>{}",filePath);
         new File(filePath).delete();
     }
 

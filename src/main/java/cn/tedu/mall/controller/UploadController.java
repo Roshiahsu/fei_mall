@@ -37,9 +37,12 @@ public class UploadController {
     @ApiOperation("圖片上傳")
     @ApiOperationSupport(order = 100)
     @PreAuthorize("hasRole('admin')")
-    public JsonResult insert(MultipartFile picFile,String picture)  {
+    public JsonResult insert(MultipartFile picFile,@Param("picture") String picture,@Param("oldPicture")String oldPicture)  {
         log.debug("開始上傳圖片>>>{}");
-        uploadService.upload(picFile,picture);
+        log.debug("獲取到的picture>>{}",picture);
+        log.debug("獲取到的oldPicture>>{}",oldPicture);
+
+        uploadService.upload(picFile,picture,oldPicture);
         return JsonResult.ok();
     }
 

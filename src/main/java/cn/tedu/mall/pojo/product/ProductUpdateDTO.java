@@ -25,6 +25,9 @@ public class ProductUpdateDTO implements Serializable {
     @ApiModelProperty(value = "品牌id")
     private Long brandId;
 
+    @ApiModelProperty(value = "品牌名稱，前端將變更過的brandId以brandName傳送")
+    private Object brandName;
+
     @ApiModelProperty(value = "商品名稱")
     private String productName;
 
@@ -49,6 +52,9 @@ public class ProductUpdateDTO implements Serializable {
     @ApiModelProperty(value = "有效期限")
     private LocalDate gmtExp;
 
-    @ApiModelProperty(value = "商品總類編號")
+    @ApiModelProperty(value = "商品種類編號")
     private Integer productTypeId;
+
+    @ApiModelProperty(value = "商品種類名稱，前端將變更過的productTypeId以productTypeName傳送")
+    private Object productTypeName;
 }

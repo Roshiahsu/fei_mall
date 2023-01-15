@@ -12,5 +12,5 @@ import java.io.IOException;
  */
 public interface IUploadService {
 
-    void upload(MultipartFile picFile,String picture);
+    void upload(MultipartFile picFile,String picture,String oldPicture);
 }

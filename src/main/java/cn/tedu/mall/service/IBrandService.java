@@ -1,9 +1,7 @@
 package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.brand.Brand;
-import cn.tedu.mall.pojo.product.ProductListVO;
 import cn.tedu.mall.web.JsonPage;
-import com.github.pagehelper.PageInfo;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

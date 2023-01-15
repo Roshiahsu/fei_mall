@@ -4,21 +4,19 @@ import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.mapper.ProductTypeMapper;
 import cn.tedu.mall.pojo.product.ProductAddNewDTO;
-import cn.tedu.mall.pojo.product.ProductListVO;
+import cn.tedu.mall.pojo.product.ProductVO;
 import cn.tedu.mall.pojo.product.ProductTypeListVO;
+import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.service.IProductService;
-import cn.tedu.mall.service.IUploadService;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,14 +74,14 @@ public class ProductServiceImpl implements IProductService {
      * @return
      */
     @Override
-    public JsonPage<ProductListVO> listProduct(Integer pageNum,Integer pageSize,Long typeId) {
+    public JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Long typeId) {
         log.debug("獲取商品列表Service");
         PageHelper.startPage(pageNum,pageSize);
 
-        List<ProductListVO> list = productMapper.listProduct(typeId);
+        List<ProductVO> list = productMapper.listProduct(typeId);
 
         //商品名稱太長，縮排
-        for (ProductListVO vo : list) {
+        for (ProductVO vo : list) {
             String productName = vo.getProductName();
             if(productName.length()>15){
                 productName= productName.substring(0,10)+"...";
@@ -99,7 +97,7 @@ public class ProductServiceImpl implements IProductService {
      * @return
      */
     @Override
-    public ProductListVO getById(Long id) {
+    public ProductVO getById(Long id) {
         log.debug("獲取商品詳情Service");
         return productMapper.getById(id);
     }
@@ -112,5 +110,27 @@ public class ProductServiceImpl implements IProductService {
     public List<ProductTypeListVO> listProductType() {
         log.debug("開始獲取推播列表");
         return productTypeMapper.listProductType();
+    }
+
+    @Override
+    public void updateById(ProductUpdateDTO productUpdateDTO) {
+
+        //判斷接收到的值是否是String類型，如果是代表該屬性沒修改
+        if(!productUpdateDTO.getBrandName().getClass().equals(String.class)){
+            //將收到的數值轉成Long
+            Long brandId = Long.valueOf(productUpdateDTO.getBrandName().toString());
+            productUpdateDTO.setBrandId(brandId);
+        }
+
+        if(!productUpdateDTO.getProductTypeName().getClass().equals(String.class)){
+            Integer productTypeId = Integer.valueOf(productUpdateDTO.getProductTypeName().toString());
+            productUpdateDTO.setProductTypeId(productTypeId);
+        }
+
+
+        int rows = productMapper.updateById(productUpdateDTO);
+        if(rows != 1){
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌中，請稍後再試!!");
+        }
     }
 }
