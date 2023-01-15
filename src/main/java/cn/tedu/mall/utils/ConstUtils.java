@@ -38,6 +38,7 @@ public class ConstUtils {
 
     public static final String  CLAIM_KEY_USERNAME = "user";
 
+
     //從上下文獲取用戶訊息
     public static LoginPrinciple getUserInfo(){
         log.debug("開始從上下文獲取id");

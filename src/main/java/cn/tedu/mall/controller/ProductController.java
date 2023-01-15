@@ -56,7 +56,7 @@ public class ProductController {
     @GetMapping("/{typeId}/listProduct")
     @ApiOperation("商品列表")
     @ApiOperationSupport(order = 300)
-    public JsonResult listProduct(@Param ("pageNum") Integer pageNum,@Param("pageSize") Integer pageSize,@PathVariable Long typeId){
+    public JsonResult listProduct(@Param ("pageNum") Integer pageNum,@Param("pageSize") Integer pageSize,@PathVariable Integer typeId){
         log.debug("開始查詢商品列表");
         JsonPage<ProductVO> list = productService.listProduct(pageNum, pageSize, typeId);
         return JsonResult.ok(list);

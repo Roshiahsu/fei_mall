@@ -22,7 +22,7 @@ public interface ProductMapper {
 
     int countByName(String productName);
 
-    List<ProductVO> listProduct(Long typeId);
+    List<ProductVO> listProduct(Integer typeId);
 
     ProductVO getById(Long id);
 

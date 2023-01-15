@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @ClassName BrandRepositoryImpl
  * @Version 1.0
- * @Description TODO
+ * @Description 品牌repository
  * @Date 2023/1/15、下午1:18
  */
 @Repository
@@ -33,6 +33,7 @@ public class BrandRepositoryImpl implements IBrandRepository {
 
     @Override
     public void putList() {
+        deleteList();
         log.debug("獲取品牌資料");
         //從Mysql中獲取品牌資料
         List<Brand> brandListVO= brandMapper.listBrand();
@@ -45,13 +46,13 @@ public class BrandRepositoryImpl implements IBrandRepository {
 
     @Override
     public void deleteList() {
-        log.debug("開始刪除redis中的List數據");
+        log.debug("開始刪除redis中的Brand List數據");
         redisTemplate.delete(KEY_PREFIX_BRAND_LIST);
     }
 
     @Override
     public List<Brand> getList() {
-        log.debug("從Redis中獲取資料");
+        log.debug("從Redis中獲取Brand資料");
         List<Object> brandVO = redisTemplate.opsForList().range(KEY_PREFIX_BRAND_LIST, 0, -1);
         List<Brand> brandListVO = new ArrayList<>();
         for (Object brand : brandVO) {

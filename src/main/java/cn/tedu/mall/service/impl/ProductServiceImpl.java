@@ -7,6 +7,7 @@ import cn.tedu.mall.pojo.product.ProductAddNewDTO;
 import cn.tedu.mall.pojo.product.ProductVO;
 import cn.tedu.mall.pojo.product.ProductTypeListVO;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
+import cn.tedu.mall.repository.IProductRepository;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
@@ -35,6 +36,10 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private ProductTypeMapper productTypeMapper;
+
+    @Autowired
+    private IProductRepository productRepository;
+
     /**
      * 新增商品
      * @param productAddNewDTO 商品資訊
@@ -57,7 +62,6 @@ public class ProductServiceImpl implements IProductService {
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍後再試!!");
         }
     }
-
     /**
      * 刪除商品
      * @param ids
@@ -74,11 +78,12 @@ public class ProductServiceImpl implements IProductService {
      * @return
      */
     @Override
-    public JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Long typeId) {
+    public JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Integer typeId) {
         log.debug("獲取商品列表Service");
         PageHelper.startPage(pageNum,pageSize);
 
-        List<ProductVO> list = productMapper.listProduct(typeId);
+        List<ProductVO> list = productRepository.getList(typeId);
+//        List<ProductVO> list = productMapper.listProduct(typeId);
 
         //商品名稱太長，縮排
         for (ProductVO vo : list) {
