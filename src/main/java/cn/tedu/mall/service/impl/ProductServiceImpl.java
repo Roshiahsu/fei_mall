@@ -9,6 +9,7 @@ import cn.tedu.mall.pojo.product.ProductTypeListVO;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.repository.IProductRepository;
 import cn.tedu.mall.service.IProductService;
+import cn.tedu.mall.utils.RedisUtils;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
 import com.github.pagehelper.PageHelper;
@@ -52,10 +53,13 @@ public class ProductServiceImpl implements IProductService {
         if(count !=0){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"商品重複！！");
         }
-        //修改時間
         LocalDateTime gmtExp = productAddNewDTO.getGmtExp();
-        gmtExp = gmtExp.plusHours(8);
-        productAddNewDTO.setGmtExp(gmtExp);
+        if(gmtExp != null){
+            //修改時間
+
+            gmtExp = gmtExp.plusHours(8);
+            productAddNewDTO.setGmtExp(gmtExp);
+        }
         //資料寫入資料庫
         int rows = productMapper.insert(productAddNewDTO);
         if(rows != 1){
@@ -80,11 +84,15 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Integer typeId) {
         log.debug("獲取商品列表Service");
-        PageHelper.startPage(pageNum,pageSize);
 
-        List<ProductVO> list = productRepository.getList(typeId);
-//        List<ProductVO> list = productMapper.listProduct(typeId);
-
+        List<ProductVO> list =null;
+        //全品項使用分頁查詢直接查詢mysql
+        if(typeId == RedisUtils.ALL_PRODUCT){
+            PageHelper.startPage(pageNum,pageSize);
+            list = productMapper.listProduct(typeId);
+        }else{
+            list = productRepository.getList(typeId,pageNum,pageSize);
+        }
         //商品名稱太長，縮排
         for (ProductVO vo : list) {
             String productName = vo.getProductName();

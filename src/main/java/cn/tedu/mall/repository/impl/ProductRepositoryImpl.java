@@ -53,11 +53,11 @@ public class ProductRepositoryImpl implements IProductRepository {
     }
 
     @Override
-    public List<ProductVO> getList(Integer typeId) {
+    public List<ProductVO> getList(Integer typeId,Integer pageNum, Integer pageSize) {
         log.debug("從Redis中獲取Product資料");
         String key = getRedisKey(typeId);
 
-        List<Object> productVO = redisTemplate.opsForList().range(key, 0, -1);
+        List<Object> productVO = redisTemplate.opsForList().range(key, 0, pageSize);
         List<ProductVO> productListVO = new ArrayList<>();
 
         for (Object vo : productVO) {
@@ -69,9 +69,7 @@ public class ProductRepositoryImpl implements IProductRepository {
     public String getRedisKey(Integer typeId){
         String key ;
         //根據輸入的typeId決定redis中的key
-        if (typeId.equals(RedisUtils.ALL_PRODUCT)){
-            key = RedisUtils.getProductKey(RedisUtils.ALL_PRODUCT_NAME);
-        }else if (typeId.equals(RedisUtils.NEW_PRODUCT)){
+        if (typeId.equals(RedisUtils.NEW_PRODUCT)){
             key = RedisUtils.getProductKey(RedisUtils.NEW_PRODUCT_NAME);
         }else if (typeId.equals(RedisUtils.HOT_PRODUCT)){
             key = RedisUtils.getProductKey(RedisUtils.HOT_PRODUCT_NAME);

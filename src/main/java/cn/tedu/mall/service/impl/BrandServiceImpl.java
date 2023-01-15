@@ -44,6 +44,7 @@ public class BrandServiceImpl implements IBrandService {
         if(rows!=1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中請稍候!");
         }
+        brandRepository.putList();
     }
 
     @Override
@@ -70,6 +71,7 @@ public class BrandServiceImpl implements IBrandService {
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌請稍候!");
         }
+        brandRepository.putList();
     }
 
     /**

@@ -33,7 +33,7 @@ public class CachePreLoad implements ApplicationRunner {
         brandRepository.putList();
         //加載商品資料
         //TODO 之後更新與資料庫對應目前寫死
-        for (int i = 1; i <=4 ; i++) {
+        for (int i = 2; i <=4 ; i++) {
             productRepository.putList(i);
         }
     }

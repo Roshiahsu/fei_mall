@@ -43,7 +43,7 @@ public class ProductTest {
 
     @Test
     public void listProductTest(){
-        List<ProductVO> vos = productMapper.listProduct(2L);
+        List<ProductVO> vos = productMapper.listProduct(2);
         for (ProductVO vo : vos) {
             System.out.println("獲取到的資料>>"+vo.toString());
         }

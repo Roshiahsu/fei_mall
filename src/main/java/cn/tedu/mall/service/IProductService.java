@@ -22,7 +22,7 @@ public interface IProductService {
 
     void deleteByIds(Long... ids);
 
-    JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Long typeId);
+    JsonPage<ProductVO> listProduct(Integer pageNum, Integer pageSize, Integer typeId);
 
     ProductVO getById(Long id);
 

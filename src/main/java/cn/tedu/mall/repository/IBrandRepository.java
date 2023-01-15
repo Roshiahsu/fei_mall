@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IBrandRepository {
 
-    // 存數據
+    // 存數據列表
     void putList();
     //刪除數據
     void deleteList();

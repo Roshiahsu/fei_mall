@@ -18,6 +18,6 @@ public interface IProductRepository {
     //刪除數據
     void deleteList(Integer typeId);
     // 獲取商品
-    List<ProductVO> getList(Integer typeId);
+    List<ProductVO> getList(Integer typeId,Integer pageNum, Integer pageSize);
 
 }
