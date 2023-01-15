@@ -3,6 +3,7 @@ package cn.tedu.mall.service.impl;
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.BrandMapper;
 import cn.tedu.mall.pojo.brand.Brand;
+import cn.tedu.mall.repository.IBrandRepository;
 import cn.tedu.mall.service.IBrandService;
 import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
@@ -27,6 +28,9 @@ public class BrandServiceImpl implements IBrandService {
     @Autowired
     private BrandMapper brandMapper;
 
+    @Autowired
+    private IBrandRepository brandRepository;
+
     @Override
     public void insert(Brand brand) {
         log.debug("開始新增品牌");
@@ -49,7 +53,8 @@ public class BrandServiceImpl implements IBrandService {
         Integer pageSize =20;
         PageHelper.startPage(pageNum,pageSize);
 
-        List<Brand> brands = brandMapper.listBrand();
+        //從redis中獲取品牌列表
+        List<Brand> brands = brandRepository.getList();
 
         return JsonPage.restPage(new PageInfo<>(brands));
     }
