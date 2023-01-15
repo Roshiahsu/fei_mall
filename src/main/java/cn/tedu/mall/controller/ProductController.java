@@ -44,11 +44,11 @@ public class ProductController {
         return JsonResult.ok();
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/{id}/delete")
     @ApiOperation("刪除商品")
     @ApiOperationSupport(order = 200)
     @PreAuthorize("hasRole('admin')")
-    public JsonResult delete(Long... ids){
+    public JsonResult delete(@PathVariable("id") Long... ids){
         log.debug("開始刪除商品");
         productService.deleteByIds(ids);
         return JsonResult.ok();
