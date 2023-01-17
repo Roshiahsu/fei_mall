@@ -17,7 +17,7 @@ import java.util.List;
 public class JsonPage<T> implements Serializable {
 
     @ApiModelProperty(value = "總頁數")
-    private Integer Pages;
+    private Integer totalPage;
 
     @ApiModelProperty(value = "總條數")
     private Long total;
@@ -35,7 +35,7 @@ public class JsonPage<T> implements Serializable {
 
     public static <T> JsonPage<T> restPage(PageInfo<T> pageInfo) {
         JsonPage<T> result = new JsonPage<T>();
-        result.setPages(pageInfo.getPages());
+        result.setTotalPage(pageInfo.getPages());
         result.setPageNum(pageInfo.getPageNum());
         result.setPageSize(pageInfo.getPageSize());
         result.setTotal(pageInfo.getTotal());

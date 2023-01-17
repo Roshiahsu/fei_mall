@@ -53,6 +53,7 @@ public class ProductController {
         productService.deleteByIds(ids);
         return JsonResult.ok();
     }
+
     @GetMapping("/{typeId}/listProduct")
     @ApiOperation("商品列表")
     @ApiOperationSupport(order = 300)
