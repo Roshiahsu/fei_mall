@@ -91,7 +91,7 @@ public class ProductServiceImpl implements IProductService {
 
         List<ProductVO> list =null;
         //全品項使用分頁查詢直接查詢mysql
-        if(typeId == RedisUtils.ALL_PRODUCT){
+        if(typeId.equals(RedisUtils.ALL_PRODUCT)){
             PageHelper.startPage(pageNum,pageSize);
             list = productMapper.listProduct(typeId);
         }else{

@@ -39,30 +39,48 @@ public class ProductRepositoryImpl implements IProductRepository {
      */
     @Override
     public void putList(Integer typeId) {
+        //刪除該類別redis中的資料
         deleteList(typeId);
         log.debug("向Redis中寫入商品數據");
+        //從mysql中獲取資料
         List<ProductVO> productVOS = productMapper.listProduct(typeId);
-
+        //根據typeId 獲取 要寫入redis中的key
         String key = getRedisKey(typeId);
-
+        //將資料寫入redis
         for (ProductVO productVO : productVOS) {
             redisTemplate.opsForList().rightPush(key,productVO);
         }
     }
 
+    /**
+     * 根據typeId刪除資料
+     * @param typeId
+     */
     @Override
     public void deleteList(Integer typeId) {
         log.debug("開始刪除redis中的Product List數據");
+        //根據typeId 獲取 redis中的key
         String key = getRedisKey(typeId);
+        //刪除資料
         redisTemplate.delete(key);
     }
 
+    /**
+     *
+     * @param typeId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @Override
     public List<ProductVO> getList(Integer typeId,Integer pageNum, Integer pageSize) {
         log.debug("從Redis中獲取Product資料");
-        String key = getRedisKey(typeId);
 
-        List<Object> productVO = redisTemplate.opsForList().range(key, 0, pageSize);
+        String key = getRedisKey(typeId);
+        //分頁計算，設定起始值
+        pageNum =(pageNum-1)*pageSize;
+        //end = 起始值 + 每頁顯示項目 -1
+        List<Object> productVO = redisTemplate.opsForList().range(key,pageNum , pageNum+pageSize-1);
         List<ProductVO> productListVO = new ArrayList<>();
 
         for (Object vo : productVO) {
