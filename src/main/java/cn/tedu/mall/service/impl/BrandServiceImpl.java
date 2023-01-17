@@ -44,6 +44,7 @@ public class BrandServiceImpl implements IBrandService {
         if(rows!=1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中請稍候!");
         }
+        //新增完成，更新Redis
         brandRepository.putList();
     }
 
@@ -53,7 +54,6 @@ public class BrandServiceImpl implements IBrandService {
         //固定每頁顯示項目為20
         Integer pageSize =20;
         PageHelper.startPage(pageNum,pageSize);
-
         //從redis中獲取品牌列表
         List<Brand> brands = brandRepository.getList();
 
@@ -71,6 +71,7 @@ public class BrandServiceImpl implements IBrandService {
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌請稍候!");
         }
+        //刪除完成，更新Redis
         brandRepository.putList();
     }
 
@@ -85,5 +86,7 @@ public class BrandServiceImpl implements IBrandService {
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
         }
+        //刪除完成，更新Redis
+        brandRepository.putList();
     }
 }

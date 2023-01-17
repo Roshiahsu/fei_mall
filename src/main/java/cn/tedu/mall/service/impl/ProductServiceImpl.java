@@ -36,9 +36,6 @@ public class ProductServiceImpl implements IProductService {
     private ProductMapper productMapper;
 
     @Autowired
-    private ProductTypeMapper productTypeMapper;
-
-    @Autowired
     private IProductRepository productRepository;
 
     /**
@@ -56,7 +53,6 @@ public class ProductServiceImpl implements IProductService {
         LocalDateTime gmtExp = productAddNewDTO.getGmtExp();
         if(gmtExp != null){
             //修改時間
-
             gmtExp = gmtExp.plusHours(8);
             productAddNewDTO.setGmtExp(gmtExp);
         }
@@ -65,6 +61,9 @@ public class ProductServiceImpl implements IProductService {
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍後再試!!");
         }
+        //將獲取的ProductTypeId 轉成 Integer
+        Integer typeId = productAddNewDTO.getProductTypeId().intValue();
+        productRepository.putList(typeId);
     }
     /**
      * 刪除商品
@@ -74,6 +73,11 @@ public class ProductServiceImpl implements IProductService {
     public void deleteByIds(Long... ids) {
         log.debug("刪除商品Service");
         productMapper.deleteByIds(ids);
+        //更新推播種類2-4類Redis資料
+        for (int i = 2; i <4 ; i++) {
+            productRepository.putList(i);
+        }
+
     }
 
     /**
@@ -122,7 +126,8 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public List<ProductTypeListVO> listProductType() {
         log.debug("開始獲取推播列表");
-        return productTypeMapper.listProductType();
+        //從redis獲取推播種類資料
+        return productRepository.getProductTypeList();
     }
 
     @Override
@@ -139,8 +144,6 @@ public class ProductServiceImpl implements IProductService {
             Integer productTypeId = Integer.valueOf(productUpdateDTO.getProductTypeName().toString());
             productUpdateDTO.setProductTypeId(productTypeId);
         }
-
-
         int rows = productMapper.updateById(productUpdateDTO);
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌中，請稍後再試!!");

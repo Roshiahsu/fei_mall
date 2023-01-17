@@ -2,6 +2,7 @@ package cn.tedu.mall.repository.impl;
 
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.mapper.ProductTypeMapper;
+import cn.tedu.mall.pojo.product.ProductTypeListVO;
 import cn.tedu.mall.pojo.product.ProductVO;
 import cn.tedu.mall.repository.IProductRepository;
 import cn.tedu.mall.utils.RedisUtils;
@@ -32,6 +33,10 @@ public class ProductRepositoryImpl implements IProductRepository {
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
 
+    /**
+     * 根據typeId將資料寫入redis
+     * @param typeId 類別id
+     */
     @Override
     public void putList(Integer typeId) {
         deleteList(typeId);
@@ -77,5 +82,32 @@ public class ProductRepositoryImpl implements IProductRepository {
             key = RedisUtils.getProductKey(RedisUtils.DISCOUNTED_PRODUCT_NAME);
 
         return key;
+    }
+
+    @Override
+    public void putProductTypeList() {
+        deleteProductTypeList();
+        List<ProductTypeListVO> productTypeListVOS = productTypeMapper.listProductType();
+        for (ProductTypeListVO productTypeListVO : productTypeListVOS) {
+            redisTemplate.opsForList().rightPush
+                    (RedisUtils.KEY_PREFIX_PRODUCT_TYPE_LIST,productTypeListVO);
+        }
+    }
+
+    @Override
+    public void deleteProductTypeList() {
+        redisTemplate.delete(RedisUtils.KEY_PREFIX_PRODUCT_TYPE_LIST);
+    }
+
+    @Override
+    public List<ProductTypeListVO> getProductTypeList() {
+        List<Object> list = redisTemplate.opsForList().range
+                (RedisUtils.KEY_PREFIX_PRODUCT_TYPE_LIST, 0, -1);
+
+        List<ProductTypeListVO> listVO = new ArrayList<>();
+        for (Object o : list) {
+            listVO.add((ProductTypeListVO)o);
+        }
+        return listVO;
     }
 }

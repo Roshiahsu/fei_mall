@@ -36,5 +36,7 @@ public class CachePreLoad implements ApplicationRunner {
         for (int i = 2; i <=4 ; i++) {
             productRepository.putList(i);
         }
+        //加載推播種類
+        productRepository.putProductTypeList();
     }
 }
