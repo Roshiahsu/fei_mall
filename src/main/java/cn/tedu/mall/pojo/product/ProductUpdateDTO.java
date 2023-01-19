@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @ClassName ProductAddNewDTO
@@ -50,7 +51,7 @@ public class ProductUpdateDTO implements Serializable {
     private Integer stock;
 
     @ApiModelProperty(value = "有效期限")
-    private LocalDate gmtExp;
+    private LocalDateTime gmtExp;
 
     @ApiModelProperty(value = "商品種類編號")
     private Integer productTypeId;

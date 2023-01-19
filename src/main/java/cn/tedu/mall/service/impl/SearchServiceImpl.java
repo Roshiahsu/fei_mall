@@ -44,6 +44,7 @@ public class SearchServiceImpl implements ISearchService {
         int pages= 0;
         int pageSize =10;
         do{
+            //將商品推播種類固定為全品項
             JsonPage<ProductVO> productVOS = productService.listProduct(i, pageSize, RedisUtils.ALL_PRODUCT);
             List<ProductForEs> esProducts = new ArrayList<>();
             for (ProductVO productVO : productVOS.getList()) {
@@ -68,6 +69,7 @@ public class SearchServiceImpl implements ISearchService {
      */
     @Override
     public JsonPage<ProductForEs> search(String keyword, Integer page, Integer pageSize) {
+        log.debug("開始關鍵字查詢");
         Page<ProductForEs> products = searchRepository.querySearch(keyword, PageRequest.of(page - 1, pageSize));
         //將Page 轉換JsonPage
         JsonPage<ProductForEs> jsonPage = new JsonPage<>();
@@ -77,5 +79,16 @@ public class SearchServiceImpl implements ISearchService {
         jsonPage.setTotalPage(products.getTotalPages());
         jsonPage.setList(products.getContent());
         return jsonPage;
+    }
+
+    /**
+     * 對關鍵字進行判斷
+     * 如果存在則計數+1，如果不存在則新增關鍵字
+     * @param keyword 前端發送的關鍵字
+     */
+    public void initKeyword(String keyword){
+        log.debug("開始對關鍵字進行分析");
+        //TODO 使用Redis 待完成
+
     }
 }

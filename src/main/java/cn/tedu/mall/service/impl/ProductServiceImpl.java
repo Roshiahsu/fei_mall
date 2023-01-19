@@ -130,6 +130,10 @@ public class ProductServiceImpl implements IProductService {
         return productRepository.getProductTypeList();
     }
 
+    /**
+     * 商品更新
+     * @param productUpdateDTO
+     */
     @Override
     public void updateById(ProductUpdateDTO productUpdateDTO) {
 
@@ -144,6 +148,14 @@ public class ProductServiceImpl implements IProductService {
             Integer productTypeId = Integer.valueOf(productUpdateDTO.getProductTypeName().toString());
             productUpdateDTO.setProductTypeId(productTypeId);
         }
+
+        LocalDateTime gmtExp = productUpdateDTO.getGmtExp();
+        if(gmtExp != null){
+            //修改時間
+            gmtExp = gmtExp.plusHours(8);
+            productUpdateDTO.setGmtExp(gmtExp);
+        }
+
         int rows = productMapper.updateById(productUpdateDTO);
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌中，請稍後再試!!");

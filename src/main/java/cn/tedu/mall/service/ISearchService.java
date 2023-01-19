@@ -2,6 +2,7 @@ package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.search.ProductForEs;
 import cn.tedu.mall.web.JsonPage;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @ClassName ISearchService
@@ -9,6 +10,7 @@ import cn.tedu.mall.web.JsonPage;
  * @Description TODO
  * @Date 2023/1/17、下午8:50
  */
+@Transactional
 public interface ISearchService {
 
     //向ES加載數據
