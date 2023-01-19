@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.tedu.mall.mapper.KeywordMapper">
+<!--    void insert(Keyword keyword);-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into
+            pms_keyword(keyword_name,count)
+        values (
+            #{keywordName},
+            #{count}
+        )
+    </insert>
+<!--    void updateCount(String keyword);-->
+    <update id="updateCount">
+        update
+            pms_keyword pk
+        set
+            pk.count = pk.count+1
+        where
+           keyword_name= #{keywordName}
+    </update>
+<!--    List<String> listKeywordsOrderByCount();-->
+    <select id="listKeywordsOrderByCount" resultType="String">
+        select
+            keyword_name
+        from
+            pms_keyword
+        order by
+            count desc limit 0,10 ;
+    </select>
+
+<!--    int countByKeywordName(String keywordName);-->
+    <select id="countByKeywordName" resultType="int">
+        select
+            count(*)
+        from
+            pms_keyword
+        where
+            keyword_name = #{keywordName}
+    </select>
+</mapper>

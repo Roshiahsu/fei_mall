@@ -52,6 +52,11 @@ public class RedisUtils {
     public static final String KEY_PREFIX_PRODUCT_TYPE_LIST = "productType:list";
 
     /**
+     * 關鍵字前綴
+     */
+    public static final String KEY_PREFIX_KEYWORD_LIST = "keyword:list";
+
+    /**
      * 商品列表前綴
      */
     public static String getProductKey(String type){

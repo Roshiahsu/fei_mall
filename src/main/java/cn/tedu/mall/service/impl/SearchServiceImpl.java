@@ -1,13 +1,16 @@
 package cn.tedu.mall.service.impl;
 
+import cn.tedu.mall.exception.ServiceException;
+import cn.tedu.mall.mapper.KeywordMapper;
 import cn.tedu.mall.pojo.product.ProductVO;
+import cn.tedu.mall.pojo.search.Keyword;
 import cn.tedu.mall.pojo.search.ProductForEs;
-import cn.tedu.mall.repository.ISearchRepository;
+import cn.tedu.mall.repository.ISearchESRepository;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.service.ISearchService;
 import cn.tedu.mall.utils.RedisUtils;
 import cn.tedu.mall.web.JsonPage;
-import com.google.j2objc.annotations.AutoreleasePool;
+import cn.tedu.mall.web.ServiceCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,10 @@ public class SearchServiceImpl implements ISearchService {
     private IProductService productService;
 
     @Autowired
-    private ISearchRepository searchRepository;
+    private ISearchESRepository searchRepository;
+
+    @Autowired
+    private KeywordMapper keywordMapper;
 
     /**
      * 加載數據到ES
@@ -70,6 +76,8 @@ public class SearchServiceImpl implements ISearchService {
     @Override
     public JsonPage<ProductForEs> search(String keyword, Integer page, Integer pageSize) {
         log.debug("開始關鍵字查詢");
+        //對關鍵字進行判斷
+        initKeyword(keyword);
         Page<ProductForEs> products = searchRepository.querySearch(keyword, PageRequest.of(page - 1, pageSize));
         //將Page 轉換JsonPage
         JsonPage<ProductForEs> jsonPage = new JsonPage<>();
@@ -84,11 +92,17 @@ public class SearchServiceImpl implements ISearchService {
     /**
      * 對關鍵字進行判斷
      * 如果存在則計數+1，如果不存在則新增關鍵字
-     * @param keyword 前端發送的關鍵字
+     * @param keywordName 前端發送的關鍵字
      */
-    public void initKeyword(String keyword){
+    public void initKeyword(String keywordName){
         log.debug("開始對關鍵字進行分析");
         //TODO 使用Redis 待完成
-
+        int count = keywordMapper.countByKeywordName(keywordName);
+        if(count ==0){
+            Keyword keyword = new Keyword();
+            keyword.setKeywordName(keywordName);
+            keywordMapper.insert(keyword);
+        }
+        keywordMapper.updateCount(keywordName);
     }
 }

@@ -9,13 +9,13 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.stereotype.Repository;
 
 /**
- * @ClassName ISearchRepository
+ * @ClassName ISearchESRepository
  * @Version 1.0
  * @Description ES交互功能
  * @Date 2023/1/17、下午8:39
  */
 @Repository
-public interface ISearchRepository extends ElasticsearchRepository<ProductForEs,Long> {
+public interface ISearchESRepository extends ElasticsearchRepository<ProductForEs,Long> {
 
     @Query("{\n" +
             "    \"bool\": {\n" + //bool類型，代表true才有結果
