@@ -25,12 +25,22 @@ import java.util.List;
 @Slf4j
 public class BrandServiceImpl implements IBrandService {
 
+    /**
+     * 品牌Mapper
+     */
     @Autowired
     private BrandMapper brandMapper;
 
+    /**
+     * 品牌Repository(redis)
+     */
     @Autowired
     private IBrandRepository brandRepository;
 
+    /**
+     * 新增品牌
+     * @param brand 品牌資料
+     */
     @Override
     public void insert(Brand brand) {
         log.debug("開始新增品牌");
@@ -48,6 +58,11 @@ public class BrandServiceImpl implements IBrandService {
         brandRepository.putList();
     }
 
+    /**
+     * 根據pageNum獲取品牌分頁列表
+     * @param pageNum 顯示頁數
+     * @return
+     */
     @Override
     public JsonPage<Brand> listBrand(Integer pageNum) {
         log.debug("開始獲取品牌列表");
