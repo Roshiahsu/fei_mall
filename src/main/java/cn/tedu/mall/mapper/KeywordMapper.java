@@ -13,12 +13,28 @@ import java.util.List;
  */
 @Repository
 public interface KeywordMapper {
-
+    /**
+     * 新增關鍵字
+     * @param keyword 關鍵字
+     */
     void insert(Keyword keyword);
 
+    /**
+     * 根據關鍵字修改計數(count)
+     * @param keyword 關鍵字
+     */
     void updateCount(String keyword);
 
-    List<String> listKeywordsOrderByCount();
+    /**
+     * 獲取關鍵字列表
+     * @return
+     */
+    List<Keyword> listKeywordsOrderByCount();
 
+    /**
+     * 根據關鍵字統計數量
+     * @param keywordName
+     * @return
+     */
     int countByKeywordName(String keywordName);
 }

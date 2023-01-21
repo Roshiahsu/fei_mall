@@ -32,9 +32,9 @@ public class SearchController {
     @GetMapping("/")
     @ApiOperation("搜尋商品")
     @ApiOperationSupport(order = 100)
-    public JsonResult search(@Param("pageNum") Integer pageNum,
-                             @Param("pageSize") Integer pageSize,
-                             @Param("keywords") String keywords){
+    public JsonResult search(Integer pageNum,
+                             Integer pageSize,
+                             String keywords){
         log.debug("開始搜尋商品");
         JsonPage<ProductForEs> search = searchService.search(keywords, pageNum, pageSize);
         return JsonResult.ok(search);

@@ -35,7 +35,7 @@ public class SearchServiceImpl implements ISearchService {
     private IProductService productService;
 
     @Autowired
-    private ISearchESRepository searchRepository;
+    private ISearchESRepository searchESRepository;
 
     @Autowired
     private KeywordMapper keywordMapper;
@@ -59,7 +59,7 @@ public class SearchServiceImpl implements ISearchService {
                 esProducts.add(productForEs);
             }
             //數據保存到es
-            searchRepository.saveAll(esProducts);
+            searchESRepository.saveAll(esProducts);
             log.info("成功加載第{}頁數據",i);
             pages=productVOS.getTotalPage();
             i++;
@@ -78,7 +78,7 @@ public class SearchServiceImpl implements ISearchService {
         log.debug("開始關鍵字查詢");
         //對關鍵字進行判斷
         initKeyword(keyword);
-        Page<ProductForEs> products = searchRepository.querySearch(keyword, PageRequest.of(page - 1, pageSize));
+        Page<ProductForEs> products = searchESRepository.querySearch(keyword, PageRequest.of(page - 1, pageSize));
         //將Page 轉換JsonPage
         JsonPage<ProductForEs> jsonPage = new JsonPage<>();
         jsonPage.getTotalPage();
@@ -96,7 +96,7 @@ public class SearchServiceImpl implements ISearchService {
      */
     public void initKeyword(String keywordName){
         log.debug("開始對關鍵字進行分析");
-        //TODO 使用Redis 待完成
+        //TODO 預計更改成在Redis中修改，修改後定期把redis中的資料寫入資料庫
         int count = keywordMapper.countByKeywordName(keywordName);
         if(count ==0){
             Keyword keyword = new Keyword();

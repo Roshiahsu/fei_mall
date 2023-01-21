@@ -30,6 +30,7 @@ public class CachePreLoad implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        log.debug("開始預熱redis");
         //加載品牌資料
         brandRepository.putList();
         //加載商品資料

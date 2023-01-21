@@ -1,11 +1,13 @@
 package cn.tedu.mall.repository.impl;
 
 import cn.tedu.mall.mapper.KeywordMapper;
+import cn.tedu.mall.pojo.search.Keyword;
 import cn.tedu.mall.repository.IKeywordRepository;
 import cn.tedu.mall.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
     @Autowired
     private RedisTemplate<String,Object> redisTemplate;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     /**
      * 將資料加載到redis
      */
@@ -41,12 +46,14 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
         deleteList();
         log.debug("開始將關鍵字加載到redis");
         //從mysql中獲取關鍵字列表
-        List<String> keywordsVO = keywordMapper.listKeywordsOrderByCount();
-        //從redis工具包獲取關鍵字key
-        String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
-        //rightPush把關鍵字資料放入redis
-        for (String keyword : keywordsVO) {
-            redisTemplate.opsForList().rightPush(key,keyword);
+        List<Keyword> keywordsVO = keywordMapper.listKeywordsOrderByCount();
+        for (Keyword keyword : keywordsVO) {
+            log.debug("獲取的資料>>>{}",keyword);
+            String keywordName = keyword.getKeywordName();
+            //從redis工具包獲取關鍵字key
+            String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST + keywordName;
+            //rightPush把關鍵字資料放入redis
+            stringRedisTemplate.boundValueOps(key).set(keyword.getCount().toString());
         }
     }
 

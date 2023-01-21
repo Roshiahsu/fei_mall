@@ -21,15 +21,23 @@
         where
            keyword_name= #{keywordName}
     </update>
-<!--    List<String> listKeywordsOrderByCount();-->
-    <select id="listKeywordsOrderByCount" resultType="String">
+<!--    List<Keyword> listKeywordsOrderByCount();-->
+    <select id="listKeywordsOrderByCount" resultMap="orderByCountResult">
         select
-            keyword_name
+            keyword_name,
+            count
         from
             pms_keyword
         order by
             count desc limit 0,10 ;
     </select>
+
+    <resultMap id="orderByCountResult" type="cn.tedu.mall.pojo.search.Keyword">
+        <id column="id" property="id"/>
+        <result column="keyword_name" property="keywordName"/>
+        <result column="count" property="count"/>
+
+    </resultMap>
 
 <!--    int countByKeywordName(String keywordName);-->
     <select id="countByKeywordName" resultType="int">
