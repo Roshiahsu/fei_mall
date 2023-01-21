@@ -18,4 +18,6 @@ public interface IKeywordRepository {
     void deleteList();
     // 獲取關鍵字
     List<String> getList();
+    //初始化關鍵字
+    void initKeyword(String keywordName);
 }

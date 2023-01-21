@@ -85,4 +85,20 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
         }
         return keywordVO;
     }
+
+    /**
+     * 對關鍵字進行判斷
+     * 如果存在則計數+1，如果不存在則新增關鍵字
+     * @param keywordName 前端發送的關鍵字
+     */
+    public void initKeyword(String keywordName){
+        log.debug("開始對關鍵字進行分析");
+        //TODO 預計更改成在Redis中修改，修改後定期把redis中的資料寫入資料庫
+
+        //從redis工具包獲取關鍵字key
+        String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST + keywordName;
+        //increment() 如果 key值不存在，會創建一個並賦值1
+        //如果key存在則，值+1
+        stringRedisTemplate.boundValueOps(key).increment();
+    }
 }
