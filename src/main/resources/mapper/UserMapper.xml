@@ -54,7 +54,7 @@
         <result column="role_name" property="roleName"/>
     </resultMap>
 
-<!--        List<UserInfoVO> userInfo(Long id);-->
+<!--         UserInfoVO userInfo(Long id);-->
     <select id="userInfo" resultMap="StandardResultMap">
         select
         <include refid="BaseQueryFields"/>
@@ -67,7 +67,7 @@
         ums_user uu
         left join ums_role on uu.role_id = ums_role.id
         left join ums_sex on uu.sex = ums_sex.id
-        left join ums_user_address uua on uu.id = uua.user_id
+        left join ums_user_address uua on uu.defult_add_id = uua.id
         where
         uu.id = #{id}
     </select>
@@ -121,7 +121,6 @@
         update
             ums_user
                  <set>
-
                      <if test="password !=null">
                         password = #{password},
                     </if>

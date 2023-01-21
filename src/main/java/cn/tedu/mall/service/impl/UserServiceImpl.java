@@ -128,18 +128,18 @@ public class UserServiceImpl implements IUserService {
         UserInfoVO userInfoVO = userMapper.userInfo(userId);
         //拼接地址詳情
         StringBuffer buffer = new StringBuffer();
-        if (userInfoVO.getZipCode() !=null){
+        String detailAddress = userInfoVO.getDetailedAddress();
+        if (userInfoVO.getZipCode() !=null && !detailAddress.contains(userInfoVO.getZipCode())){
             buffer.append(userInfoVO.getZipCode());
         }
-        if (userInfoVO.getZipCode() !=null){
+        if (userInfoVO.getCity() !=null && !detailAddress.contains(userInfoVO.getCity())){
             buffer.append(userInfoVO.getCity());
         }
-        if (userInfoVO.getZipCode() !=null){
+        if (userInfoVO.getZone() !=null && !detailAddress.contains(userInfoVO.getZone())){
             buffer.append(userInfoVO.getZone());
         }
-        if (userInfoVO.getZipCode() !=null){
-            buffer.append(userInfoVO.getDetailedAddress());
-        }
+        buffer.append(userInfoVO.getDetailedAddress());
+
 
         userInfoVO.setDetailedAddress(buffer.toString());
         log.debug("準備響應的用戶資料>>>{}",userInfoVO);
@@ -194,9 +194,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void updateAddress(UserAddressDTO userAddressDTO) {
         log.debug("開始修改用戶地址");
+        //獲取userId
         Long userId = ConstUtils.getUserId();
         userAddressDTO.setUserId(userId);
         int addressCount = userAddressMapper.countAddressByDetail(userAddressDTO.getDetailedAddress());
+
+
+
+
 
         if(addressCount >0 ){
             log.debug("數據已存在，進行修改");

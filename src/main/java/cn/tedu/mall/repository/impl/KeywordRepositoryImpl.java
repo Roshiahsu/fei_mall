@@ -63,7 +63,7 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
      */
     @Override
     public void deleteList() {
-        log.debug("開始刪除redis中的關鍵字");
+        log.debug("開始刪除redis中的關鍵字列表");
         //從redis工具包獲取關鍵字key
         String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
         //刪除redis中的資料
@@ -75,7 +75,7 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
      */
     @Override
     public void deleteItem(String itemName) {
-        log.debug("開始刪除redis中的關鍵字");
+        log.debug("開始刪除redis中的關鍵字{}",itemName);
         //從redis工具包獲取關鍵字key
         String key = RedisUtils.KEY_PREFIX_KEYWORD;
         stringRedisTemplate.delete(key+itemName);
@@ -105,7 +105,6 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
      */
     public void initKeyword(String keywordName){
         log.debug("開始對關鍵字進行分析");
-        //TODO 預計更改成在Redis中修改，修改後定期把redis中的資料寫入資料庫
         //從redis工具包獲取關鍵字key
         String key = RedisUtils.KEY_PREFIX_KEYWORD + keywordName;
         //increment() 如果 key值不存在，會創建一個並賦值1
