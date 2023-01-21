@@ -12,12 +12,12 @@
             #{count}
         )
     </insert>
-<!--    void updateCount(String keyword);-->
+<!--    void updateCount(Keyword keyword);-->
     <update id="updateCount">
         update
             pms_keyword pk
         set
-            pk.count = pk.count+1
+            pk.count = pk.count+#{count}
         where
            keyword_name= #{keywordName}
     </update>

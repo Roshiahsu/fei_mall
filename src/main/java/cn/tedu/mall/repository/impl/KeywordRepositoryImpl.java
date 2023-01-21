@@ -45,8 +45,6 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
     public void putList() {
         //刪除資料，避免資料重複
         deleteList();
-        //刪除Item避免資料重複
-        deleteItem();
         log.debug("開始將關鍵字加載到redis");
         //從mysql中獲取關鍵字列表
         List<Keyword> keywordsVO = keywordMapper.listKeywordsOrderByCount();
@@ -76,17 +74,15 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
      * 刪除redis中的Item
      */
     @Override
-    public void deleteItem() {
+    public void deleteItem(String itemName) {
         log.debug("開始刪除redis中的關鍵字");
         //從redis工具包獲取關鍵字key
-        String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
-        Set<String> keys = redisTemplate.keys(key+"*");
-        //刪除redis中的資料
-        stringRedisTemplate.delete(keys);
+        String key = RedisUtils.KEY_PREFIX_KEYWORD;
+        stringRedisTemplate.delete(key+itemName);
     }
 
     /**
-     * 從redis中獲取資料
+     * 從redis list中獲取資料
      * @return
      */
     @Override
@@ -94,7 +90,7 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
         log.debug("開始從redis中獲取資料");
         //從redis工具包獲取關鍵字key
         String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
-        List<Object> range = redisTemplate.opsForList().range(key, 0, 9);
+        List<Object> range = redisTemplate.opsForList().range(key, 0, -1);
         List<String> keywordVO = new ArrayList<>();
         for (Object o : range) {
             keywordVO.add((String)o);
@@ -111,9 +107,44 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
         log.debug("開始對關鍵字進行分析");
         //TODO 預計更改成在Redis中修改，修改後定期把redis中的資料寫入資料庫
         //從redis工具包獲取關鍵字key
-        String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST + keywordName;
+        String key = RedisUtils.KEY_PREFIX_KEYWORD + keywordName;
         //increment() 如果 key值不存在，會創建一個並賦值1
         //如果key存在則，值+1
         stringRedisTemplate.boundValueOps(key).increment();
+    }
+
+    /**
+     * 將redis中的資料寫入mysql
+     */
+    @Override
+    public void updateDatabaseFromRedis() {
+        //獲取前綴
+        String key = RedisUtils.KEY_PREFIX_KEYWORD;
+        //獲取該前綴下的所有key
+        Set<String> keys = redisTemplate.keys(key.concat("*"));
+        Keyword keyword = new Keyword();
+        //遍歷key值
+        for (String s : keys) {
+            //取出後綴
+            String keywordName = s.substring(s.lastIndexOf(":")+1);
+            if (!"list".equals(keywordName)){
+                String countString = stringRedisTemplate.boundValueOps(s).get();
+                int count = Integer.parseInt(countString);
+                keyword.setKeywordName(keywordName);
+                keyword.setCount(count);
+                //判斷該關鍵字是否存在database中
+                int countByKeywordName = keywordMapper.countByKeywordName(keywordName);
+                if(countByKeywordName !=0){
+                    //已存在則更新
+                    keywordMapper.updateCount(keyword);
+                }else{
+                    //不存在則新增
+                    keywordMapper.insert(keyword);
+                }
+                //刪除redis中的資料
+                deleteItem(keywordName);
+            }
+        }
+
     }
 }

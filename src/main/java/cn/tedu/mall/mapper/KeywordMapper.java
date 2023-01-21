@@ -23,7 +23,7 @@ public interface KeywordMapper {
      * 根據關鍵字修改計數(count)
      * @param keyword 關鍵字
      */
-    void updateCount(String keyword);
+    void updateCount(Keyword keyword);
 
     /**
      * 獲取關鍵字列表

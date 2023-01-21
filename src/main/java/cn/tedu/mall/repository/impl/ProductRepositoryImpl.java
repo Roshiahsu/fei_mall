@@ -66,10 +66,10 @@ public class ProductRepositoryImpl implements IProductRepository {
     }
 
     /**
-     *
-     * @param typeId
-     * @param pageNum
-     * @param pageSize
+     * 根據typeId獲取資料
+     * @param typeId 推播種類
+     * @param pageNum 起始頁面
+     * @param pageSize 獲取多少商品
      * @return
      */
     @Override
@@ -89,6 +89,11 @@ public class ProductRepositoryImpl implements IProductRepository {
         return productListVO;
     }
 
+    /**
+     * 根據typeId獲取redis key值前綴
+     * @param typeId 推播種類
+     * @return
+     */
     public String getRedisKey(Integer typeId){
         String key ;
         //根據輸入的typeId決定redis中的key
@@ -102,21 +107,34 @@ public class ProductRepositoryImpl implements IProductRepository {
         return key;
     }
 
+    /**
+     * 將商品推播列表放入redis
+     */
     @Override
     public void putProductTypeList() {
+        //清空列表
         deleteProductTypeList();
+        //從mysql獲取推播種類
         List<ProductTypeListVO> productTypeListVOS = productTypeMapper.listProductType();
+        //放入redis
         for (ProductTypeListVO productTypeListVO : productTypeListVOS) {
             redisTemplate.opsForList().rightPush
                     (RedisUtils.KEY_PREFIX_PRODUCT_TYPE_LIST,productTypeListVO);
         }
     }
 
+    /**
+     * 清空推播列表redis list
+     */
     @Override
     public void deleteProductTypeList() {
         redisTemplate.delete(RedisUtils.KEY_PREFIX_PRODUCT_TYPE_LIST);
     }
 
+    /**
+     * 從redis中獲取推播列表
+     * @return
+     */
     @Override
     public List<ProductTypeListVO> getProductTypeList() {
         List<Object> list = redisTemplate.opsForList().range

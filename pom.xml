@@ -110,6 +110,12 @@
             <artifactId>seata-serializer-kryo</artifactId>
             <version>1.4.2</version>
         </dependency>
+
+        <!--Quartz-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
     </dependencies>
 
 

@@ -63,6 +63,7 @@ public class ProductServiceImpl implements IProductService {
         }
         //將獲取的ProductTypeId 轉成 Integer
         Integer typeId = productAddNewDTO.getProductTypeId().intValue();
+        //更新redis
         productRepository.putList(typeId);
     }
     /**
@@ -159,6 +160,10 @@ public class ProductServiceImpl implements IProductService {
         int rows = productMapper.updateById(productUpdateDTO);
         if(rows != 1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌中，請稍後再試!!");
+        }
+        //如果商品是特殊推播類型商品必須修改redis中的內容
+        if (productUpdateDTO.getProductTypeId()!=1) {
+            productRepository.putList(productUpdateDTO.getProductTypeId());
         }
     }
 }

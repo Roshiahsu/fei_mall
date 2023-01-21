@@ -17,9 +17,12 @@ public interface IKeywordRepository {
     //刪除集合數據
     void deleteList();
     //刪除數據
-    void deleteItem();
+    void deleteItem(String itemName);
     // 獲取關鍵字
     List<String> getList();
     //初始化關鍵字
     void initKeyword(String keywordName);
+    //將redis中的資料寫入mysql
+    void updateDatabaseFromRedis();
+
 }
