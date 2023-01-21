@@ -14,8 +14,10 @@ public interface IKeywordRepository {
 
     // 存數據
     void putList();
-    //刪除數據
+    //刪除集合數據
     void deleteList();
+    //刪除數據
+    void deleteItem();
     // 獲取關鍵字
     List<String> getList();
     //初始化關鍵字

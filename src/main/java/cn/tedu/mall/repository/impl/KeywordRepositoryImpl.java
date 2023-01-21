@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName KeywordRepositoryImpl
@@ -44,6 +45,8 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
     public void putList() {
         //刪除資料，避免資料重複
         deleteList();
+        //刪除Item避免資料重複
+        deleteItem();
         log.debug("開始將關鍵字加載到redis");
         //從mysql中獲取關鍵字列表
         List<Keyword> keywordsVO = keywordMapper.listKeywordsOrderByCount();
@@ -51,14 +54,14 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
             log.debug("獲取的資料>>>{}",keyword);
             String keywordName = keyword.getKeywordName();
             //從redis工具包獲取關鍵字key
-            String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST + keywordName;
+            String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
             //rightPush把關鍵字資料放入redis
-            stringRedisTemplate.boundValueOps(key).set(keyword.getCount().toString());
+           redisTemplate.opsForList().rightPush(key,keywordName);
         }
     }
 
     /**
-     * 刪除redis中的資料
+     * 刪除redis中List的資料
      */
     @Override
     public void deleteList() {
@@ -70,6 +73,19 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
     }
 
     /**
+     * 刪除redis中的Item
+     */
+    @Override
+    public void deleteItem() {
+        log.debug("開始刪除redis中的關鍵字");
+        //從redis工具包獲取關鍵字key
+        String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
+        Set<String> keys = redisTemplate.keys(key+"*");
+        //刪除redis中的資料
+        stringRedisTemplate.delete(keys);
+    }
+
+    /**
      * 從redis中獲取資料
      * @return
      */
@@ -78,7 +94,7 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
         log.debug("開始從redis中獲取資料");
         //從redis工具包獲取關鍵字key
         String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST;
-        List<Object> range = redisTemplate.opsForList().range(key, 0, -1);
+        List<Object> range = redisTemplate.opsForList().range(key, 0, 9);
         List<String> keywordVO = new ArrayList<>();
         for (Object o : range) {
             keywordVO.add((String)o);
@@ -94,7 +110,6 @@ public class KeywordRepositoryImpl implements IKeywordRepository {
     public void initKeyword(String keywordName){
         log.debug("開始對關鍵字進行分析");
         //TODO 預計更改成在Redis中修改，修改後定期把redis中的資料寫入資料庫
-
         //從redis工具包獲取關鍵字key
         String key = RedisUtils.KEY_PREFIX_KEYWORD_LIST + keywordName;
         //increment() 如果 key值不存在，會創建一個並賦值1

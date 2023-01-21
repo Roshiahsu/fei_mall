@@ -1,16 +1,13 @@
 package cn.tedu.mall.service.impl;
 
-import cn.tedu.mall.exception.ServiceException;
-import cn.tedu.mall.mapper.KeywordMapper;
 import cn.tedu.mall.pojo.product.ProductVO;
-import cn.tedu.mall.pojo.search.Keyword;
 import cn.tedu.mall.pojo.search.ProductForEs;
+import cn.tedu.mall.repository.IKeywordRepository;
 import cn.tedu.mall.repository.ISearchESRepository;
 import cn.tedu.mall.service.IProductService;
 import cn.tedu.mall.service.ISearchService;
 import cn.tedu.mall.utils.RedisUtils;
 import cn.tedu.mall.web.JsonPage;
-import cn.tedu.mall.web.ServiceCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +35,7 @@ public class SearchServiceImpl implements ISearchService {
     private ISearchESRepository searchESRepository;
 
     @Autowired
-    private KeywordMapper keywordMapper;
+    private IKeywordRepository keywordRepository;
 
     /**
      * 加載數據到ES
@@ -77,7 +74,8 @@ public class SearchServiceImpl implements ISearchService {
     public JsonPage<ProductForEs> search(String keyword, Integer page, Integer pageSize) {
         log.debug("開始關鍵字查詢");
         //對關鍵字進行判斷
-        initKeyword(keyword);
+        keywordRepository.initKeyword(keyword);
+        //使用ES對關鍵字進行搜尋
         Page<ProductForEs> products = searchESRepository.querySearch(keyword, PageRequest.of(page - 1, pageSize));
         //將Page 轉換JsonPage
         JsonPage<ProductForEs> jsonPage = new JsonPage<>();
@@ -89,20 +87,4 @@ public class SearchServiceImpl implements ISearchService {
         return jsonPage;
     }
 
-    /**
-     * 對關鍵字進行判斷
-     * 如果存在則計數+1，如果不存在則新增關鍵字
-     * @param keywordName 前端發送的關鍵字
-     */
-    public void initKeyword(String keywordName){
-        log.debug("開始對關鍵字進行分析");
-        //TODO 預計更改成在Redis中修改，修改後定期把redis中的資料寫入資料庫
-        int count = keywordMapper.countByKeywordName(keywordName);
-        if(count ==0){
-            Keyword keyword = new Keyword();
-            keyword.setKeywordName(keywordName);
-            keywordMapper.insert(keyword);
-        }
-        keywordMapper.updateCount(keywordName);
-    }
 }

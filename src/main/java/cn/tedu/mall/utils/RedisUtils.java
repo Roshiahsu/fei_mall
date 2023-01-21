@@ -54,7 +54,7 @@ public class RedisUtils {
     /**
      * 關鍵字前綴
      */
-    public static final String KEY_PREFIX_KEYWORD_LIST = "keyword:list";
+    public static final String KEY_PREFIX_KEYWORD_LIST = "keyword:";
 
     /**
      * 商品列表前綴
