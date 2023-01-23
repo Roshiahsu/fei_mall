@@ -28,6 +28,16 @@ public class ConstUtils {
     public static final int IS_DISABLE =0;
 
     /**
+     * 狀態描述default
+     */
+    public static final int IS_DEFAULT = 1;
+    /**
+     * 狀態描述not default
+     */
+    public static final int IS_NOT_DEFAULT =0;
+
+
+    /**
      * 管理員權限
      */
     public static final Integer AUTHORITY_ADMIN_ID = 1;

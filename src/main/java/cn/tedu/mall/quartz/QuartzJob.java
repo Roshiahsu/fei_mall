@@ -3,6 +3,7 @@ package cn.tedu.mall.quartz;
 import cn.tedu.mall.repository.IBrandRepository;
 import cn.tedu.mall.repository.IKeywordRepository;
 import cn.tedu.mall.repository.IProductRepository;
+import cn.tedu.mall.service.ISearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,10 +22,7 @@ import java.time.LocalDateTime;
 public class QuartzJob implements Job {
 
     @Autowired
-    private IBrandRepository brandRepository;
-
-    @Autowired
-    private IProductRepository productRepository;
+    private ISearchService searchService;
 
     @Autowired
     private IKeywordRepository keywordRepository;
@@ -34,5 +32,7 @@ public class QuartzJob implements Job {
         log.debug("開始更新redis中的資料");
         //從redis中獲取資料，並更新到database中
         keywordRepository.updateDatabaseFromRedis();
+        //更新ES
+        searchService.loadProducts();
     }
 }
