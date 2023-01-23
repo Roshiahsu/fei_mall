@@ -19,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -117,7 +119,8 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ProductVO getById(Long id) {
         log.debug("獲取商品詳情Service");
-        return productMapper.getById(id);
+        ProductVO productVO = productMapper.getById(id);
+        return productVO;
     }
 
     /**
@@ -144,11 +147,14 @@ public class ProductServiceImpl implements IProductService {
             Long brandId = Long.valueOf(productUpdateDTO.getBrandName().toString());
             productUpdateDTO.setBrandId(brandId);
         }
-
+        //判斷接收到的值是否是String類型，如果是代表該屬性沒修改
         if(!productUpdateDTO.getProductTypeName().getClass().equals(String.class)){
+            //將收到的數值轉成Integer
             Integer productTypeId = Integer.valueOf(productUpdateDTO.getProductTypeName().toString());
             productUpdateDTO.setProductTypeId(productTypeId);
         }
+
+
 
         LocalDateTime gmtExp = productUpdateDTO.getGmtExp();
         if(gmtExp != null){

@@ -199,10 +199,6 @@ public class UserServiceImpl implements IUserService {
         userAddressDTO.setUserId(userId);
         int addressCount = userAddressMapper.countAddressByDetail(userAddressDTO.getDetailedAddress());
 
-
-
-
-
         if(addressCount >0 ){
             log.debug("數據已存在，進行修改");
             int rows = userAddressMapper.updateUserAddress(userAddressDTO);
