@@ -30,11 +30,20 @@ public interface UserAddressMapper {
     int updateUserAddress(UserAddressDTO userAddressDTO);
 
     /**
-     * 根據詳細地址統計數量
-     * @param detailAddress
+     * 根據userId修改Default的值
+     * @param userId
      * @return
      */
-    int countAddressByDetail(String detailAddress);
+    int updateAddressDefaultByUserId(Long userId);
+
+
+
+    /**
+     * 根據詳細地址統計數量
+     * @param id 地址id
+     * @return
+     */
+    int countAddressByDetail(Long id);
 
     /**
      * 根據id獲取地址
@@ -48,6 +57,8 @@ public interface UserAddressMapper {
      * @return
      */
     List<Address> listAddress(Long userId);
+
+
 }
 
 

@@ -34,7 +34,8 @@ public class QuartzConfig {
         System.out.println("showTimeTrigger方法運行");
         //cron表達式
         CronScheduleBuilder cronScheduleBuilder =
-                CronScheduleBuilder.cronSchedule("5/50 * * * * ?");
+                //每10分鐘執行一次
+                CronScheduleBuilder.cronSchedule("0 0/10 * * * ? ");
         return TriggerBuilder.newTrigger()
                 .forJob(showTime())
                 .withIdentity("redisUpdateTrigger")

@@ -55,23 +55,20 @@ public class UserAddressServiceImpl implements IUserAddressService {
     @Override
     public void updateAddress(UserAddressDTO userAddressDTO) {
         log.debug("開始修改用戶地址");
-        //獲取userId
-        Long userId = ConstUtils.getUserId();
-        userAddressDTO.setUserId(userId);
-        int addressCount = userAddressMapper.countAddressByDetail(userAddressDTO.getDetailedAddress());
-
-        if(addressCount >0 ){
-            log.debug("數據已存在，進行修改");
-            int rows = userAddressMapper.updateUserAddress(userAddressDTO);
-            if (rows !=1){
-                throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"伺服器忙碌請稍候!");
-            }
-        }else{
-            log.debug("數據不存在，進行新增");
-            int rows = userAddressMapper.insetAddress(userAddressDTO);
-            if (rows !=1){
-                throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"伺服器忙碌請稍候!");
-            }
+        //檢查要修改的地址是否存在
+        int addressCount = userAddressMapper.countAddressByDetail(userAddressDTO.getId());
+        if(addressCount ==0){
+            throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"地址不存在!");
+        }
+        //判斷該地址是否是預設
+        if(userAddressDTO.getIsDefault() == ConstUtils.IS_DEFAULT){
+            //是預設，先將該使用者的其他保存地址的isDefault設定為0
+            Long userId = ConstUtils.getUserId();
+            userAddressMapper.updateAddressDefaultByUserId(userId);
+        }
+        int rows = userAddressMapper.updateUserAddress(userAddressDTO);
+        if (rows !=1){
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
         }
     }
 }

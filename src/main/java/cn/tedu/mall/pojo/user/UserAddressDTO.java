@@ -39,6 +39,9 @@ public class UserAddressDTO implements Serializable {
     @ApiModelProperty(value = "是否啟用")
     private  Integer isEnable;
 
+    @ApiModelProperty(value = "是否為預設")
+    private  Integer isDefault;
+
     public UserAddressDTO() {
         //預設啟用
         this.isEnable = ConstUtils.IS_ENABLE;

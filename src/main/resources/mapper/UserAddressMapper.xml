@@ -33,21 +33,42 @@
                 zone = #{zone},
             </if>
             <if test="detailedAddress !=null">
-                detailed_ddress = #{detailedAddress},
+                detailed_address = #{detailedAddress},
+            </if>
+            <if test="tag !=null">
+                tag = #{tag},
+            </if>
+            <if test="isDefault !=null">
+                is_default = #{isDefault},
+            </if>
+        </set>
+        where
+        id = #{id}
+    </update>
+
+
+<!--    int updateAddressDefaultByUserId(Long userId);-->
+    <update id="updateAddressDefaultByUserId">
+        update
+        ums_user_address
+        <set>
+            <if test="isDefault !=null">
+                is_default = 0,
             </if>
         </set>
         where
         user_id = #{userId}
     </update>
 
-<!--    int countAddressByDetail(String detailAddress);-->
+
+<!--    int countAddressByDetail(Long id);-->
     <select id="countAddressByDetail" resultType="int">
         select
             count(*)
         from
             ums_user_address
         where
-            detailed_address = #{detailedAddress}
+            id = #{id}
     </select>
 
 <!--    Address getAddressById(Long id);-->
@@ -79,7 +100,8 @@
             city,
             zone,
             detailed_address,
-            is_default
+            is_default,
+            tag
         </if>
     </sql>
 
@@ -90,5 +112,6 @@
         <result column="zone" property="zone"/>
         <result column="detailed_address" property="detailedAddress"/>
         <result column="is_default" property="isDefault"/>
+        <result column="tag" property="tag"/>
     </resultMap>
 </mapper>

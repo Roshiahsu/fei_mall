@@ -29,6 +29,9 @@ public class Address implements Serializable {
     @ApiModelProperty(value = "地址詳情")
     private String detailedAddress;
 
+    @ApiModelProperty(value = "標籤")
+    private String tag;
+
     @ApiModelProperty(value = "是否為預設")
     private Integer isDefault;
 }

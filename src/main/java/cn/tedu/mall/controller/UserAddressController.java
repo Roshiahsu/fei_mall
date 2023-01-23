@@ -32,13 +32,13 @@ public class UserAddressController {
     @Autowired
     private IUserAddressService userAddressService;
 
-    @PostMapping("/addressInfo")
+    @GetMapping("/addressInfo")
     @ApiOperation("地址詳情")
     @ApiOperationSupport(order = 100)
     @PreAuthorize("hasRole('user') or hasRole('admin')")
-    public JsonResult getAddressInfo(@RequestBody @Valid UserAddressDTO userAddressDTO){
+    public JsonResult getAddressInfo(Long id){
         log.debug("查詢地址controller開始");
-        Address addressById = userAddressService.getAddressById(userAddressDTO.getId());
+        Address addressById = userAddressService.getAddressById(id);
         return JsonResult.ok(addressById);
     }
 
