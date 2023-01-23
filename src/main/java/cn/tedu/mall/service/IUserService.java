@@ -13,16 +13,34 @@ import java.util.List;
  */
 @Transactional
 public interface IUserService {
-
+    /**
+     * 用戶註冊
+     * @param userRegDTO
+     */
     void reg(UserRegDTO userRegDTO);
 
+    /**
+     * 用戶登入
+     * @param userLoginDTO
+     * @return
+     */
     String login(UserLoginDTO userLoginDTO);
 
+    /**
+     * 更新用戶資料(不包含密碼)
+     * @param userUpdateDTO
+     */
     void update(UserUpdateDTO userUpdateDTO);
 
+    /**
+     * 用戶修改密碼
+     * @param userUpdateDTO
+     */
     void updatePassword(UserUpdateDTO userUpdateDTO);
 
-    void updateAddress(UserAddressDTO userAddressDTO);
-
+    /**
+     * 獲取用戶資料
+     * @return
+     */
     UserInfoVO userInfo();
 }

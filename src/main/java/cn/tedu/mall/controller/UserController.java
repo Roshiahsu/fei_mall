@@ -25,6 +25,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private IUserService userService;
 
@@ -56,15 +57,6 @@ public class UserController {
         return JsonResult.ok();
     }
 
-    @PostMapping("/updateAddress")
-    @ApiOperation("詳情地址")
-    @ApiOperationSupport(order = 310)
-    @PreAuthorize("hasRole('user') or hasRole('admin')")
-    public JsonResult update(@RequestBody @Valid UserAddressDTO userAddressDTO){
-        log.debug("修改地址controller開始");
-        userService.updateAddress(userAddressDTO);
-        return JsonResult.ok();
-    }
 
     @GetMapping("/userInfo")
     @ApiOperation("用戶詳情")

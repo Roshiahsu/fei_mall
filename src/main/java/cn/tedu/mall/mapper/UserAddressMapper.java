@@ -1,7 +1,10 @@
 package cn.tedu.mall.mapper;
 
+import cn.tedu.mall.pojo.domain.Address;
 import cn.tedu.mall.pojo.user.UserAddressDTO;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @ClassName UserAddressMapper
@@ -32,4 +35,19 @@ public interface UserAddressMapper {
      * @return
      */
     int countAddressByDetail(String detailAddress);
+
+    /**
+     * 根據id獲取地址
+     * @param id 地址id
+     * @return
+     */
+    Address getAddressById(Long id);
+
+    /**
+     * 獲取地址列表
+     * @return
+     */
+    List<Address> listAddress(Long userId);
 }
+
+

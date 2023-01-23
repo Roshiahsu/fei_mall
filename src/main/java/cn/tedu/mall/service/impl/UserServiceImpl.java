@@ -41,9 +41,6 @@ public class UserServiceImpl implements IUserService {
     private UserMapper userMapper;
 
     @Autowired
-    private UserAddressMapper userAddressMapper;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     /**
@@ -184,33 +181,6 @@ public class UserServiceImpl implements IUserService {
         int rows = userMapper.update(userUpdateDTO);
         if(rows !=1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
-        }
-    }
-
-    /**
-     * 修改用戶地址
-     * @param userAddressDTO
-     */
-    @Override
-    public void updateAddress(UserAddressDTO userAddressDTO) {
-        log.debug("開始修改用戶地址");
-        //獲取userId
-        Long userId = ConstUtils.getUserId();
-        userAddressDTO.setUserId(userId);
-        int addressCount = userAddressMapper.countAddressByDetail(userAddressDTO.getDetailedAddress());
-
-        if(addressCount >0 ){
-            log.debug("數據已存在，進行修改");
-            int rows = userAddressMapper.updateUserAddress(userAddressDTO);
-            if (rows !=1){
-                throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"伺服器忙碌請稍候!");
-            }
-        }else{
-            log.debug("數據不存在，進行新增");
-            int rows = userAddressMapper.insetAddress(userAddressDTO);
-            if (rows !=1){
-                throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"伺服器忙碌請稍候!");
-            }
         }
     }
 }

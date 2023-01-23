@@ -49,4 +49,46 @@
         where
             detailed_address = #{detailedAddress}
     </select>
+
+<!--    Address getAddressById(Long id);-->
+    <select id="getAddressById" resultMap="StandardResultMap">
+        select
+            <include refid="BaseQueryFields"/>
+        from
+            ums_user_address
+        where
+            id = #{id}
+    </select>
+
+<!--        List<Address> listAddress();-->
+    <select id="listAddress" resultMap="StandardResultMap">
+        select
+            <include refid="BaseQueryFields"/>
+        from
+            ums_user_address
+        where
+            user_id=#{userId}
+    </select>
+
+
+<!--    基本查詢字段-->
+    <sql id="BaseQueryFields">
+        <if test="true">
+            id,
+            zip_code,
+            city,
+            zone,
+            detailed_address,
+            is_default
+        </if>
+    </sql>
+
+    <resultMap id="StandardResultMap" type="cn.tedu.mall.pojo.domain.Address">
+        <id column="id" property="id"/>
+        <result column="zip_code" property="zipCode"/>
+        <result column="city" property="city"/>
+        <result column="zone" property="zone"/>
+        <result column="detailed_address" property="detailedAddress"/>
+        <result column="is_default" property="isDefault"/>
+    </resultMap>
 </mapper>
