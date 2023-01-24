@@ -4,6 +4,7 @@ import cn.tedu.mall.utils.ConstUtils;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -30,6 +31,7 @@ public class UserAddressDTO implements Serializable {
     @ApiModelProperty(value = "鄉鎮區")
     private String zone;
 
+    @NotBlank(message = "地址詳情不得為空")
     @ApiModelProperty(value = "地址詳情")
     private String detailedAddress;
 

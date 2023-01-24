@@ -2,6 +2,7 @@ package cn.tedu.mall.service;
 
 import cn.tedu.mall.pojo.domain.Address;
 import cn.tedu.mall.pojo.user.UserAddressDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @Description TODO
  * @Date 2023/1/23、下午7:41
  */
+@Transactional
 public interface IUserAddressService {
 
     void insert(UserAddressDTO userAddressDTO);

@@ -5,7 +5,7 @@
 <mapper namespace="cn.tedu.mall.mapper.UserAddressMapper">
 
     <!--        int insertAddress(UserAddressDTO userAddressDTO);-->
-    <insert id="insertAddress" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertAddress" useGeneratedKeys="true" keyProperty="id" parameterType="cn.tedu.mall.pojo.user.UserAddressDTO">
         INSERT INTO
             ums_user_address(user_id,zip_code,city,zone,detailed_address,is_enable,is_default,tag)
         VALUES(
@@ -71,6 +71,15 @@
             ums_user_address
         where
             id = #{id}
+    </select>
+<!--    int countAddressByUserId(Long userID);-->
+    <select id="countAddressByUserId" resultType="int">
+        select
+            count(*)
+        from
+            ums_user_address
+        where
+            user_id = #{userId}
     </select>
 
 <!--    Address getAddressById(Long id);-->

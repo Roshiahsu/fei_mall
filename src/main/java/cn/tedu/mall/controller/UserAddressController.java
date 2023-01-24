@@ -37,7 +37,7 @@ public class UserAddressController {
     @ApiOperation("地址詳情")
     @ApiOperationSupport(order = 100)
     @PreAuthorize("hasRole('user') or hasRole('admin')")
-    public JsonResult insert(@RequestBody UserAddressDTO userAddressDTO){
+    public JsonResult insert(@RequestBody @Valid UserAddressDTO userAddressDTO){
         log.debug("查詢地址controller開始");
         userAddressService.insert(userAddressDTO);
         return JsonResult.ok();

@@ -148,6 +148,9 @@
                      <if test="roleId !=null">
                          role_id = #{roleId},
                      </if>
+                     <if test="defaultAddId !=null">
+                         default_add_id = #{defaultAddId},
+                     </if>
 
                 </set>
         where

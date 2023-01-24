@@ -36,8 +36,6 @@ public interface UserAddressMapper {
      */
     int updateAddressDefaultByUserId(Long userId);
 
-
-
     /**
      * 根據詳細地址統計數量
      * @param id 地址id

@@ -54,6 +54,9 @@ public class UserUpdateDTO implements Serializable, Regex {
     @ApiModelProperty(value = "用戶角色")
     private Integer roleId;
 
+    @ApiModelProperty(value = "預設地址Id")
+    private Long defaultAddId;
+
     public UserUpdateDTO() {
         this.isEnable = 1;
     }
