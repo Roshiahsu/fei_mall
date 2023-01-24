@@ -13,9 +13,13 @@ import java.util.List;
  */
 public interface IUserAddressService {
 
+    void insert(UserAddressDTO userAddressDTO);
+
     void updateAddress(UserAddressDTO userAddressDTO);
 
     Address getAddressById(Long id);
 
     List<Address> listAddress(Long userId);
+
+    void deleteById(Long id);
 }

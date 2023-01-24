@@ -26,6 +26,24 @@ public class UserAddressServiceImpl implements IUserAddressService {
     @Autowired
     private UserAddressMapper userAddressMapper;
 
+
+    @Override
+    public void insert(UserAddressDTO userAddressDTO) {
+        log.debug("開始新增地址");
+        //獲取userId
+        Long userId = ConstUtils.getUserId();
+        userAddressDTO.setUserId(userId);
+        //判斷該地址是否是預設
+        if(userAddressDTO.getIsDefault() == ConstUtils.IS_DEFAULT){
+            //是預設，先將該使用者的其他保存地址的isDefault設定為0
+            userAddressMapper.updateAddressDefaultByUserId(userId);
+        }
+        int rows = userAddressMapper.insertAddress(userAddressDTO);
+        if (rows !=1){
+            throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌請稍候!");
+        }
+    }
+
     /**
      * 獲取地址詳情
      * @param id 地址id
@@ -69,6 +87,19 @@ public class UserAddressServiceImpl implements IUserAddressService {
         int rows = userAddressMapper.updateUserAddress(userAddressDTO);
         if (rows !=1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
+        }
+    }
+
+    /**
+     * 根據id刪除資料
+     * @param id 主鍵id
+     */
+    @Override
+    public void deleteById(Long id) {
+        log.debug("開始根據id刪除地址");
+        int rows = userAddressMapper.deleteById(id);
+        if (rows !=1){
+            throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌請稍候!");
         }
     }
 }

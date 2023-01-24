@@ -32,9 +32,20 @@ public class UserAddressController {
     @Autowired
     private IUserAddressService userAddressService;
 
-    @GetMapping("/addressInfo")
+
+    @PostMapping("/insert")
     @ApiOperation("地址詳情")
     @ApiOperationSupport(order = 100)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
+    public JsonResult insert(@RequestBody UserAddressDTO userAddressDTO){
+        log.debug("查詢地址controller開始");
+        userAddressService.insert(userAddressDTO);
+        return JsonResult.ok();
+    }
+
+    @GetMapping("/addressInfo")
+    @ApiOperation("地址詳情")
+    @ApiOperationSupport(order = 400)
     @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult getAddressInfo(Long id){
         log.debug("查詢地址controller開始");
@@ -44,7 +55,7 @@ public class UserAddressController {
 
     @GetMapping("/addressList")
     @ApiOperation("地址詳情列表")
-    @ApiOperationSupport(order = 150)
+    @ApiOperationSupport(order = 450)
     @PreAuthorize("hasRole('user') or hasRole('admin')")
     public JsonResult listAddressInfo(){
         log.debug("查詢地址列表controller開始");
@@ -60,6 +71,16 @@ public class UserAddressController {
     public JsonResult update(@RequestBody @Valid UserAddressDTO userAddressDTO){
         log.debug("修改地址controller開始");
         userAddressService.updateAddress(userAddressDTO);
+        return JsonResult.ok();
+    }
+
+    @GetMapping("/{id}/delete")
+    @ApiOperation("刪除地址")
+    @ApiOperationSupport(order = 200)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
+    public JsonResult deleteByID(@PathVariable Long id){
+        log.debug("刪除地址controller開始");
+        userAddressService.deleteById(id);
         return JsonResult.ok();
     }
 }

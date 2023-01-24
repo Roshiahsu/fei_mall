@@ -4,17 +4,19 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.tedu.mall.mapper.UserAddressMapper">
 
-    <!--        int insetAddress(UserAddressDTO userAddressDTO);-->
-    <insert id="insetAddress" useGeneratedKeys="true" keyProperty="id">
+    <!--        int insertAddress(UserAddressDTO userAddressDTO);-->
+    <insert id="insertAddress" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-            ums_user_address(user_id,zip_code,city,zone,detailed_address,is_enable)
+            ums_user_address(user_id,zip_code,city,zone,detailed_address,is_enable,is_default,tag)
         VALUES(
         #{userId},
         #{zipCode},
         #{city},
         #{zone},
         #{detailedAddress},
-        #{isEnable}
+        #{isEnable},
+        #{isDefault},
+        #{tag}
         )
     </insert>
 
@@ -114,4 +116,15 @@
         <result column="is_default" property="isDefault"/>
         <result column="tag" property="tag"/>
     </resultMap>
+<!--    int deleteById(Long id);-->
+    <delete id="deleteById">
+        delete
+        from
+            ums_user_address
+        where
+            id=#{id}
+    </delete>
+
+
+
 </mapper>

@@ -20,7 +20,7 @@ public interface UserAddressMapper {
      * @param userAddressDTO
      * @return
      */
-    int insetAddress(UserAddressDTO userAddressDTO);
+    int insertAddress(UserAddressDTO userAddressDTO);
 
     /**
      * 修改用戶地址
@@ -46,6 +46,13 @@ public interface UserAddressMapper {
     int countAddressByDetail(Long id);
 
     /**
+     * 根據用戶id統計數量
+     * @param userID 用戶id
+     * @return
+     */
+    int countAddressByUserId(Long userID);
+
+    /**
      * 根據id獲取地址
      * @param id 地址id
      * @return
@@ -58,6 +65,12 @@ public interface UserAddressMapper {
      */
     List<Address> listAddress(Long userId);
 
+    /**
+     * 根據id刪除資料
+     * @param id 主鍵id
+     * @return
+     */
+    int deleteById(Long id);
 
 }
 
