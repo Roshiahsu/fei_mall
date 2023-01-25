@@ -30,11 +30,12 @@ public interface UserAddressMapper {
     int updateUserAddress(UserAddressDTO userAddressDTO);
 
     /**
-     * 根據userId修改Default的值
-     * @param userId
+     * 根據userId修改Default的值並排除輸入的id
+     * @param userId 用戶id
+     * @param id 地址id
      * @return
      */
-    int updateAddressDefaultByUserId(Long userId);
+    int updateAddressDefaultByUserId(Long userId,Long id);
 
     /**
      * 根據詳細地址統計數量

@@ -39,29 +39,27 @@ public class UserAddressServiceImpl implements IUserAddressService {
         //獲取userId
         Long userId = ConstUtils.getUserId();
         //根據用戶id獲取目前有多少地址
-        int count = userAddressMapper.updateAddressDefaultByUserId(userId);
+        int count = userAddressMapper.countAddressByUserId(userId);
         //判斷儲存的地址數量是否超過最大值，目前設定為5
         if(count >=MAX_ADDRESS_COUNT){
             //超過，拋異常
             throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"儲存量已達最大");
         }
-
+        //設定用戶id
         userAddressDTO.setUserId(userId);
-        //判斷該地址是否是預設
-        if(userAddressDTO.getIsDefault() == ConstUtils.IS_DEFAULT){
-            //是預設，先將該使用者的其他保存地址的isDefault設定為0
-            userAddressMapper.updateAddressDefaultByUserId(userId);
-        }
+
+        //新增地址
         int rows = userAddressMapper.insertAddress(userAddressDTO);
         if (rows !=1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌請稍候!");
         }
-        UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
-        userUpdateDTO.setDefaultAddId(userAddressDTO.getId());
-        userUpdateDTO.setId(userId);
-        int updateRow = userMapper.update(userUpdateDTO);
-        if (updateRow !=1){
-            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
+
+        //判斷該地址是否是預設
+        if(userAddressDTO.getIsDefault() == ConstUtils.IS_DEFAULT){
+            //是預設，先將該使用者的其他保存地址的isDefault設定為0並避開當前新增id
+            userAddressMapper.updateAddressDefaultByUserId(userId,userAddressDTO.getId());
+            //修改用戶預設地址
+            updateUserDefault(userId,userAddressDTO.getId());
         }
     }
 
@@ -99,12 +97,17 @@ public class UserAddressServiceImpl implements IUserAddressService {
         if(addressCount ==0){
             throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"地址不存在!");
         }
-        //判斷該地址是否是預設
+        //判斷輸入的地址是否是預設
         if(userAddressDTO.getIsDefault() == ConstUtils.IS_DEFAULT){
             //是預設，先將該使用者的其他保存地址的isDefault設定為0
+            //獲取用戶id
             Long userId = ConstUtils.getUserId();
-            userAddressMapper.updateAddressDefaultByUserId(userId);
+            //是預設，先將該使用者的其他保存地址的isDefault設定為0並避開當前修改id
+            userAddressMapper.updateAddressDefaultByUserId(userId,userAddressDTO.getId());
+            //修改用戶預設地址
+            updateUserDefault(userId,userAddressDTO.getId());
         }
+        //開始修改地址
         int rows = userAddressMapper.updateUserAddress(userAddressDTO);
         if (rows !=1){
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
@@ -125,10 +128,26 @@ public class UserAddressServiceImpl implements IUserAddressService {
             //是預設，拋異常
             throw new ServiceException(ServiceCode.ERR_DELETE,"不能刪除預設地址!");
         }
-
         int rows = userAddressMapper.deleteById(id);
         if (rows !=1){
             throw new ServiceException(ServiceCode.ERR_DELETE,"伺服器忙碌請稍候!");
+        }
+    }
+
+    /**
+     * 更新用戶預設地址
+     * @param userId 用戶id
+     * @param addId 地址id
+     */
+    private void updateUserDefault(Long userId,Long addId){
+        UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
+        //修改用戶預設地址id
+        userUpdateDTO.setDefaultAddId(addId);
+        //設定用戶id
+        userUpdateDTO.setId(userId);
+        int updateRow = userMapper.update(userUpdateDTO);
+        if (updateRow !=1){
+            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器忙碌請稍候!");
         }
     }
 }

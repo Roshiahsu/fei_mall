@@ -54,12 +54,10 @@
         update
         ums_user_address
         <set>
-            <if test="isDefault !=null">
-                is_default = 0,
-            </if>
+            is_default = 0,
         </set>
         where
-        user_id = #{userId}
+        user_id = #{userId} and id != #{id}
     </update>
 
 
