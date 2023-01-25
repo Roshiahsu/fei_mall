@@ -59,7 +59,8 @@ public interface UserAddressMapper {
     Address getAddressById(Long id);
 
     /**
-     * 獲取地址列表
+     * 根據用戶id獲取地址列表
+     * @param userId 用戶id
      * @return
      */
     List<Address> listAddress(Long userId);

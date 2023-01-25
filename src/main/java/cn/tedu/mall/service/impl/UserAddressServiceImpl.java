@@ -82,7 +82,36 @@ public class UserAddressServiceImpl implements IUserAddressService {
     @Override
     public List<Address> listAddress(Long userId) {
         log.debug("開始獲取地址列表");
-        return userAddressMapper.listAddress(userId);
+        List<Address> addressList = userAddressMapper.listAddress(userId);
+        //使用StringBuffer拼接地址
+        StringBuffer buffer = new StringBuffer();
+
+        for (Address addressVO : addressList) {
+            //獲取詳細地址
+            String detailAddress = addressVO.getDetailedAddress();
+            //判斷zipCode(郵遞區號)是否為null且 詳細地址不包含zipCode
+            if (addressVO.getZipCode() !=null && !detailAddress.contains(addressVO.getZipCode())){
+                //拼接zipCode(郵遞區號)
+                buffer.append(addressVO.getZipCode());
+            }
+            //判斷city(居住縣市)是否為null且 詳細地址不包含city
+            if (addressVO.getCity() !=null && !detailAddress.contains(addressVO.getCity())){
+                //拼接city(居住縣市)
+                buffer.append(addressVO.getCity());
+            }
+            //判斷zone(鄉鎮區)是否為null且 詳細地址不包含zone
+            if (addressVO.getZone() !=null && !detailAddress.contains(addressVO.getZone())){
+                //拼接zone
+                buffer.append(addressVO.getZone());
+            }
+            //拼接詳細地址
+            buffer.append(addressVO.getDetailedAddress());
+            addressVO.setDetailedAddress(buffer.toString());
+            //清空stringBuffer
+            buffer.setLength(0);
+        }
+
+        return addressList;
     }
 
     /**
