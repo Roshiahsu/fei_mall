@@ -37,6 +37,12 @@ public interface OrderMapper {
     List<OrderListVO> listOrdersByUserId(Long userId);
 
     /**
+     * 管理員獲取全部訂單
+     * @return
+     */
+    List<OrderListVO> listOrdersForAdmin();
+
+    /**
      * 根據id查詢訂單詳情
      * @param id oms_order.id
      * @return

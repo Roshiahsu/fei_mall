@@ -10,7 +10,10 @@ import cn.tedu.mall.pojo.order.*;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
 import cn.tedu.mall.service.IOrderService;
 import cn.tedu.mall.utils.ConstUtils;
+import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.ServiceCode;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,11 +156,25 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public List<OrderListVO> listByUserId() {
-        log.debug("開使獲取訂單列表");
+        log.debug("開始獲取訂單列表");
         //從上下文獲取id
         Long userId = ConstUtils.getUserId();
         List<OrderListVO> orderListVOS = orderMapper.listOrdersByUserId(userId);
         return orderListVOS;
+    }
+
+    /**
+     * 管理員獲取全部訂單
+     * @return
+     */
+    @Override
+    public JsonPage<OrderListVO> listForAdmin(Integer pageNum) {
+        log.debug("開始獲取所有訂單列表");
+        //設定每頁10個
+        Integer pageSize = 10;
+        PageHelper.startPage(pageNum,pageSize);
+        List<OrderListVO> orderListVOS = orderMapper.listOrdersForAdmin();
+        return JsonPage.restPage(new PageInfo<>(orderListVOS));
     }
 
     /**

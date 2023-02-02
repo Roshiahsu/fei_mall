@@ -3,11 +3,13 @@ package cn.tedu.mall.controller;
 import cn.tedu.mall.pojo.Cart.CartAddNewDTO;
 import cn.tedu.mall.pojo.order.*;
 import cn.tedu.mall.service.IOrderService;
+import cn.tedu.mall.web.JsonPage;
 import cn.tedu.mall.web.JsonResult;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -69,5 +71,15 @@ public class OrderController {
         log.debug("開始訂單列表Controller");
         List<OrderListVO> orderListVOS = orderService.listByUserId();
         return JsonResult.ok(orderListVOS);
+    }
+
+    @GetMapping("/{pageNum}/admin/list")
+    @ApiOperation("管理員訂單列表")
+    @ApiOperationSupport(order = 420)
+    @PreAuthorize("hasRole('admin')")
+    public JsonResult listForAdmin(@PathVariable Integer pageNum){
+        log.debug("開始訂單列表Controller");
+        JsonPage<OrderListVO> orderListVOJsonPage = orderService.listForAdmin(pageNum);
+        return JsonResult.ok(orderListVOJsonPage);
     }
 }

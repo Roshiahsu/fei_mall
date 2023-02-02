@@ -66,9 +66,24 @@
         from
             oms_order oo
         left join order_status_info osi on oo.order_status = osi.id
-        where
+            where
             oo.user_id =#{userId}
     </select>
+
+<!--    List<OrderListVO> listOrdersForAdmin();-->
+    <select id="listOrdersForAdmin" resultMap="listOrdersResult">
+        select
+            oo.id,
+            oo.sn,
+            oo.gmt_create,
+            osi.status_name,
+            oo.amount_of_actual_pay
+        from
+            oms_order oo
+        left join order_status_info osi on oo.order_status = osi.id
+    </select>
+
+
 
     <resultMap id="listOrdersResult" type="cn.tedu.mall.pojo.order.OrderListVO">
         <id column="id" property="id"/>
