@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * @Description TODO
  * @Date 2023/1/28、上午11:25
  */
-@Controller
+@RestController
 @RequestMapping("/paypal")
 public class PaymentController {
 
@@ -40,19 +41,18 @@ public class PaymentController {
     @Autowired
     private PaypalService paypalService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String index(){
+    //http://localhost:9080/paypal/
+    @GetMapping("/")
+    public String index(Model model){
         log.debug("開始訪問index");
         return "index";
     }
 
     @PostMapping("/pay")
-    public String pay(HttpServletRequest request){
+    public JsonResult pay(HttpServletRequest request){
         log.debug("獲取請求，開始pay");
         String cancelUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_CANCEL_URL;
         String successUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_SUCCESS_URL;
-//         String cancelUrl ="https://localhost:8080/paypal/cancel";
-//         String successUrl = "https://localhost:8080/paypal/return";
 
         try {
             Payment payment = paypalService.createPayment(
@@ -68,14 +68,16 @@ public class PaymentController {
                 log.debug("links>>>{}",links);
                 if(links.getRel().equals("approval_url")){
                     log.debug("links.getHref()>>>{}",links.getHref());
-                    return "redirect:" + links.getHref();
+//                    return "redirect:" + links.getHref();
+                    return JsonResult.ok(links.getHref());
                 }
             }
 
             } catch (PayPalRESTException payPalRESTException) {
             payPalRESTException.printStackTrace();
         }
-        return "redirect:/";
+//        return "redirect:/";
+        return JsonResult.ok();
     }
 
     @GetMapping(PAYPAL_CANCEL_URL)
