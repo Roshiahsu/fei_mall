@@ -98,8 +98,7 @@
             ums_user_address
         where
             user_id=#{userId}
-        order by
-            is_default desc
+
     </select>
 
 

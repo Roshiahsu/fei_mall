@@ -30,7 +30,7 @@ public class QuartzJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.debug("開始更新redis中的資料");
-        //從redis中獲取資料，並更新到database中
+        //從redis中獲取關鍵字資料，並更新到資料庫
         keywordRepository.updateDatabaseFromRedis();
         //更新ES
         searchService.loadProducts();
