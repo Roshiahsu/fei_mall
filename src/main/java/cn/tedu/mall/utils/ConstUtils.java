@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.time.LocalDateTime;
+
 /**
  * @ClassName ConstUtils
  * @Version 1.0
@@ -49,7 +51,10 @@ public class ConstUtils {
     public static final String  CLAIM_KEY_USERNAME = "user";
 
 
-    //從上下文獲取用戶訊息
+    /**
+     * 從上下文獲取用戶資料
+     * @return 用戶資料
+     */
     public static LoginPrinciple getUserInfo(){
         log.debug("開始從上下文獲取id");
         UsernamePasswordAuthenticationToken authentication = null;
@@ -64,8 +69,20 @@ public class ConstUtils {
         LoginPrinciple loginPrinciple = (LoginPrinciple)authentication.getCredentials();
         return loginPrinciple;
     }
-
+    /**
+     * 獲取用戶id
+     * @return 用戶id
+     */
     public static Long getUserId(){
         return getUserInfo().getId();
+    }
+
+    /**
+     * 將時間初始化成gmt+8
+     * @param localDateTime
+     * @return
+     */
+    public static LocalDateTime initDate(LocalDateTime localDateTime){
+        return localDateTime.plusHours(8);
     }
 }
