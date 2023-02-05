@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -168,12 +169,29 @@ public class OrderServiceImpl implements IOrderService {
      * @return
      */
     @Override
-    public JsonPage<OrderListVO> listForAdmin(Integer pageNum) {
+    public JsonPage<OrderListVO> listForAdmin(OrderQueryDTO orderQueryDTO) {
         log.debug("開始獲取所有訂單列表");
-        //設定每頁10個
-        Integer pageSize = 10;
+        //設定分頁查詢條件
+        Integer pageNum = orderQueryDTO.getPageNum();
+        Integer pageSize = orderQueryDTO.getPageSize();
         PageHelper.startPage(pageNum,pageSize);
-        List<OrderListVO> orderListVOS = orderMapper.listOrdersForAdmin();
+
+        OrderQuery orderQuery = new OrderQuery();
+        //設定訂單編號
+        if(orderQueryDTO.getSn() !=null){
+            orderQuery.setSn(orderQueryDTO.getSn());
+        }
+        //設定時間
+        if(orderQueryDTO.getGmtCreate() !=null){
+            LocalDateTime gmtCreate = ConstUtils.initDate(orderQueryDTO.getGmtCreate());
+            orderQuery.setGmtCreateStart(gmtCreate);
+            orderQuery.setGmtCreateEnd(gmtCreate.plusDays(1));
+        }
+        if (orderQueryDTO.getReceiverKeyword()!=null){
+            orderQuery.setReceiverKeyword(orderQueryDTO.getReceiverKeyword());
+        }
+        log.debug("orderQuery>>>{}",orderQuery.toString());
+        List<OrderListVO> orderListVOS = orderMapper.listOrdersForAdmin(orderQuery);
         return JsonPage.restPage(new PageInfo<>(orderListVOS));
     }
 

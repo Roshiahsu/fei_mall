@@ -70,7 +70,7 @@
             oo.user_id =#{userId}
     </select>
 
-<!--    List<OrderListVO> listOrdersForAdmin();-->
+<!--        List<OrderListVO> listOrdersForAdmin(OrderQuery orderQuery);-->
     <select id="listOrdersForAdmin" resultMap="listOrdersResult">
         select
             oo.id,
@@ -81,6 +81,16 @@
         from
             oms_order oo
         left join order_status_info osi on oo.order_status = osi.id
+        left join recipient_information ri on oo.recipient_id = ri.id
+        <if test="sn !=null">
+            where oo.sn = #{sn}
+        </if>
+        <if test="gmtCreateStart !=null">
+            where oo.gmt_create between #{gmtCreateStart} and #{gmtCreateEnd}
+        </if>
+        <if test="receiverKeyword !=null">
+            where ri.recipient_name = #{receiverKeyword} or ri.recipient_phone = #{receiverKeyword}
+        </if>
     </select>
 
 

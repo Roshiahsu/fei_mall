@@ -40,7 +40,7 @@ public interface OrderMapper {
      * 管理員獲取全部訂單
      * @return
      */
-    List<OrderListVO> listOrdersForAdmin();
+    List<OrderListVO> listOrdersForAdmin(OrderQuery orderQuery);
 
     /**
      * 根據id查詢訂單詳情

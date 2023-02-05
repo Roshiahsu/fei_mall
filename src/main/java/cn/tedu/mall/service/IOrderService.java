@@ -33,7 +33,7 @@ public interface IOrderService {
      * 管理員獲取全部訂單
      * @return
      */
-    JsonPage<OrderListVO> listForAdmin(Integer pageNum);
+    JsonPage<OrderListVO> listForAdmin(OrderQueryDTO orderQueryDTO);
 
     /**
      * 獲取訂單詳情

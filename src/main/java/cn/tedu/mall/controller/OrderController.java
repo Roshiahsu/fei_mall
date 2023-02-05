@@ -73,13 +73,24 @@ public class OrderController {
         return JsonResult.ok(orderListVOS);
     }
 
-    @GetMapping("/{pageNum}/admin/list")
+//    @Deprecated
+//    @GetMapping("/{pageNum}/admin/list")
+//    @ApiOperation("管理員訂單列表")
+//    @ApiOperationSupport(order = 420)
+//    @PreAuthorize("hasRole('admin')")
+//    public JsonResult listForAdmin(@PathVariable Integer pageNum){
+//        log.debug("開始訂單列表Controller");
+//        JsonPage<OrderListVO> orderListVOJsonPage = orderService.listForAdmin(pageNum);
+//        return JsonResult.ok(orderListVOJsonPage);
+//    }
+
+    @PostMapping("/admin/list")
     @ApiOperation("管理員訂單列表")
-    @ApiOperationSupport(order = 420)
+    @ApiOperationSupport(order = 430)
     @PreAuthorize("hasRole('admin')")
-    public JsonResult listForAdmin(@PathVariable Integer pageNum){
-        log.debug("開始訂單列表Controller");
-        JsonPage<OrderListVO> orderListVOJsonPage = orderService.listForAdmin(pageNum);
+    public JsonResult listForAdmin(@RequestBody OrderQueryDTO orderQueryDTO){
+        log.debug("開始訂單列表Controller{}",orderQueryDTO);
+        JsonPage<OrderListVO> orderListVOJsonPage = orderService.listForAdmin(orderQueryDTO);
         return JsonResult.ok(orderListVOJsonPage);
     }
 }
