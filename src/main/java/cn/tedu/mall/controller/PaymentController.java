@@ -3,6 +3,7 @@ package cn.tedu.mall.controller;
 
 import cn.tedu.mall.paypal.service.PaypalService;
 import cn.tedu.mall.pojo.order.OrderAddNewDTO;
+import cn.tedu.mall.pojo.order.OrderAddVO;
 import cn.tedu.mall.repository.IOrderRepository;
 import cn.tedu.mall.service.IOrderService;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -80,11 +81,12 @@ public class PaymentController {
         try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
-                //TODO 支付成功，連接創建訂單
                 //TODO 連接到訂單詳情頁面
                 OrderAddNewDTO orderAddNewDTO = orderRepository.getItem(userId);
-                orderService.insert(orderAddNewDTO);
-                return "redirect:http://localhost:8080/index";
+                OrderAddVO orderAddVO = orderService.insert(orderAddNewDTO);
+                Long id = orderAddVO.getId();
+                orderRepository.deleteItem(userId);
+                return "redirect:http://localhost:8080/orderDetailInfo?id="+id;
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());

@@ -5,6 +5,7 @@ import cn.tedu.mall.mapper.CartMapper;
 import cn.tedu.mall.mapper.OrderMapper;
 import cn.tedu.mall.mapper.ProductMapper;
 import cn.tedu.mall.mapper.RecipientMapper;
+import cn.tedu.mall.pojo.Cart.CartInfoVO;
 import cn.tedu.mall.pojo.domain.Recipient;
 import cn.tedu.mall.pojo.order.*;
 import cn.tedu.mall.pojo.product.ProductUpdateDTO;
@@ -64,10 +65,12 @@ public class OrderServiceImpl implements IOrderService {
     public OrderAddVO insert(OrderAddNewDTO orderAddNewDTO) {
         log.debug("開始新增訂單");
         log.debug("獲取到的DTO>>>{}",orderAddNewDTO);
-        //從上下文獲取id
-        Long userId = ConstUtils.getUserId();
-
+//        //從上下文獲取id
+//        Long userId = ConstUtils.getUserId();
+        Long userId = orderAddNewDTO.getUserId();
         Order order = new Order();
+        orderAddNewDTO.setRewardPoint(100);
+
 
         //初始化收件人資料
         Recipient recipient = new Recipient();
@@ -92,9 +95,8 @@ public class OrderServiceImpl implements IOrderService {
         }
 
         //初始化要寫入oms_order表中的訂單資料
-
         BeanUtils.copyProperties(orderAddNewDTO,order);
-        order.setUserId(userId);
+//        order.setUserId(userId);
         order.setOrderStatus(ORDER_STATUS_SUCCESS);
 
         //數據加載
@@ -106,12 +108,23 @@ public class OrderServiceImpl implements IOrderService {
         if (rows != 1){
             throw new ServiceException(ServiceCode.ERR_INSERT,"伺服器忙碌中，請稍後再試!!");
         }
+
+        List<CartInfoVO> cartInfoVOS = cartMapper.listCartInfoByUserId(userId);
+        cartInfoVOS = getSubtotal(cartInfoVOS);
+        
         //宣告準備寫入購物列表的List
         List<OrderItemAddNewDTO> orderItems = new ArrayList<>();
 
         //獲取訂單中的商品訊息
-        for (OrderItemAddNewDTO orderItem : orderAddNewDTO.getOrderItems()) {
-            //外鍵，將omsOrderItem與omsOrder透過sn進行關聯
+            for (CartInfoVO cartInfoVO : cartInfoVOS) {
+                OrderItemAddNewDTO orderItem = new OrderItemAddNewDTO();
+                orderItem.setSpuId(cartInfoVO.getSpuId());
+                orderItem.setQuantity(cartInfoVO.getQuantity());
+                orderItem.setStock(cartInfoVO.getStock());
+                orderItem.setPrice(cartInfoVO.getPrice());
+                orderItem.setSubtotal(cartInfoVO.getSubtotal());
+
+                //外鍵，將omsOrderItem與omsOrder透過sn進行關聯
             orderItem.setSn(order.getSn());
             orderItems.add(orderItem);
 
@@ -295,5 +308,16 @@ public class OrderServiceImpl implements IOrderService {
         return null;
     }
 
+    /**
+     * 商品價錢小計
+     * @param cartInfoVO
+     * @return
+     */
+    List<CartInfoVO> getSubtotal(List<CartInfoVO> cartInfoVO){
+        for (CartInfoVO infoVO : cartInfoVO) {
+            infoVO.setSubtotal(infoVO.getPrice() * infoVO.getQuantity());
+        }
+        return cartInfoVO;
+    }
 
 }
