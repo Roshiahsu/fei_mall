@@ -77,7 +77,7 @@ public class ProductServiceImpl implements IProductService {
         log.debug("刪除商品Service");
         productMapper.deleteByIds(ids);
         //更新推播種類2-4類Redis資料
-        for (int i = 2; i <4 ; i++) {
+        for (int i = 2; i <=4 ; i++) {
             productRepository.putList(i);
         }
 

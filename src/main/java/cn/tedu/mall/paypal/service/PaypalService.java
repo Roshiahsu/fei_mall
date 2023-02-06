@@ -6,7 +6,9 @@ import cn.tedu.mall.paypal.URLUtils;
 import cn.tedu.mall.paypal.config.PaypalPaymentIntent;
 import cn.tedu.mall.paypal.config.PaypalPaymentMethod;
 import cn.tedu.mall.pojo.order.OrderAddNewDTO;
+import cn.tedu.mall.pojo.order.OrderAddVO;
 import cn.tedu.mall.repository.IOrderRepository;
+import cn.tedu.mall.service.IOrderService;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
@@ -39,6 +41,10 @@ public class PaypalService implements IPaypalService {
 
     @Autowired
     private IOrderRepository orderRepository;
+
+    @Autowired
+    private IOrderService orderService;
+
 
     @Override
     public String pay(HttpServletRequest request) {
@@ -73,7 +79,27 @@ public class PaypalService implements IPaypalService {
         } catch (PayPalRESTException payPalRESTException) {
             payPalRESTException.printStackTrace();
         }
-        return "redirect:/";
+        return "redirect:http://localhost:8080/failed";
+    }
+
+    @Override
+    public String successPay(String paymentId, String payerId, Long userId) {
+        try {
+            Payment payment = executePayment(paymentId, payerId);
+            if(payment.getState().equals("approved")){
+                //從redis中獲取訂單詳情
+                OrderAddNewDTO orderAddNewDTO = orderRepository.getItem(userId);
+                //新增訂單
+                OrderAddVO orderAddVO = orderService.insert(orderAddNewDTO);
+                Long id = orderAddVO.getId();
+                //刪除redis中的資料
+                orderRepository.deleteItem(userId);
+                return "redirect:http://localhost:8080/orderDetailInfo?id="+id;
+            }
+        } catch (PayPalRESTException e) {
+            log.error(e.getMessage());
+        }
+        return "redirect:http://localhost:8080/cancel";
     }
 
     /**

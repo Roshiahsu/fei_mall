@@ -37,26 +37,7 @@ public class PaymentController {
     public static final String PAYPAL_CANCEL_URL = "/cancel";
 
     @Autowired
-    private APIContext apiContext;
-    @Autowired
     private PaypalService paypalService;
-
-    @Autowired
-    private IOrderService orderService;
-
-    @Autowired
-    private IOrderRepository orderRepository;
-
-
-    //http://localhost:9080/
-    @GetMapping("/")
-    @ApiOperation("支付首頁")
-    @ApiOperationSupport(order = 100)
-    @PreAuthorize("hasRole('user') or hasRole('admin')")
-    public String index(){
-        log.debug("開始訪問index");
-        return "index";
-    }
 
     @PostMapping("/pay")
     @ApiOperation("支付請求")
@@ -69,7 +50,6 @@ public class PaymentController {
     @GetMapping(PAYPAL_CANCEL_URL)
     public String cancelPay(){
         log.debug("開始訪問cancel");
-        //TODO 建立一個取消頁面
         return "cancel";
     }
 
@@ -78,22 +58,9 @@ public class PaymentController {
                              @RequestParam("PayerID") String payerId,
                              @PathVariable Long userId){
         log.debug("開始訪問success");
-        try {
-            Payment payment = paypalService.executePayment(paymentId, payerId);
-            if(payment.getState().equals("approved")){
-                //TODO 連接到訂單詳情頁面
-                OrderAddNewDTO orderAddNewDTO = orderRepository.getItem(userId);
-                OrderAddVO orderAddVO = orderService.insert(orderAddNewDTO);
-                Long id = orderAddVO.getId();
-                orderRepository.deleteItem(userId);
-                return "redirect:http://localhost:8080/orderDetailInfo?id="+id;
-            }
-        } catch (PayPalRESTException e) {
-            log.error(e.getMessage());
-        }
-       //TODO府款失敗
-        return "cancel";
-//        return "redirect:/";
+        String result = paypalService.successPay(paymentId, payerId, userId);
+
+        return result;
     }
 
 }

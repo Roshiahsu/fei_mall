@@ -14,4 +14,5 @@ public interface IPaypalService {
 
     String pay(HttpServletRequest request);
 
+    String successPay(String paymentId,String payerId,Long userId);
 }
