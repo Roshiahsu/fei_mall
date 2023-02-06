@@ -1,25 +1,24 @@
 package cn.tedu.mall.controller;
 
 
-import cn.tedu.mall.paypal.URLUtils;
-import cn.tedu.mall.paypal.config.PaypalPaymentIntent;
-import cn.tedu.mall.paypal.config.PaypalPaymentMethod;
 import cn.tedu.mall.paypal.service.PaypalService;
-import cn.tedu.mall.web.JsonResult;
-import com.paypal.api.payments.*;
+import cn.tedu.mall.pojo.order.OrderAddNewDTO;
+import cn.tedu.mall.repository.IOrderRepository;
+import cn.tedu.mall.service.IOrderService;
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
+import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @ClassName PaymentController
@@ -27,77 +26,72 @@ import java.util.List;
  * @Description TODO
  * @Date 2023/1/28、上午11:25
  */
-@RestController
+@Controller
 @RequestMapping("/paypal")
+@Slf4j
+@Api(tags = "Paypal金流管理模組")
 public class PaymentController {
 
-    public static final String PAYPAL_SUCCESS_URL = "/success";
+    public static final String PAYPAL_SUCCESS_URL = "/{userId}/success";
     public static final String PAYPAL_CANCEL_URL = "/cancel";
-
-    private Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private APIContext apiContext;
     @Autowired
     private PaypalService paypalService;
 
-    //http://localhost:9080/paypal/
+    @Autowired
+    private IOrderService orderService;
+
+    @Autowired
+    private IOrderRepository orderRepository;
+
+
+    //http://localhost:9080/
     @GetMapping("/")
-    public String index(Model model){
+    @ApiOperation("支付首頁")
+    @ApiOperationSupport(order = 100)
+    @PreAuthorize("hasRole('user') or hasRole('admin')")
+    public String index(){
         log.debug("開始訪問index");
         return "index";
     }
 
     @PostMapping("/pay")
-    public JsonResult pay(HttpServletRequest request){
+    @ApiOperation("支付請求")
+    @ApiOperationSupport(order = 120)
+    public String pay(HttpServletRequest request){
         log.debug("獲取請求，開始pay");
-        String cancelUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_CANCEL_URL;
-        String successUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_SUCCESS_URL;
-
-        try {
-            Payment payment = paypalService.createPayment(
-                    20.00,
-                    "USD",
-                    PaypalPaymentMethod.paypal,
-                    PaypalPaymentIntent.sale,
-                    "測試用 description",
-                    cancelUrl,
-                    successUrl);
-
-            for(Links links : payment.getLinks()){
-                log.debug("links>>>{}",links);
-                if(links.getRel().equals("approval_url")){
-                    log.debug("links.getHref()>>>{}",links.getHref());
-//                    return "redirect:" + links.getHref();
-                    return JsonResult.ok(links.getHref());
-                }
-            }
-
-            } catch (PayPalRESTException payPalRESTException) {
-            payPalRESTException.printStackTrace();
-        }
-//        return "redirect:/";
-        return JsonResult.ok();
+        return paypalService.pay(request);
     }
 
     @GetMapping(PAYPAL_CANCEL_URL)
     public String cancelPay(){
         log.debug("開始訪問cancel");
+        //TODO 建立一個取消頁面
         return "cancel";
     }
 
     @GetMapping(PAYPAL_SUCCESS_URL)
-    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId){
+    public String successPay(@RequestParam("paymentId") String paymentId,
+                             @RequestParam("PayerID") String payerId,
+                             @PathVariable Long userId){
         log.debug("開始訪問success");
-       try {
+        try {
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if(payment.getState().equals("approved")){
+                //TODO 支付成功，連接創建訂單
+                //TODO 連接到訂單詳情頁面
+                OrderAddNewDTO orderAddNewDTO = orderRepository.getItem(userId);
+                orderService.insert(orderAddNewDTO);
                 return "redirect:http://localhost:8080/index";
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        return "redirect:/";
+       //TODO府款失敗
+        return "cancel";
+//        return "redirect:/";
     }
 
 }

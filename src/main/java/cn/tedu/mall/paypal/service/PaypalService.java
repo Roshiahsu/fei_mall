@@ -1,8 +1,12 @@
 package cn.tedu.mall.paypal.service;
 
 
+import cn.tedu.mall.paypal.IPaypalService;
+import cn.tedu.mall.paypal.URLUtils;
 import cn.tedu.mall.paypal.config.PaypalPaymentIntent;
 import cn.tedu.mall.paypal.config.PaypalPaymentMethod;
+import cn.tedu.mall.pojo.order.OrderAddNewDTO;
+import cn.tedu.mall.repository.IOrderRepository;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
@@ -10,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +29,65 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class PaypalService {
+public class PaypalService implements IPaypalService {
+
+    public static final String PAYPAL_SUCCESS_URL = "/success";
+    public static final String PAYPAL_CANCEL_URL = "/cancel";
 
     @Autowired
     private APIContext apiContext;
 
+    @Autowired
+    private IOrderRepository orderRepository;
+
+    @Override
+    public String pay(HttpServletRequest request) {
+        log.debug("獲取請求，開始pay");
+        OrderAddNewDTO orderAddNewDTO = getOrderInfo(request);
+        Long userId = orderAddNewDTO.getUserId();
+
+        String cancelUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_CANCEL_URL;
+        String successUrl = URLUtils.getBaseURl(request) + "/paypal/" +userId+ PAYPAL_SUCCESS_URL;
+        Double amountOfActualPay = Double.valueOf(request.getParameter("AmountOfActualPay"));
+
+        orderRepository.addItem(orderAddNewDTO);
+
+        try {
+            Payment payment = createPayment(
+                    amountOfActualPay,
+                    "TWD",
+                    PaypalPaymentMethod.paypal,
+                    PaypalPaymentIntent.sale,
+                    "測試用 description",
+                    cancelUrl,
+                    successUrl);
+
+            for(Links links : payment.getLinks()){
+                log.debug("links>>>{}",links);
+                if(links.getRel().equals("approval_url")){
+                    log.debug("links.getHref()>>>{}",links.getHref());
+                    return "redirect:" + links.getHref();
+                }
+            }
+
+        } catch (PayPalRESTException payPalRESTException) {
+            payPalRESTException.printStackTrace();
+        }
+        return "redirect:/";
+    }
+
+    /**
+     * 創建付款資訊
+     * @param total 實際支付金額
+     * @param currency 支付貨幣
+     * @param method 支付方式
+     * @param intent 創建種類
+     * @param description 描述
+     * @param cancelUrl 取消發送的請求
+     * @param successUrl 成功發送的請求
+     * @return
+     * @throws PayPalRESTException
+     */
     public Payment createPayment(
             Double total,
             String currency,
@@ -60,8 +121,39 @@ public class PaypalService {
         redirectUrls.setCancelUrl(cancelUrl);
         redirectUrls.setReturnUrl(successUrl);
         payment.setRedirectUrls(redirectUrls);
-        log.debug("x");
         return payment.create(apiContext);
+    }
+
+    public OrderAddNewDTO getOrderInfo(HttpServletRequest request){
+        //獲取userId
+        String userIdString=request.getParameter("userId");
+        Long userId = Long.valueOf(userIdString);
+        //獲取實際支付金額
+        String amountOfActualPayString = request.getParameter("AmountOfActualPay");
+        BigInteger aap =new BigInteger(amountOfActualPayString);
+        log.debug("AmountOfActualPay>>>{}",amountOfActualPayString);
+        //獲取原始價錢
+        String amountOfOriginalPrice = request.getParameter("amountOfOriginalPrice");
+        BigInteger aoo =new BigInteger(amountOfOriginalPrice);
+        log.debug("amountOfOriginalPrice>>>{}",amountOfOriginalPrice);
+        //獲取收件人姓名
+        String recipientName = request.getParameter("recipientName");
+        log.debug("recipientName>>>{}",recipientName);
+        //獲取收件人手機
+        String recipientPhone = request.getParameter("recipientPhone");
+        log.debug("recipientPhone>>>{}",recipientPhone);
+        //獲取收件人地址
+        String recipientAddress = request.getParameter("recipientAddress");
+        log.debug("recipientAddress>>>{}",recipientAddress);
+
+        OrderAddNewDTO orderAddNewDTO = new OrderAddNewDTO();
+        orderAddNewDTO.setUserId(userId);
+        orderAddNewDTO.setAmountOfActualPay(aap);
+        orderAddNewDTO.setAmountOfOriginalPrice(aoo);
+        orderAddNewDTO.setRecipientName(recipientName);
+        orderAddNewDTO.setRecipientPhone(recipientPhone);
+        orderAddNewDTO.setRecipientAddress(recipientAddress);
+        return orderAddNewDTO;
     }
 
     public Payment executePayment(String paymentId, String payerId) throws PayPalRESTException{
