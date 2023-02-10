@@ -29,4 +29,8 @@ public class UserLoginVO implements Serializable {
     @ApiModelProperty(value = "用戶角色")
     private String roleName;
 
+    //TODO獨立出一個passwordVO
+    @ApiModelProperty(value = "用戶電子信箱")
+    private String email;
+
 }

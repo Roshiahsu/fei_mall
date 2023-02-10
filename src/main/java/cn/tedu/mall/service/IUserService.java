@@ -33,12 +33,6 @@ public interface IUserService {
     void update(UserUpdateDTO userUpdateDTO);
 
     /**
-     * 用戶修改密碼
-     * @param userUpdateDTO
-     */
-    void updatePassword(UserUpdateDTO userUpdateDTO);
-
-    /**
      * 獲取用戶資料
      * @return
      */
