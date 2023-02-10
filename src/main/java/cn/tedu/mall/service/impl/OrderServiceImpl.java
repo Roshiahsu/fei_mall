@@ -246,12 +246,12 @@ public class OrderServiceImpl implements IOrderService {
         //判斷運費
         if(order.getAmountOfFreight()==null){
             //使用BigInteger做精確計算
-            order.setAmountOfFreight(new BigInteger("0"));
+            order.setAmountOfFreight(new BigDecimal("0"));
         }
         //判斷運費
         if(order.getAmountOfDiscount()==null){
 
-            order.setAmountOfDiscount(new BigInteger("0"));
+            order.setAmountOfDiscount(new BigDecimal("0"));
         }
         //判斷創建時間
         if(order.getGmtCreate()==null){
@@ -264,10 +264,10 @@ public class OrderServiceImpl implements IOrderService {
             throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"沒有訂單原價！！");
         }
         //計算實際支付金額
-        BigInteger amountOfFreight = order.getAmountOfFreight(); //運費
-        BigInteger amountOfDiscount = order.getAmountOfDiscount();//折扣
-        BigInteger amountOfOriginalPrice = order.getAmountOfOriginalPrice();//原價
-        BigInteger actualPay = amountOfOriginalPrice.add(amountOfFreight).subtract(amountOfDiscount);
+        BigDecimal amountOfFreight = order.getAmountOfFreight(); //運費
+        BigDecimal amountOfDiscount = order.getAmountOfDiscount();//折扣
+        BigDecimal amountOfOriginalPrice = order.getAmountOfOriginalPrice();//原價
+        BigDecimal actualPay = amountOfOriginalPrice.add(amountOfFreight).subtract(amountOfDiscount);
         order.setAmountOfActualPay(actualPay); //實際需要支付的金額
     }
 

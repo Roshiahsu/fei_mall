@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +90,7 @@ public class PaypalService implements IPaypalService {
             if(payment.getState().equals("approved")){
                 //從redis中獲取訂單詳情
                 OrderAddNewDTO orderAddNewDTO = orderRepository.getItem(userId);
+                log.debug("orderAddNewDTO>>>{}",orderAddNewDTO);
                 //新增訂單
                 OrderAddVO orderAddVO = orderService.insert(orderAddNewDTO);
                 Long id = orderAddVO.getId();
@@ -156,11 +158,11 @@ public class PaypalService implements IPaypalService {
         Long userId = Long.valueOf(userIdString);
         //獲取實際支付金額
         String amountOfActualPayString = request.getParameter("AmountOfActualPay");
-        BigInteger aap =new BigInteger(amountOfActualPayString);
+        BigDecimal aap =new BigDecimal(amountOfActualPayString);
         log.debug("AmountOfActualPay>>>{}",amountOfActualPayString);
         //獲取原始價錢
         String amountOfOriginalPrice = request.getParameter("amountOfOriginalPrice");
-        BigInteger aoo =new BigInteger(amountOfOriginalPrice);
+        BigDecimal aoo =new BigDecimal(amountOfOriginalPrice);
         log.debug("amountOfOriginalPrice>>>{}",amountOfOriginalPrice);
         //獲取收件人姓名
         String recipientName = request.getParameter("recipientName");
