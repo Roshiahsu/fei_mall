@@ -2,10 +2,13 @@ package cn.tedu.mall.service.impl;
 
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.mapper.UserMapper;
+import cn.tedu.mall.pojo.password.PasswordDTO;
+import cn.tedu.mall.pojo.user.UserInfoVO;
 import cn.tedu.mall.pojo.user.UserLoginVO;
 import cn.tedu.mall.pojo.user.UserUpdateDTO;
 import cn.tedu.mall.service.IMailService;
 import cn.tedu.mall.service.IPasswordService;
+import cn.tedu.mall.utils.ConstUtils;
 import cn.tedu.mall.web.ServiceCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,9 @@ public class PasswordServiceImpl implements IPasswordService {
     private final IMailService mailService;
 
     @Autowired
-    public PasswordServiceImpl(PasswordEncoder passwordEncoder, UserMapper userMapper, IMailService mailService) {
+    public PasswordServiceImpl(PasswordEncoder passwordEncoder,
+                               UserMapper userMapper,
+                               IMailService mailService) {
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.mailService = mailService;
@@ -43,18 +48,39 @@ public class PasswordServiceImpl implements IPasswordService {
     public static final int INIT_PASSWORD_LENGTH = 6;
 
     /**
-     * 修改用戶密碼
-     * @param userUpdateDTO
+     * 驗證原始密碼
+     * @param passwordDTO
+     * @return
      */
     @Override
-    public void updatePassword(UserUpdateDTO userUpdateDTO) {
+    public void matchesPassword(PasswordDTO passwordDTO) {
+        log.debug("開始驗證原始密碼");
+        //獲取用戶id
+        Long userId = ConstUtils.getUserId();
+        //根據UserId獲取用戶資料
+        UserInfoVO userInfoVO = userMapper.userInfo(userId);
+        //獲取用戶密碼
+        String passwordBySql =  userInfoVO.getPassword();
+        if (!passwordEncoder.matches(passwordDTO.getOldPassword(),passwordBySql)){
+            throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"密碼錯誤!!");
+        }
+        updatePassword(passwordDTO,userId);
+    }
+
+    /**
+     * 修改用戶密碼
+     * @param passwordDTO
+     */
+    public void updatePassword(PasswordDTO passwordDTO,Long userId) {
         log.debug("開始service.updatePassword");
-
-
         /*密碼加密*/
-        String password = userUpdateDTO.getPassword();
+        //獲取新密碼
+        String password = passwordDTO.getNewPassword();
+        //新密碼加密
         String encode = passwordEncoder.encode(password);
+        UserUpdateDTO userUpdateDTO = new UserUpdateDTO();
         userUpdateDTO.setPassword(encode);
+        userUpdateDTO.setId(userId);
 
         int rows = userMapper.update(userUpdateDTO);
         if(rows !=1){

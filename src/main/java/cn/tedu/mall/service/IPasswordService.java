@@ -1,5 +1,6 @@
 package cn.tedu.mall.service;
 
+import cn.tedu.mall.pojo.password.PasswordDTO;
 import cn.tedu.mall.pojo.user.UserUpdateDTO;
 
 /**
@@ -11,10 +12,10 @@ import cn.tedu.mall.pojo.user.UserUpdateDTO;
 public interface IPasswordService {
 
     /**
-     * 用戶修改密碼
-     * @param userUpdateDTO
+     * 驗證原始密碼
+     * @param passwordDTO
      */
-    void updatePassword(UserUpdateDTO userUpdateDTO);
+    void matchesPassword(PasswordDTO passwordDTO);
 
     /**
      * 重置密碼
