@@ -15,17 +15,27 @@ import java.util.Map;
  */
 
 public class JwtUtils {
-
+    /**
+     * jwt密鑰
+     */
     private static final String SECRET_KEY="55688";
-
-    private static final Integer EXPIRED = 60 * 60 *24;
+    /**
+     * 到期時間，期限一天
+     * 60sec * 60min * 24hour
+     */
+    private static final Integer EXPIRED = 60 * 60 * 24;
 
     private JwtUtils() {
     }
 
+    /**
+     * 封裝JWT
+     * @param claims 封裝到payload的資料
+     * @return 封裝完成的JWT String
+     */
     public static String generate(Map<String,Object> claims){
         Date expiration = new Date(System.currentTimeMillis() + 1000 * EXPIRED );
-
+        //生成jwt
         String jwt = Jwts.builder()
                 .setHeaderParam("type","jwt")
                 .setHeaderParam("alg","HS.256")
@@ -37,6 +47,11 @@ public class JwtUtils {
         return jwt;
     }
 
+    /**
+     * 解析JWT
+     * @param jwt
+     * @return
+     */
     public static Claims parse(String jwt){
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
