@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.xml.ws.ServiceMode;
 
@@ -103,6 +104,10 @@ public class PasswordServiceImpl implements IPasswordService {
         //獲取用戶email
         UserLoginVO userInfo = userMapper.getByUsername(username);
         String email = userInfo.getEmail();
+        log.debug("email>>>{}",email);
+        if(email==null){
+            throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"沒有email！！");
+        }
         //獲取隨機生成的密碼
         String newPassword = initPassword(INIT_PASSWORD_LENGTH);
         //密碼加密
