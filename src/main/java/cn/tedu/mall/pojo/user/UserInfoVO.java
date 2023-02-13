@@ -40,7 +40,7 @@ public class UserInfoVO implements Serializable {
     private String sexName;
 
     @ApiModelProperty(value = "用戶生日")
-    private LocalDate bod;
+    private LocalDateTime bod;
 
     @ApiModelProperty(value = "是否啟用")
     private Integer isEnable;
