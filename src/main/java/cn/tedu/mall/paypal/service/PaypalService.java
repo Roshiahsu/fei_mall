@@ -13,6 +13,7 @@ import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -36,6 +36,9 @@ public class PaypalService implements IPaypalService {
 
     public static final String PAYPAL_SUCCESS_URL = "/success";
     public static final String PAYPAL_CANCEL_URL = "/cancel";
+    public static final String RECIPIENT_ADDRESS_DETAIL_ADDRESS = "detailAddress";
+    public static final String RECIPIENT_ADDRESS_CITY = "city";
+    public static final String RECIPIENT_ADDRESS_POSTAL_CODE = "postalCode";
 
     @Autowired
     private APIContext apiContext;
@@ -58,6 +61,8 @@ public class PaypalService implements IPaypalService {
         Double amountOfActualPay = Double.valueOf(request.getParameter("AmountOfActualPay"));
 
         orderRepository.addItem(orderAddNewDTO);
+        //獲取收件人地址
+        String address = request.getParameter("recipientAddress");
 
         try {
             Payment payment = createPayment(
@@ -65,6 +70,7 @@ public class PaypalService implements IPaypalService {
                     "TWD",
                     PaypalPaymentMethod.paypal,
                     PaypalPaymentIntent.sale,
+                    address,
                     "測試用 description",
                     cancelUrl,
                     successUrl);
@@ -110,6 +116,7 @@ public class PaypalService implements IPaypalService {
      * @param currency 支付貨幣
      * @param method 支付方式
      * @param intent 創建種類
+     * @param address 地址
      * @param description 描述
      * @param cancelUrl 取消發送的請求
      * @param successUrl 成功發送的請求
@@ -121,6 +128,7 @@ public class PaypalService implements IPaypalService {
             String currency,
             PaypalPaymentMethod method,
             PaypalPaymentIntent intent,
+            String address,
             String description,
             String cancelUrl,
             String successUrl) throws PayPalRESTException {
@@ -129,27 +137,65 @@ public class PaypalService implements IPaypalService {
         amount.setCurrency(currency);
         amount.setTotal(String.format("%.2f", total));
 
+        //購買商品
         log.debug("開始封裝transaction");
         Transaction transaction = new Transaction();
         transaction.setDescription(description);
         transaction.setAmount(amount);
 
+        log.debug("獲取到的地址>>>{}",address);
+        Map<String, String> addressMap = parseAddress(address);
+        // 設置地址
+        ShippingAddress shippingAddress = new ShippingAddress();
+        shippingAddress.setLine1(addressMap.get(RECIPIENT_ADDRESS_DETAIL_ADDRESS));
+        shippingAddress.setCity(addressMap.get(RECIPIENT_ADDRESS_CITY));
+        shippingAddress.setPostalCode(addressMap.get(RECIPIENT_ADDRESS_POSTAL_CODE));
+        shippingAddress.setCountryCode("TW");
+
+
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(transaction);
 
+        ItemList itemList = new ItemList();
+        itemList.setShippingAddress(shippingAddress);
+        transaction.setItemList(itemList);
+        //設定付款方式
         Payer payer = new Payer();
         payer.setPaymentMethod(method.toString());
+
+        //設置付款重定向 URL
+        RedirectUrls redirectUrls = new RedirectUrls();
+        redirectUrls.setCancelUrl(cancelUrl);
+        redirectUrls.setReturnUrl(successUrl);
 
         Payment payment = new Payment();
         payment.setIntent(intent.toString());
         payment.setPayer(payer);
-        payment.setTransactions(transactions);
+        payment.setTransactions(Arrays.asList(transaction));
+
         log.debug("開始封裝網址");
-        RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl(cancelUrl);
-        redirectUrls.setReturnUrl(successUrl);
         payment.setRedirectUrls(redirectUrls);
         return payment.create(apiContext);
+    }
+
+    /**
+     *  解析地址
+     * @param address
+     * @return
+     */
+    public Map<String,String> parseAddress(String address){
+        Map<String,String> addressMap = new HashMap<>();
+        //郵遞區號
+        String postalCode = address.substring(0, 0 + 3);
+        //城市
+        String city = address.substring(3,3+3);
+        //detailAddress
+        String detailAddress = address.substring(9);
+        addressMap.put(RECIPIENT_ADDRESS_POSTAL_CODE,postalCode);
+        addressMap.put(RECIPIENT_ADDRESS_CITY,city);
+        addressMap.put(RECIPIENT_ADDRESS_DETAIL_ADDRESS,detailAddress);
+
+        return addressMap;
     }
 
     public OrderAddNewDTO getOrderInfo(HttpServletRequest request){
