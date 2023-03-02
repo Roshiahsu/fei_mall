@@ -42,17 +42,5 @@ mall
 | Redis | 記憶體資料存放區 | 
 | Quartz | 任務排程 | 
 
-
- 
-  
-  
-  
-  
-### 專案技術架構
-- [Spring Security](#myAnchor)
-- [Spring Security](#myAnchor)
-  
-
-
-
-<a name="myAnchor">我是一个锚点</a>
+## 系統架構
+![Image text](https://github.com/Roshiahsu/img-folder/blob/main/1.png)
