@@ -16,6 +16,38 @@
   - 商品管理
   - 品牌管理
   
+## 組織結構
+ <pre><code>
+mall
+├── mall-Brand -- 品牌相關功能
+├── mall-Cart -- 購物車相關功能
+├── mall-Keyword -- 搜尋功能關鍵字管理功能
+├── mall-Order -- 訂單相關功能
+├── mall-Password -- 密碼管理功能
+├── mall-Payment -- paypal金流管理系統
+├── mall-Product -- 商品管理功能
+├── mall-Search -- 基於Elasticsearch的商品搜尋系統
+└── mall-User -- 用戶管理相關功能
+ </code></pre>
+ 
+## 使用到的技術
+| 技術 | 說明 |
+| --- | --- | 
+| SpringBoot | Web應用開發 | 
+| SpringSecurity | 認證與授權 | 
+| MyBatis	 | ORM框架 | 
+| Elasticsearch | 搜索引擎 | 
+| Spring Validation | 資料驗證 | 
+| PageHelper | MyBatis分頁外掛 | 
+| Redis | 記憶體資料存放區 | 
+| Quartz | 任務排程 | 
+
+
+ 
+  
+  
+  
+  
 ### 專案技術架構
 - [Spring Security](#myAnchor)
 - [Spring Security](#myAnchor)
