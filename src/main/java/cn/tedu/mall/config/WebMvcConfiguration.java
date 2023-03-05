@@ -15,9 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")//表示所有路徑
-                .allowedOrigins("http://localhost:9080/")
-                .allowedOrigins("http://localhost:8080/")
-//                .allowedOriginPatterns("*")//允許任何方法源
+//                .allowedOrigins("http://localhost:9080/")
+//                .allowedOrigins("http://localhost:8080/")
+                .allowedOriginPatterns("*")//允許任何方法源
                 .allowedMethods("*")//允許任何請求方式 get or post
                 .allowedHeaders("*")//允許任何請求頭
                 .allowCredentials(true)//允許發送cookie
