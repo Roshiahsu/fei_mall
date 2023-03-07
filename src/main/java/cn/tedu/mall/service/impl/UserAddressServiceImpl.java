@@ -132,7 +132,7 @@ public class UserAddressServiceImpl implements IUserAddressService {
             throw new ServiceException(ServiceCode.ERR_BAD_REQUEST,"地址不存在!");
         }
         //判斷輸入的地址是否是預設
-        if(userAddressDTO.getIsDefault() == ConstUtils.IS_DEFAULT){
+        if(userAddressDTO.getIsDefault().equals(ConstUtils.IS_DEFAULT)){
             //是預設，先將該使用者的其他保存地址的isDefault設定為0
             //獲取用戶id
             Long userId = ConstUtils.getUserId();
@@ -158,7 +158,7 @@ public class UserAddressServiceImpl implements IUserAddressService {
         //獲取地址資料
         Address getAddVO = userAddressMapper.getAddressById(id);
         //判斷要刪除的地址是否為預設
-        if(getAddVO.getIsDefault() == ConstUtils.IS_DEFAULT){
+        if(getAddVO.getIsDefault().equals(ConstUtils.IS_DEFAULT)){
             //是預設，拋異常
             throw new ServiceException(ServiceCode.ERR_DELETE,"不能刪除預設地址!");
         }
