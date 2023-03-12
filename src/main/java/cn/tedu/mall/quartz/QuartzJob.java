@@ -33,6 +33,6 @@ public class QuartzJob implements Job {
         //從redis中獲取關鍵字資料，並更新到資料庫
         keywordRepository.updateDatabaseFromRedis();
         //更新ES
-        searchService.loadProducts();
+//        searchService.loadProducts();
     }
 }

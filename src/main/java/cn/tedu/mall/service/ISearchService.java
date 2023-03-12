@@ -10,12 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @Description TODO
  * @Date 2023/1/17、下午8:50
  */
+@Deprecated
 @Transactional
 public interface ISearchService {
 
-    //向ES加載數據
-    void loadProducts();
-
-    //ES分頁查詢spu方法
-    JsonPage<ProductForEs> search(String keyword, Integer page, Integer pageSize);
+//    //向ES加載數據
+//    void loadProducts();
+//
+//    //ES分頁查詢spu方法
+//    JsonPage<ProductForEs> search(String keyword, Integer page, Integer pageSize);
 }

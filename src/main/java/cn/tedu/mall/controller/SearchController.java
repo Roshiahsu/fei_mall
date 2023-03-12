@@ -20,23 +20,24 @@ import org.springframework.web.bind.annotation.*;
  * @Description 搜尋功能
  * @Date 2023/1/17、下午10:53
  */
+@Deprecated
 @RestController
 @Slf4j
 @RequestMapping("/search")
 @Api(tags = "商品搜尋模組")
 public class SearchController {
 
-    @Autowired
-    private ISearchService searchService;
-
-    @GetMapping("/")
-    @ApiOperation("搜尋商品")
-    @ApiOperationSupport(order = 100)
-    public JsonResult search(Integer pageNum,
-                             Integer pageSize,
-                             String keywords){
-        log.debug("開始搜尋商品");
-        JsonPage<ProductForEs> search = searchService.search(keywords, pageNum, pageSize);
-        return JsonResult.ok(search);
-    }
+//    @Autowired
+//    private ISearchService searchService;
+//
+//    @GetMapping("/")
+//    @ApiOperation("搜尋商品")
+//    @ApiOperationSupport(order = 100)
+//    public JsonResult search(Integer pageNum,
+//                             Integer pageSize,
+//                             String keywords){
+//        log.debug("開始搜尋商品");
+//        JsonPage<ProductForEs> search = searchService.search(keywords, pageNum, pageSize);
+//        return JsonResult.ok(search);
+//    }
 }
