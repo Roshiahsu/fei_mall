@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class URLUtils {
 
+    /**
+     * 分析URL
+     * @param request
+     * @return
+     */
     public static String getBaseURl(HttpServletRequest request) {
 
         String scheme = request.getScheme();

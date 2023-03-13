@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,17 +30,17 @@ public class OrderAddNewDTO implements Serializable {
 
     @ApiModelProperty(value = "訂單原始總價")
     @NotBlank(message = "訂單原始總價不得為空")
-    private BigInteger amountOfOriginalPrice;
+    private BigDecimal amountOfOriginalPrice;
 
     @ApiModelProperty(value = "運費")
-    private BigInteger amountOfFreight;
+    private BigDecimal amountOfFreight;
 
     @ApiModelProperty(value = "折扣金額")
-    private BigInteger amountOfDiscount;
+    private BigDecimal amountOfDiscount;
 
     @ApiModelProperty(value = "實際支付金額")
     @NotBlank(message = "實際支付金額不得為空")
-    private BigInteger amountOfActualPay;
+    private BigDecimal amountOfActualPay;
 
     @ApiModelProperty(value = "訂單商品列表")
     private List<OrderItemAddNewDTO> orderItems;

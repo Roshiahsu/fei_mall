@@ -93,7 +93,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             authorities.add(new SimpleGrantedAuthority(s));
         }
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(loginPrincipleString.getUsername(), loginPrincipleString, authorities);
+        Authentication authentication = new
+                UsernamePasswordAuthenticationToken(loginPrincipleString.getUsername(), loginPrincipleString, authorities);
 
         //將獲取訊息添加到上下文
         SecurityContext securityContext = SecurityContextHolder.getContext();

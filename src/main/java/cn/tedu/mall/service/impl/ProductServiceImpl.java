@@ -80,7 +80,6 @@ public class ProductServiceImpl implements IProductService {
         for (int i = 2; i <=4 ; i++) {
             productRepository.putList(i);
         }
-
     }
 
     /**
@@ -153,8 +152,6 @@ public class ProductServiceImpl implements IProductService {
             Integer productTypeId = Integer.valueOf(productUpdateDTO.getProductTypeName().toString());
             productUpdateDTO.setProductTypeId(productTypeId);
         }
-
-
 
         LocalDateTime gmtExp = productUpdateDTO.getGmtExp();
         if(gmtExp != null){

@@ -39,7 +39,6 @@ public class ProductController {
     @PreAuthorize("hasRole('admin')")
     public JsonResult insert(@RequestBody ProductAddNewDTO productAddNewDTO){
         log.debug("開始新增商品");
-
         productService.insert(productAddNewDTO);
         return JsonResult.ok();
     }

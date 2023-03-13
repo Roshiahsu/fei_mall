@@ -3,6 +3,7 @@ package cn.tedu.mall.exception.handler;
 import cn.tedu.mall.exception.ServiceException;
 import cn.tedu.mall.web.JsonResult;
 import cn.tedu.mall.web.ServiceCode;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,6 +40,12 @@ public class GlobalExceptionHandler {
             stringJoiner.add(fieldError.getDefaultMessage());
         }
         return JsonResult.fail(ServiceCode.ERR_BAD_REQUEST,stringJoiner.toString());
+    }
+
+    @ExceptionHandler
+    public JsonResult handlerAccessDeniedException(AccessDeniedException e){
+        e.printStackTrace();
+        return JsonResult.fail(ServiceCode.ERR_UNAUTHORIZED,e.getMessage());
     }
 
 

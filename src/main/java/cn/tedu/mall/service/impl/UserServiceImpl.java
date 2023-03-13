@@ -164,23 +164,4 @@ public class UserServiceImpl implements IUserService {
             throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
         }
     }
-
-    /**
-     * 修改用戶密碼
-     * @param userUpdateDTO
-     */
-    @Override
-    public void updatePassword(UserUpdateDTO userUpdateDTO) {
-        log.debug("開始service.updatePassword");
-
-        /*密碼加密*/
-        String password = userUpdateDTO.getPassword();
-        String encode = passwordEncoder.encode(password);
-        userUpdateDTO.setPassword(encode);
-
-        int rows = userMapper.update(userUpdateDTO);
-        if(rows !=1){
-            throw new ServiceException(ServiceCode.ERR_UPDATE,"伺服器繁忙請稍後再試");
-        }
-    }
 }

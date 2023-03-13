@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -22,5 +23,5 @@ public class OrderAddVO implements Serializable {
     private String sn;
 
     @ApiModelProperty(value = "實際支付金額")
-    private BigInteger payAmount;
+    private BigDecimal payAmount;
 }
