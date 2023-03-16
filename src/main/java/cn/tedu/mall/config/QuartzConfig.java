@@ -37,7 +37,7 @@ public class QuartzConfig {
         //cron表達式
         CronScheduleBuilder cronScheduleBuilder =
                 //每30分鐘執行一次
-                CronScheduleBuilder.cronSchedule("0 0/30 * * * ? ");
+                CronScheduleBuilder.cronSchedule("0 0 0/10 * * ? ");
         return TriggerBuilder.newTrigger()
                 .forJob(showTime())
                 .withIdentity("redisUpdateTrigger")
