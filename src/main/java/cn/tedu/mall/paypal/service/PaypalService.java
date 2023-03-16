@@ -86,7 +86,7 @@ public class PaypalService implements IPaypalService {
         } catch (PayPalRESTException payPalRESTException) {
             payPalRESTException.printStackTrace();
         }
-        return "redirect:http://localhost:8080/failed";
+        return "redirect:"+HOST_URL+"/failed";
     }
 
     @Override
@@ -102,12 +102,13 @@ public class PaypalService implements IPaypalService {
                 Long id = orderAddVO.getId();
                 //刪除redis中的資料
                 orderRepository.deleteItem(userId);
-                return "redirect:http://localhost:8080/orderDetailInfo?id="+id;
+//                return "redirect:"+HOST_URL+"/orderDetailInfo?id="+id;
+                return "redirect:"+HOST_URL;
             }
         } catch (PayPalRESTException e) {
             log.error(e.getMessage());
         }
-        return "redirect:http://localhost:8080/cancel";
+        return "redirect:"+HOST_URL+"/cancel";
     }
 
     /**

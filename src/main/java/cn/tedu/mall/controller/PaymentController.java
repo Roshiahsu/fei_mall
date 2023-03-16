@@ -50,7 +50,7 @@ public class PaymentController {
     @GetMapping(PAYPAL_CANCEL_URL)
     public String cancelPay(){
         log.debug("開始訪問cancel");
-        return "redirect:http://localhost:8080/cancel";
+        return "redirect:http://18.206.208.196:8088/cancel";
     }
 
     @GetMapping(PAYPAL_SUCCESS_URL)

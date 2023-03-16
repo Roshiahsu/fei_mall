@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface IPaypalService {
 
+    public static final String HOST_URL ="http://18.206.208.196:8088";
+
     String pay(HttpServletRequest request);
 
     String successPay(String paymentId,String payerId,Long userId);
